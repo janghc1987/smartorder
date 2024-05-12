@@ -273,6 +273,8 @@
 
 <div class="flex flex-col h-screen">
   <header class="bg-gray-900 text-white py-4 px-6">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <div class="flex justify-between items-center">
       <h1 href="#" class="text-2xl font-bold" onclick="showMain()" style="cursor: pointer">Smart Order</h1>
       <div class="flex items-center space-x-4">
@@ -319,263 +321,331 @@
   <div class="layerPopup" style="display: none;" id="loading">
     <div class="spinner"></div>
   </div>
-  <main id="main" class="flex-1 bg-gray-100 py-8 px-6">
-    <div class="mb-8">
-      <h2 class="text-lg font-bold mb-4">Menu Categories</h2>
-      <div class="flex space-x-4 overflow-x-auto">
-        <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('Burgers')">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-8 h-8 mb-2"
-          >
-            <circle cx="12.5" cy="8.5" r="2.5"></circle>
-            <path d="M12.5 2a6.5 6.5 0 0 0-6.22 4.6c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c4 0 8.4-1.8 11.4-4.3A6.5 6.5 0 0 0 12.5 2Z"></path>
-            <path d="m18.5 6 2.19 4.5a6.48 6.48 0 0 1 .31 2 6.49 6.49 0 0 1-2.6 5.2C15.4 20.2 11 22 7 22a3 3 0 0 1-2.68-1.66L2.4 16.5"></path>
-          </svg>
-          <span>Burgers</span>
-        </a>
-        <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('Pizza')">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-8 h-8 mb-2"
-          >
-            <path d="M15 11h.01"></path>
-            <path d="M11 15h.01"></path>
-            <path d="M16 16h.01"></path>
-            <path d="m2 16 20 6-6-20A20 20 0 0 0 2 16"></path>
-            <path d="M5.71 17.11a17.04 17.04 0 0 1 11.4-11.4"></path>
-          </svg>
-          <span>Pizza</span>
-        </a>
-        <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('Salads')">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-8 h-8 mb-2"
-          >
-            <path d="M7 21h10"></path>
-            <path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"></path>
-            <path d="M11.38 12a2.4 2.4 0 0 1-.4-4.77 2.4 2.4 0 0 1 3.2-2.77 2.4 2.4 0 0 1 3.47-.63 2.4 2.4 0 0 1 3.37 3.37 2.4 2.4 0 0 1-1.1 3.7 2.51 2.51 0 0 1 .03 1.1"></path>
-            <path d="m13 12 4-4"></path>
-            <path d="M10.9 7.25A3.99 3.99 0 0 0 4 10c0 .73.2 1.41.54 2"></path>
-          </svg>
-          <span>Salads</span>
-        </a>
-        <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('Drinks')">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-8 h-8 mb-2"
-          >
-            <path d="M17 11h1a3 3 0 0 1 0 6h-1"></path>
-            <path d="M9 12v6"></path>
-            <path d="M13 12v6"></path>
-            <path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 2 11 2s2 1.5 3 1.5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"></path>
-            <path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"></path>
-          </svg>
-          <span>Drinks</span>
-        </a>
-        <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('ALL')">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-8 h-8 mb-2"
-          >
-            <path d="M5 12v10"></path>
-            <path d="M9 12v10"></path>
-            <path d="M13 12v10"></path>
-          </svg>
-          <span>ALL</span>
-        </a>
+  <!-- <div class="container" style="height: 100%; width: 100%;">
+    <div class="row" style="height: 100%; width: 100%;">
+      <div class="col-md-3" style="background-color: #3498db;">
+
+      </div>
+      <div class="col-md-9" style="background-color: #333; ">
+
       </div>
     </div>
-    <div class="mb-8">
-      <h2 class="text-lg font-bold mb-4">Recommended Menu</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a name="Burgers" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('1')" >
-          <img id="img_1"
-            
-            src = ''
-            alt="Menu Item"
-            width="300"
-            height="200"
-            class="w-full h-48 object-cover"
-            style="aspect-ratio: 300 / 200; object-fit: cover;"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-bold mb-2">불고기 버거</h3>
-            <p class="text-gray-500 mb-4">Juicy beef patty, cheddar cheese, lettuce, tomato, and special sauce.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-lg font-bold">$12.99</span>
-              <button 
-              onclick="addCart('1')"
-              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </a>
-        <a name="Burgers" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('2')">
-          <img 
-            id="img_2"
-            src=""
-            alt="Menu Item"
-            width="300"
-            height="200"
-            class="w-full h-48 object-cover"
-            style="aspect-ratio: 300 / 200; object-fit: cover;"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-bold mb-2">치킨버거</h3>
-            <p class="text-gray-500 mb-4">Classic Italian pizza with fresh mozzarella, basil, and tomato sauce.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-lg font-bold">$14.99</span>
-              <button 
-              onclick="addCart('2')"
-              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </a>
-        <a name="Drinks" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('3')">
-          <img
-            id="img_3"
-            alt="Menu Item"
-            width="300"
-            height="200"
-            class="w-full h-48 object-cover"
-            style="aspect-ratio: 300 / 200; object-fit: cover;"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-bold mb-2">아메리카노</h3>
-            <p class="text-gray-500 mb-4">Crisp romaine lettuce, croutons, parmesan, and creamy Caesar dressing.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-lg font-bold">$2.00</span>
-              <button 
-              onclick="addCart('3')"
-              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </a>
+  </div> -->
+  <main id="main" class="flex-1 bg-gray-100 py-8 px-6" >
+    <div class="row">
+      <div class="col-md-2">
+        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+              <li class="nav-item">
+                  <a href="#" class="nav-link align-middle px-0">
+                      <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                      <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> 
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav-link px-0 align-middle">
+                      <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>
+              </li>
+              <li>
+                  <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                      <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
+                  <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                      <li class="w-100">
+                          <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
+                      </li>
+                      <li>
+                          <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
+                      </li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                      <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Products</span> </a>
+                      <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                      <li class="w-100">
+                          <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
+                      </li>
+                      <li>
+                          <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 2</a>
+                      </li>
+                      <li>
+                          <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 3</a>
+                      </li>
+                      <li>
+                          <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 4</a>
+                      </li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="#" class="nav-link px-0 align-middle">
+                      <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </a>
+              </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="mb-8">
-      <h2 class="text-lg font-bold mb-4">Popular Menu</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a name="Burgers" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('4')">
-          <img
-            id="img_4"
-            alt="Menu Item"
-            width="300"
-            height="200"
-            class="w-full h-48 object-cover"
-            style="aspect-ratio: 300 / 200; object-fit: cover;"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-bold mb-2">치즈버거</h3>
-            <p class="text-gray-500 mb-4">
-              Grilled chicken in a sweet and savory teriyaki sauce, served with rice.
-            </p>
-            <div class="flex justify-between items-center">
-              <span class="text-lg font-bold">$11.99</span>
-              <button 
-              onclick="addCart('4')"
-              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                Add to Cart
-              </button>
-            </div>
+      <div class="col-md-10">
+        <div class="mb-8">
+          <h2 class="text-lg font-bold mb-4">Menu Categories</h2>
+          <div class="flex space-x-4 overflow-x-auto">
+            <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('Burgers')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-8 h-8 mb-2"
+              >
+                <circle cx="12.5" cy="8.5" r="2.5"></circle>
+                <path d="M12.5 2a6.5 6.5 0 0 0-6.22 4.6c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c4 0 8.4-1.8 11.4-4.3A6.5 6.5 0 0 0 12.5 2Z"></path>
+                <path d="m18.5 6 2.19 4.5a6.48 6.48 0 0 1 .31 2 6.49 6.49 0 0 1-2.6 5.2C15.4 20.2 11 22 7 22a3 3 0 0 1-2.68-1.66L2.4 16.5"></path>
+              </svg>
+              <span>Burgers</span>
+            </a>
+            <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('Pizza')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-8 h-8 mb-2"
+              >
+                <path d="M15 11h.01"></path>
+                <path d="M11 15h.01"></path>
+                <path d="M16 16h.01"></path>
+                <path d="m2 16 20 6-6-20A20 20 0 0 0 2 16"></path>
+                <path d="M5.71 17.11a17.04 17.04 0 0 1 11.4-11.4"></path>
+              </svg>
+              <span>Pizza</span>
+            </a>
+            <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('Salads')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-8 h-8 mb-2"
+              >
+                <path d="M7 21h10"></path>
+                <path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"></path>
+                <path d="M11.38 12a2.4 2.4 0 0 1-.4-4.77 2.4 2.4 0 0 1 3.2-2.77 2.4 2.4 0 0 1 3.47-.63 2.4 2.4 0 0 1 3.37 3.37 2.4 2.4 0 0 1-1.1 3.7 2.51 2.51 0 0 1 .03 1.1"></path>
+                <path d="m13 12 4-4"></path>
+                <path d="M10.9 7.25A3.99 3.99 0 0 0 4 10c0 .73.2 1.41.54 2"></path>
+              </svg>
+              <span>Salads</span>
+            </a>
+            <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('Drinks')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-8 h-8 mb-2"
+              >
+                <path d="M17 11h1a3 3 0 0 1 0 6h-1"></path>
+                <path d="M9 12v6"></path>
+                <path d="M13 12v6"></path>
+                <path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 2 11 2s2 1.5 3 1.5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"></path>
+                <path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"></path>
+              </svg>
+              <span>Drinks</span>
+            </a>
+            <a class="bg-white rounded-lg shadow-md px-4 py-2 flex-shrink-0" href="#" onclick="showCategory('ALL')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-8 h-8 mb-2"
+              >
+                <path d="M5 12v10"></path>
+                <path d="M9 12v10"></path>
+                <path d="M13 12v10"></path>
+              </svg>
+              <span>ALL</span>
+            </a>
           </div>
-        </a>
-        <a name="Drinks" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('5')">
-          <img
-            id="img_5"
-            src=""
-            alt="Menu Item"
-            width="300"
-            height="200"
-            class="w-full h-48 object-cover"
-            style="aspect-ratio: 300 / 200; object-fit: cover;"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-bold mb-2">바닐라쉐이크</h3>
-            <p class="text-gray-500 mb-4">
-              Grilled vegetables, hummus, and mixed greens wrapped in a soft tortilla.
-            </p>
-            <div class="flex justify-between items-center">
-              <span class="text-lg font-bold">$8.99</span>
-              <button 
-              onclick="addCart('5')"
-              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                Add to Cart
-              </button>
-            </div>
+        </div>
+        <div class="mb-8">
+          <h2 class="text-lg font-bold mb-4">Recommended Menu</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a name="Burgers" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('1')" >
+              <img id="img_1"
+                
+                src = ''
+                alt="Menu Item"
+                width="300"
+                height="200"
+                class="w-full h-48 object-cover"
+                style="aspect-ratio: 300 / 200; object-fit: cover;"
+              />
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">불고기 버거</h3>
+                <p class="text-gray-500 mb-4">Juicy beef patty, cheddar cheese, lettuce, tomato, and special sauce.</p>
+                <div class="flex justify-between items-center">
+                  <span class="text-lg font-bold">$12.99</span>
+                  <button 
+                  onclick="addCart('1')"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </a>
+            <a name="Burgers" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('2')">
+              <img 
+                id="img_2"
+                src=""
+                alt="Menu Item"
+                width="300"
+                height="200"
+                class="w-full h-48 object-cover"
+                style="aspect-ratio: 300 / 200; object-fit: cover;"
+              />
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">치킨버거</h3>
+                <p class="text-gray-500 mb-4">Classic Italian pizza with fresh mozzarella, basil, and tomato sauce.</p>
+                <div class="flex justify-between items-center">
+                  <span class="text-lg font-bold">$14.99</span>
+                  <button 
+                  onclick="addCart('2')"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </a>
+            <a name="Drinks" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('3')">
+              <img
+                id="img_3"
+                alt="Menu Item"
+                width="300"
+                height="200"
+                class="w-full h-48 object-cover"
+                style="aspect-ratio: 300 / 200; object-fit: cover;"
+              />
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">아메리카노</h3>
+                <p class="text-gray-500 mb-4">Crisp romaine lettuce, croutons, parmesan, and creamy Caesar dressing.</p>
+                <div class="flex justify-between items-center">
+                  <span class="text-lg font-bold">$2.00</span>
+                  <button 
+                  onclick="addCart('3')"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </a>
           </div>
-        </a>
-        <a name="Pizza" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('6')">
-          <img
-            id="img_6"
-            src=""
-            alt="Menu Item"
-            width="300"
-            height="200"
-            class="w-full h-48 object-cover"
-            style="aspect-ratio: 300 / 200; object-fit: cover;"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-bold mb-2">양념치킨</h3>
-            <p class="text-gray-500 mb-4">
-              Freshly brewed coffee, served over ice with your choice of milk and sweetener.
-            </p>
-            <div class="flex justify-between items-center">
-              <span class="text-lg font-bold">$4.99</span>
-              <button 
-              onclick="addCart('6')"
-              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                Add to Cart
-              </button>
-            </div>
+        </div>
+        <div class="mb-8">
+          <h2 class="text-lg font-bold mb-4">Popular Menu</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a name="Burgers" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('4')">
+              <img
+                id="img_4"
+                alt="Menu Item"
+                width="300"
+                height="200"
+                class="w-full h-48 object-cover"
+                style="aspect-ratio: 300 / 200; object-fit: cover;"
+              />
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">치즈버거</h3>
+                <p class="text-gray-500 mb-4">
+                  Grilled chicken in a sweet and savory teriyaki sauce, served with rice.
+                </p>
+                <div class="flex justify-between items-center">
+                  <span class="text-lg font-bold">$11.99</span>
+                  <button 
+                  onclick="addCart('4')"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </a>
+            <a name="Drinks" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('5')">
+              <img
+                id="img_5"
+                src=""
+                alt="Menu Item"
+                width="300"
+                height="200"
+                class="w-full h-48 object-cover"
+                style="aspect-ratio: 300 / 200; object-fit: cover;"
+              />
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">바닐라쉐이크</h3>
+                <p class="text-gray-500 mb-4">
+                  Grilled vegetables, hummus, and mixed greens wrapped in a soft tortilla.
+                </p>
+                <div class="flex justify-between items-center">
+                  <span class="text-lg font-bold">$8.99</span>
+                  <button 
+                  onclick="addCart('5')"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </a>
+            <a name="Pizza" class="bg-white rounded-lg shadow-md overflow-hidden" href="#" onclick="showDetail('6')">
+              <img
+                id="img_6"
+                src=""
+                alt="Menu Item"
+                width="300"
+                height="200"
+                class="w-full h-48 object-cover"
+                style="aspect-ratio: 300 / 200; object-fit: cover;"
+              />
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">양념치킨</h3>
+                <p class="text-gray-500 mb-4">
+                  Freshly brewed coffee, served over ice with your choice of milk and sweetener.
+                </p>
+                <div class="flex justify-between items-center">
+                  <span class="text-lg font-bold">$4.99</span>
+                  <button 
+                  onclick="addCart('6')"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </a>
           </div>
-        </a>
+        </div>
       </div>
     </div>
   </main>
