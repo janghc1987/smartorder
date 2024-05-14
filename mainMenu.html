@@ -26,54 +26,17 @@
 
   }
   function showDetail(menuName){
-    if(menuName == 'Daepae_Woo_Seol'){
-      $("#detailImg").attr("src",img_1);
-      $("#detailMenuName").text("불고기버거");
-      $("#detailMenuDes").text("달콤한 한국식 소스의 불고기버거");
-      $("#detailMenuPrice").text("$15.22");
-      $("#detailTotalPrice").text("Total : $15.22");
-    }else if(menuName == '2'){
-      $("#detailImg").attr("src",img_2);
-      $("#detailMenuName").text("치킨버거");
-      $("#detailMenuDes").text("달콤한 한국식 치킨버거");
-      $("#detailMenuPrice").text("$14.22");
-      $("#detailTotalPrice").text("Total : $14.22");
-    }else if(menuName == '3'){
-      $("#detailImg").attr("src",img_3);
-      $("#detailMenuName").text("아메리카노");
-      $("#detailMenuDes").text("시원하고 찐한 2샷 아메리카노");
-      $("#detailMenuPrice").text("$2.00");
-      $("#detailTotalPrice").text("Total : $2.00");
-    }else if(menuName == '4'){
-      $("#detailImg").attr("src",img_4);
-      $("#detailMenuName").text("치즈버거");
-      $("#detailMenuDes").text("미국 전통 치즈버거");
-      $("#detailMenuPrice").text("$10.22");
-      $("#detailTotalPrice").text("Total : $10.22");
-    }else if(menuName == '5'){
-      $("#detailImg").attr("src",img_5);
-      $("#detailMenuName").text("바닐라쉐이크");
-      $("#detailMenuDes").text("햄버거와 찰떡궁합인 풍미가 진한 바닐라쉐이크");
-      $("#detailMenuPrice").text("$5.44");
-      $("#detailTotalPrice").text("Total : $5.44");
-    }else if(menuName == '6'){
-      $("#detailImg").attr("src",img_6);
-      $("#detailMenuName").text("양념치킨");
-      $("#detailMenuDes").text("달콤한 한국식 소스의 양념치킨");
-      $("#detailMenuPrice").text("$20.55");
-      $("#detailTotalPrice").text("Total : $20.55");
-    }
-    detailMenuId = menuName;
-    $("#main").hide();
-    $("#detail").show();
+
+    $("#detailImg").attr("src",menuList[menuName][0]);
+    $("#detailMenuName").text(menuList[menuName][1]);
+    $("#detailMenuDes").text(menuList[menuName][2]);
+    $("#detailMenuOption").append("");
+    $("#selectMenuName").val(menuName);
+
   }
 
   function showCart(){
-    $("#main").hide();
-    $("#detail").hide();
-    $("#payment").hide();
-    $("#myOrder").hide();
-    $("#cart").show();
+   
   }
 
   function showPay(){
@@ -85,60 +48,27 @@
 
   }
 
-  function addCart(menuId){
+  function addCart(){
 
-    if(menuId == 'detail'){
-      if(detailMenuId == '1'){
-        $("#cartDiv").append($("#cartDivPre").html().replace("menuName","불고기버거").replace("menuPrice","$15.22").replace("menuPrice","$15.22").replace("menuTotalPrice","$15.22").replace("cartImg",img_1));
-        $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 15.22).toFixed(2)); 
-        openPop("불고기버거");
-      }else if(detailMenuId == '2'){
-        $("#cartDiv").append($("#cartDivPre").html().replace("menuName","치킨버거").replace("menuPrice","$14.22").replace("menuPrice","$14.22").replace("menuTotalPrice","$14.22").replace("cartImg",img_2));
-        $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 14.22).toFixed(2));
-        openPop("치킨버거");
-      }else if(detailMenuId == '3'){
-        $("#cartDiv").append($("#cartDivPre").html().replace("menuName","아메리카노").replace("menuPrice","$2.00").replace("menuPrice","$2.00").replace("menuTotalPrice","$2.00").replace("cartImg",img_3));
-        $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 2.00).toFixed(2));
-        openPop("아메리카노");
-      }else if(detailMenuId == '4'){
-        $("#cartDiv").append($("#cartDivPre").html().replace("menuName","치즈버거").replace("menuPrice","$10.22").replace("menuPrice","$10.22").replace("menuTotalPrice","$10.22").replace("cartImg",img_4));
-        $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 10.22).toFixed(2));
-        openPop("치즈버거");
-      }else if(detailMenuId == '5'){
-        $("#cartDiv").append($("#cartDivPre").html().replace("menuName","바닐라쉐이크").replace("menuPrice","$5.44").replace("menuPrice","$5.44").replace("menuTotalPrice","$5.44").replace("cartImg",img_5));
-        $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 5.44).toFixed(2));
-        openPop("바닐라쉐이크");
-      }else if(detailMenuId == '6'){
-        $("#cartDiv").append($("#cartDivPre").html().replace("menuName","양념치킨").replace("menuPrice","$20.55").replace("menuPrice","$20.55").replace("menuTotalPrice","$20.55").replace("cartImg",img_6));
-        $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 20.55).toFixed(2));
-        openPop("양념치킨");
+    var menuName = $("#selectMenuName").val();
+    $(".btn-close").click();
+    $("#myModal").fadeOut("slow");
+    $("#fadeOutDiv").show();
+    $("#fadeOutDiv").fadeOut(1600);
+    var cnt = 1;
+    let timerId = setInterval(() => {
+      if(cnt > 50){
+        clearInterval(timerId);
+        $("#fadeOutDiv").attr("style","position: absolute; left: 800px; top: 600px; width: 200px; height: 200px; display: none;")
+        return;
       }
-    }else if(menuId == '1'){
-      $("#cartDiv").append($("#cartDivPre").html().replace("menuName","불고기버거").replace("menuPrice","$15.22").replace("menuPrice","$15.22").replace("menuTotalPrice","$15.22").replace("cartImg",img_1));
-      $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 15.22).toFixed(2));
-      openPop("불고기버거");
-    }else if(menuId == '2'){
-      $("#cartDiv").append($("#cartDivPre").html().replace("menuName","치킨버거").replace("menuPrice","$14.22").replace("menuPrice","$14.22").replace("menuTotalPrice","$14.22").replace("cartImg",img_2));
-      $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 14.22).toFixed(2));
-      openPop("치킨버거");
-    }else if(menuId == '3'){
-      $("#cartDiv").append($("#cartDivPre").html().replace("menuName","아메리카노").replace("menuPrice","$2.00").replace("menuPrice","$2.00").replace("menuTotalPrice","$2.00").replace("cartImg",img_3));
-      $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 2.00).toFixed(2));
-      openPop("아메리카노");
-    }else if(menuId == '4'){
-      $("#cartDiv").append($("#cartDivPre").html().replace("menuName","치즈버거").replace("menuPrice","$10.22").replace("menuPrice","$10.22").replace("menuTotalPrice","$10.22").replace("cartImg",img_4));
-      $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 10.22).toFixed(2));
-      openPop("치즈버거");
-    }else if(menuId == '5'){
-      $("#cartDiv").append($("#cartDivPre").html().replace("menuName","바닐라쉐이크").replace("menuPrice","$5.44").replace("menuPrice","$5.44").replace("menuTotalPrice","$5.44").replace("cartImg",img_5));
-      $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 5.44).toFixed(2));
-      openPop("바닐라쉐이크");
-    }else if(menuId == '6'){
-      $("#cartDiv").append($("#cartDivPre").html().replace("menuName","양념치킨").replace("menuPrice","$20.55").replace("menuPrice","$20.55").replace("menuTotalPrice","$20.55").replace("cartImg",img_6));
-      $("#totalPrice").text("$"+(parseFloat($("#totalPrice").text().replace("$","")) + 20.55).toFixed(2));
-      openPop("양념치킨");
-    }
+      $("#fadeOutDiv").attr("style","position: absolute; left: "+(800+(cnt*15))+"px; top: "+(600+(cnt*4))+"px; width: "+(200-(cnt*2))+"px; height: "+(200-(cnt*2))+"px;")
+      cnt++;
+    }, 8);
 
+    $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuTotalPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]));
+    $("#totalPrice").text((parseInt($("#totalPrice").text().replace("원","").replace(",","")) + menuList[menuName][3]).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원"); 
+    
   }
 
   function showLoading(){
@@ -154,38 +84,38 @@
 
   function deleteMenu(obj){
     
-    var subTotal = parseFloat($(obj).parent().parent().find("#subtotalPrice").text().replace("$",""));
-    var totalPrice = parseFloat($("#totalPrice").text().replace("$",""));
+    var subTotal = parseInt($(obj).parent().parent().find("#subtotalPrice").text().replace("원","").replace(",",""));
+    var totalPrice = parseInt($("#totalPrice").text().replace("원","").replace(",",""));
 
-    $("#totalPrice").text("$"+(totalPrice - subTotal).toFixed(2))
+    $("#totalPrice").text((totalPrice - subTotal).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원")
 
     $(obj).parent().parent().remove();
   }
 
   function plusCnt(obj){
-    var cnt = parseFloat($(obj).parent().parent().parent().find("#cnt").text());
-    var perPrice = parseFloat($(obj).parent().parent().parent().find("#perPrice").text().replace("$",""));
-    var subTotal = parseFloat($(obj).parent().parent().parent().find("#subtotalPrice").text().replace("$",""));
-    var totalPrice = parseFloat($("#totalPrice").text().replace("$",""));
+    var cnt = parseInt($(obj).parent().parent().parent().find("#cnt").text());
+    var perPrice = parseInt($(obj).parent().parent().parent().find("#perPrice").text().replace("원","").replace(",",""));
+    var subTotal = parseInt($(obj).parent().parent().parent().find("#subtotalPrice").text().replace("원","").replace(",",""));
+    var totalPrice = parseInt($("#totalPrice").text().replace("원","").replace(",",""));
 
     $(obj).parent().parent().parent().find("#cnt").text(cnt + 1);
-    $(obj).parent().parent().parent().find("#subtotalPrice").text("$"+(subTotal + perPrice).toFixed(2))
-    $("#totalPrice").text("$"+(totalPrice + perPrice).toFixed(2))
+    $(obj).parent().parent().parent().find("#subtotalPrice").text((subTotal + perPrice).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","))
+    $("#totalPrice").text((totalPrice + perPrice).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원")
 
 
   }
 
   function minusCnt(obj){
     
-    var cnt = parseFloat($(obj).parent().parent().parent().find("#cnt").text());
-    var perPrice = parseFloat($(obj).parent().parent().parent().find("#perPrice").text().replace("$",""));
-    var subTotal = parseFloat($(obj).parent().parent().parent().find("#subtotalPrice").text().replace("$",""));
-    var totalPrice = parseFloat($("#totalPrice").text().replace("$",""));
+    var cnt = parseInt($(obj).parent().parent().parent().find("#cnt").text());
+    var perPrice = parseInt($(obj).parent().parent().parent().find("#perPrice").text().replace("원","").replace(",",""));
+    var subTotal = parseInt($(obj).parent().parent().parent().find("#subtotalPrice").text().replace("원","").replace(",",""));
+    var totalPrice = parseInt($("#totalPrice").text().replace("원","").replace(",",""));
 
     if(cnt > 1){
       $(obj).parent().parent().parent().find("#cnt").text(cnt - 1);
-      $(obj).parent().parent().parent().find("#subtotalPrice").text("$"+(subTotal - perPrice).toFixed(2))
-      $("#totalPrice").text("$"+(totalPrice - perPrice).toFixed(2))
+      $(obj).parent().parent().parent().find("#subtotalPrice").text((subTotal - perPrice).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","))
+      $("#totalPrice").text((totalPrice - perPrice).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원")
     }
   }
 
@@ -266,7 +196,7 @@
 
 .keyup_select{border-radius: 10%; background-color: aqua;}
 
-.modal-dialog{max-width: 500px; max-height: 650px;}
+.modal-dialog{max-width: 800px; max-height: 650px;}
 </style>
 
 <div class="flex flex-col h-screen">
@@ -360,7 +290,7 @@
         <div class="row">
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('Daepae_Woo_Seol')" style="background-color: white; border-radius: 5%;"
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('Daepae_Woo_Seol')" style="background-color: white; border-radius: 5%;"
               data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Daepae_Woo_Seol"
                   class="col"
@@ -383,7 +313,8 @@
           </div>
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('Kkot_Sal')" style="background-color: white; border-radius: 5%;"
+              data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Kkot_Sal"
                   src = ''
                   alt="Menu Item"
@@ -405,7 +336,8 @@
           </div>
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('Mansinchang_Samgyeopsal_soy')" style="background-color: white; border-radius: 5%;"
+              data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Mansinchang_Samgyeopsal_soy"
                   src = ''
                   alt="Menu Item"
@@ -416,7 +348,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Mansinchang_Samgyeopsal_soy')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -427,7 +359,8 @@
           </div>
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('Mansinchang_Samgyeopsal_spicy')" style="background-color: white; border-radius: 5%;"
+              data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Mansinchang_Samgyeopsal_spicy"
                   src = ''
                   alt="Menu Item"
@@ -438,7 +371,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Mansinchang_Samgyeopsal_spicy')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -449,7 +382,7 @@
           </div>
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('Mansinchang_Samgyeopsal')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Mansinchang_Samgyeopsal"
                   src = ''
                   alt="Menu Item"
@@ -460,7 +393,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Mansinchang_Samgyeopsal')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -471,7 +404,7 @@
           </div>
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('Modum_Yachae_Gui')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Modum_Yachae_Gui"
                   src = ''
                   alt="Menu Item"
@@ -482,7 +415,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Modum_Yachae_Gui')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -493,7 +426,7 @@
           </div>
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('Saeng_Galbi')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Saeng_Galbi"
                   src = ''
                   alt="Menu Item"
@@ -504,7 +437,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Saeng_Galbi')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -515,7 +448,7 @@
           </div>
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('SSaeu_Gui')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="SSaeu_Gui"
                   src = ''
                   alt="Menu Item"
@@ -526,7 +459,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('SSaeu_Gui')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -537,29 +470,7 @@
           </div>
           <div class="col-md-3 mt-3 Barbecue menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
-                <img id="view"
-                  src = ''
-                  alt="Menu Item"
-                  style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
-                />
-                <div class="col">
-                  <h3>view</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('1')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div class="col-md-3 mt-3 Barbecue menuDiv">
-            <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Barbecue" href="#" onclick="showDetail('Woo_Samgyup')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Woo_Samgyup"
                   src = ''
                   alt="Menu Item"
@@ -570,7 +481,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Woo_Samgyup')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -581,7 +492,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Bibim_Naengmyeon')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Bibim_Naengmyeon"
                   src = ''
                   alt="Menu Item"
@@ -592,7 +503,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Bibim_Naengmyeon')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -603,7 +514,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Bornga_Naengmyeon')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Bornga_Naengmyeon"
                   src = ''
                   alt="Menu Item"
@@ -614,7 +525,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Bornga_Naengmyeon')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -625,7 +536,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Bulgogi_jjigae')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Bulgogi_jjigae"
                   src = ''
                   alt="Menu Item"
@@ -636,7 +547,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Bulgogi_jjigae')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -647,7 +558,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Dolsot_Bibimbap')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Dolsot_Bibimbap"
                   src = ''
                   alt="Menu Item"
@@ -658,7 +569,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Dolsot_Bibimbap')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -669,7 +580,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Galbitang')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Galbitang"
                   src = ''
                   alt="Menu Item"
@@ -680,7 +591,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Galbitang')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -691,7 +602,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Kimchi_Jjigae')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Kimchi_Jjigae"
                   src = ''
                   alt="Menu Item"
@@ -702,7 +613,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Kimchi_Jjigae')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -713,7 +624,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Suntofu_Jjigae_Spicy')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Suntofu_Jjigae_Spicy"
                   src = ''
                   alt="Menu Item"
@@ -724,7 +635,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Suntofu_Jjigae_Spicy')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -735,7 +646,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Nokdu_Samgyetang')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Nokdu_Samgyetang"
                   src = ''
                   alt="Menu Item"
@@ -746,7 +657,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Nokdu_Samgyetang')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -757,7 +668,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Suntofu_Jjigae_Mild')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Suntofu_Jjigae_Mild"
                   src = ''
                   alt="Menu Item"
@@ -768,7 +679,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Suntofu_Jjigae_Mild')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -779,7 +690,7 @@
           </div>
           <div class="col-md-3 mt-3 Rice_Noodle_Soup menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Rice_Noodle_Soup" href="#" onclick="showDetail('Yukgaejang')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Yukgaejang"
                   src = ''
                   alt="Menu Item"
@@ -790,7 +701,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Yukgaejang')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -801,7 +712,7 @@
           </div>
           <div class="col-md-3 mt-3 Side_dish menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Side_dish" href="#" onclick="showDetail('Gyeran_Jjim')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Gyeran_Jjim"
                   src = ''
                   alt="Menu Item"
@@ -812,7 +723,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Gyeran_Jjim')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -823,7 +734,7 @@
           </div>
           <div class="col-md-3 mt-3 Side_dish menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Side_dish" href="#" onclick="showDetail('Haemul_Ssamjang')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Haemul_Ssamjang"
                   src = ''
                   alt="Menu Item"
@@ -834,7 +745,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Haemul_Ssamjang')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -845,7 +756,7 @@
           </div>
           <div class="col-md-3 mt-3 Stew_Hot_pot menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Stew_Hot_pot" href="#" onclick="showDetail('Bornga_Bulgogi')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Bornga_Bulgogi"
                   src = ''
                   alt="Menu Item"
@@ -856,7 +767,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Bornga_Bulgogi')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -867,7 +778,7 @@
           </div>
           <div class="col-md-3 mt-3 Stew_Hot_pot menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Stew_Hot_pot" href="#" onclick="showDetail('Budae_Jjigae')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Budae_Jjigae"
                   src = ''
                   alt="Menu Item"
@@ -878,7 +789,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Budae_Jjigae')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -889,7 +800,7 @@
           </div>
           <div class="col-md-3 mt-3 Stew_Hot_pot menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Stew_Hot_pot" href="#" onclick="showDetail('Chadol_Duenjang_Jjigae')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Chadol_Duenjang_Jjigae"
                   src = ''
                   alt="Menu Item"
@@ -900,7 +811,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Chadol_Duenjang_Jjigae')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -911,7 +822,7 @@
           </div>
           <div class="col-md-3 mt-3 Traditional_Dish menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Traditional_Dish" href="#" onclick="showDetail('Dwaeji_Gochujang_Barbecue')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Dwaeji_Gochujang_Barbecue"
                   src = ''
                   alt="Menu Item"
@@ -922,7 +833,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Dwaeji_Gochujang_Barbecue')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -933,7 +844,7 @@
           </div>
           <div class="col-md-3 mt-3 Traditional_Dish menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Traditional_Dish" href="#" onclick="showDetail('Haemul_Dduk_Jjim')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Haemul_Dduk_Jjim"
                   src = ''
                   alt="Menu Item"
@@ -944,7 +855,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Haemul_Dduk_Jjim')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -955,7 +866,7 @@
           </div>
           <div class="col-md-3 mt-3 Traditional_Dish menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Traditional_Dish" href="#" onclick="showDetail('Haemul_Pa_Jeon')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Haemul_Pa_Jeon"
                   src = ''
                   alt="Menu Item"
@@ -966,7 +877,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Haemul_Pa_Jeon')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -977,7 +888,7 @@
           </div>
           <div class="col-md-3 mt-3 Traditional_Dish menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Traditional_Dish" href="#" onclick="showDetail('Jap_Chae')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Jap_Chae"
                   src = ''
                   alt="Menu Item"
@@ -988,7 +899,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Jap_Chae')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -999,7 +910,7 @@
           </div>
           <div class="col-md-3 mt-3 Traditional_Dish menuDiv">
             <div class="row">
-              <a class="col-md-11" name="Burgers" href="#" onclick="showDetail('1')" style="background-color: white; border-radius: 5%;">
+              <a class="col-md-11" name="Traditional_Dish" href="#" onclick="showDetail('Yeo_San_Tteokgalbi')" style="background-color: white; border-radius: 5%;" data-bs-toggle="modal" data-bs-target="#myModal">
                 <img id="Yeo_San_Tteokgalbi"
                   src = ''
                   alt="Menu Item"
@@ -1010,7 +921,7 @@
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold">$12.99</span>
                     <button 
-                    onclick="addCart('1')"
+                    onclick="addCart('Yeo_San_Tteokgalbi')"
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
                       
                     </button>
@@ -1022,158 +933,11 @@
         </div>
       </div>
     </div>
-  </main>
-  <detail id="detail" style="display: none;">
-    <div class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
-      <div>
-        <img
-          id="detailImg"
-          src=""
-          alt="Menu Item"
-          width="600"
-          height="900"
-          class="aspect-[2/3] object-cover w-full rounded-lg"
-        />
-      </div>
-      <div class="grid gap-6">
-        <div>
-          <h1 class="text-3xl font-bold" id="detailMenuName"></h1>
-          <p class="text-gray-500 dark:text-gray-400" id="detailMenuDes"></p>
-          <h2 class="text-2xl font-bold mt-4" id="detailMenuPrice"></h2>
-        </div>
-        <form class="grid gap-4">
-          <div>
-            <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-base" for="size">
-              Size
-            </label>
-            <div
-              role="radiogroup"
-              aria-required="false"
-              dir="ltr"
-              class="flex items-center gap-2"
-              id="size"
-              tabindex="0"
-              style="outline: none;"
-            >
-              <label
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 border cursor-pointer rounded-md p-2 flex items-center gap-2 [&amp;:has(:checked)]:bg-gray-100 dark:[&amp;:has(:checked)]:bg-gray-800"
-                for="size-small"
-              >
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked="false"
-                  data-state="unchecked"
-                  value="small"
-                  class="aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  id="size-small"
-                  tabindex="-1"
-                  data-radix-collection-item=""
-                ></button>
-                <input
-                  aria-hidden="true"
-                  tabindex="-1"
-                  type="radio"
-                  value="small"
-                  style="transform: translateX(-100%); position: absolute; pointer-events: none; opacity: 0; margin: 0px; width: 16px; height: 16px;"
-                />
-                Small
-              </label>
-              <label
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 border cursor-pointer rounded-md p-2 flex items-center gap-2 [&amp;:has(:checked)]:bg-gray-100 dark:[&amp;:has(:checked)]:bg-gray-800"
-                for="size-medium"
-              >
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked="true"
-                  data-state="checked"
-                  value="medium"
-                  class="aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  id="size-medium"
-                  tabindex="-1"
-                  data-radix-collection-item=""
-                >
-                  <span data-state="checked" class="flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="h-2.5 w-2.5 fill-current text-current"
-                    >
-                      <circle cx="12" cy="12" r="10"></circle>
-                    </svg>
-                  </span>
-                </button>
-                <input
-                  aria-hidden="true"
-                  tabindex="-1"
-                  type="radio"
-                  value="medium"
-                  checked=""
-                  style="transform: translateX(-100%); position: absolute; pointer-events: none; opacity: 0; margin: 0px; width: 16px; height: 16px;"
-                />
-                Medium
-              </label>
-              <label
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 border cursor-pointer rounded-md p-2 flex items-center gap-2 [&amp;:has(:checked)]:bg-gray-100 dark:[&amp;:has(:checked)]:bg-gray-800"
-                for="size-large"
-              >
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked="false"
-                  data-state="unchecked"
-                  value="large"
-                  class="aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  id="size-large"
-                  tabindex="-1"
-                  data-radix-collection-item=""
-                ></button>
-                <input
-                  aria-hidden="true"
-                  tabindex="-1"
-                  type="radio"
-                  value="large"
-                  style="transform: translateX(-100%); position: absolute; pointer-events: none; opacity: 0; margin: 0px; width: 16px; height: 16px;"
-                />
-                Large
-              </label>
-            </div>
-          </div>
-          <div>
-            <label
-              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-base"
-              for="toppings"
-            >
-              Toppings
-            </label>
-            <div class="grid gap-2">
-              <div>Pepperoni</div>
-              <div>Mushrooms</div>
-              <div>Olives</div>
-              <div>Onions</div>
-            </div>
-          </div>
-          <div class="flex items-center justify-between">
-            <h3 class="text-2xl font-bold" id="detailTotalPrice"></h3>
-            <button 
-            onclick="addCart('detail')"
-            class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">
-              
-            </button>
-          </div>
-        </form>
-      </div>
+    <div id="fadeOutDiv" style=" position: absolute; left: 800px;  top: 600px; width: 200px; height: 200px; display: none;">
+      <img id="fadeOutImg" alt="Menu Item" style="height: auto; width: 100%; margin-top: 5px; border-radius: 5%;" src="https://telegra.ph/file/03e67b1774713572b6517.jpg"/>
     </div>
-  </detail>
-<cart id="cart" style="display: none;">
+  </main>
+<!-- <cart id="cart" style="display: none;">
   <div class="container mx-auto py-8">
     <h1 class="text-3xl font-bold mb-6">장바구니</h1>
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -1249,8 +1013,8 @@
       </div>
     </div>
   </div>
-</cart>
-<myOrder id="myOrder" style="display: none;">
+</cart> -->
+<!-- <myOrder id="myOrder" style="display: none;">
   <div class="container mx-auto py-8">
     <h1 class="text-3xl font-bold mb-6">주문내역</h1>
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -1264,7 +1028,7 @@
             <th class="px-4 py-3 text-right"></th>
           </tr>
         </thead>
-        <tbody id="cartDivPre">
+        <tbody>
           <tr>
             <td class="px-4 py-3">
               <div class="flex items-center">
@@ -1299,7 +1063,7 @@
       </div>
     </div>
   </div>
-</myOrder>
+</myOrder> -->
 <payment id="payment" style="display: none;">
   <div class="flex flex-col h-screen">
     <main class="flex-1 container mx-auto py-8">
@@ -1554,12 +1318,13 @@
       <a href="#" class="col-md-12 pt-2" style="border-radius: 5%; border-width: 2px; border-color: gainsboro; text-align: center;">주문내역</a>
     </div>
     <div class="col-md-1 h-12 rounded row">
-      <a href="#" class="col-md-12 pt-2" style="border-radius: 5%; border-width: 2px; border-color: gainsboro; text-align: center;">장바구니</a>
+      <a href="#" class="col-md-12 pt-2" style="border-radius: 5%; border-width: 2px; border-color: gainsboro; text-align: center;"
+      data-bs-toggle="modal" data-bs-target="#myCartModal">장바구니</a>
     </div>
   </div>
 </footer>
 </div>
-<div class="popup_layer" id="popup_layer" style="display: none;">
+<div class="popup_layer" id="imgAnimation" style="display: none;">
   <div class="row">
       <div></div>
       <!--팝업 컨텐츠 영역-->
@@ -1573,7 +1338,63 @@
       </div>
   </div>
 </div>
-<div class="modal" id="myModal">
+<div class="modal" id="myModal" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <input type="hidden" id="selectMenuName"/>
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">제품추가</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body row" style="height: 400px;">
+        <div class="col-md-6 h-12"> 
+          <img id="detailImg"
+                  alt="Menu Item"
+                  style="height: 360px; width: 100%; margin-top: 5px; border-radius: 5%;"
+                />
+        </div>
+        <div class="col-md-6 h-100" >
+          <div class="row h-20">
+            <div class="col-md-4">상품명</div>
+            <div id="detailMenuName" class="col-md-8"></div>
+          </div>
+          <div class="row h-40">
+            <div class="col-md-4">상품설명</div>
+            <div id="detailMenuDes" class="col-md-8"></div>
+          </div>
+          <div class="row h-20">
+            <div class="col-md-4">상품옵션</div>
+            <div id="detailMenuOption" class="col-md-8"></div>
+          </div>
+          <div class="row h-20">
+            <div class="col-md-12">
+              <div class="flex items-center justify-end">
+                <span style="display: none;" id="perPrice">menuPrice</span>
+                <button onclick="minusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+                  -
+                </button>
+                <span id="cnt" class="mx-2">1</span>
+                <button onclick="plusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" onclick="addCart()">장바구니 담기</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal" id="myCartModal" >
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -1585,19 +1406,78 @@
 
       <!-- Modal body -->
       <div class="modal-body row" style="height: 400px;">
-        <div class="col-md-6 h-12">
-          <img id="detailImg"
-                  src="https://telegra.ph/file/03e67b1774713572b6517.jpg"
-                  alt="Menu Item"
-                  style="height: 360px; width: 100%; margin-top: 5px; border-radius: 5%;"
-                />
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <table class="w-full">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="px-4 py-3 text-left">메뉴</th>
+                <th class="px-4 py-3 text-right">가격</th>
+                <th class="px-4 py-3 text-right">수량</th>
+                <th class="px-4 py-3 text-right">총 금액</th>
+                <th class="px-4 py-3 text-right">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="cartDivPre" style="display: none;">
+              <tr>
+                <td class="px-4 py-3">
+                  <div class="flex items-center">
+                    <img src="cartImg" alt="메뉴 이미지" class="w-12 h-12 rounded-full mr-4" />
+                    <span>menuName</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-right">menuPrice</td>
+                <td class="px-4 py-3 text-right">
+                  <div class="flex items-center justify-end">
+                    <span style="display: none;" id="perPrice">menuPrice</span>
+                    <button onclick="minusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+                      -
+                    </button>
+                    <span id="cnt" class="mx-2">1</span>
+                    <button onclick="plusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+                      +
+                    </button>
+                  </div>
+                </td>
+                <td id="subtotalPrice" class="px-4 py-3 text-right">menuTotalPrice</td>
+                <td class="px-4 py-3 text-right">
+                  <button 
+                  onclick="deleteMenu(this)"
+                  class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="w-4 h-4"
+                    >
+                      <path d="M3 6h18"></path>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tbody id="cartDiv">
+            </tbody>
+          </table>
+          <div class="bg-gray-100 p-4 flex justify-end row">
+            <div class="text-right col-md-6 row">
+              <p class="text-gray-500 text-2xl font-bold text-right col-md-6">총 금액:</p>
+              <p id="totalPrice" class="text-2xl font-bold text-right col-md-6">0원</p>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6 h-12"></div>
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger">장바구니 담기</button>
+        <button type="button" class="btn btn-danger" onclick="showPay()">주문하기</button>
       </div>
 
     </div>
@@ -1614,7 +1494,6 @@
   const Modum_Yachae_Gui = "https://telegra.ph/file/e464eb06755c4fc3e6e2d.jpg";
   const Saeng_Galbi = "https://telegra.ph/file/71dcbd18c60a6f0ddd482.jpg";
   const SSaeu_Gui = "https://telegra.ph/file/bae8da9dd40fed1216eaf.jpg";
-  const view = "https://telegra.ph/file/56349d3a6b1f615f7de1f.jpg";
   const Woo_Samgyup = "https://telegra.ph/file/8ebe6e3964785e59ea6f4.jpg";
 
   const Bibim_Naengmyeon = "https://i.postimg.cc/yD5QB7GB/Bibim-Naengmyeon.jpg";
@@ -1636,11 +1515,42 @@
   const Chadol_Duenjang_Jjigae = "https://i.postimg.cc/14f8VPCb/Chadol-Duenjang-Jjigae.jpg";
 
   const Dwaeji_Gochujang_Barbecue = "https://i.postimg.cc/Hr4n1Ln8/Dwaeji-Gochujang-Barbecue.jpg";
-  const Haemul_Dduk_Jjim = "https://i.postimg.cc/cKxHxNt9/Haemul-Dduk-Jjim.jpg";
+  const Haemul_Dduk_Jjim = "https://i.postimg.cc/cKxHxNt9/Haemul-Dduk-menuListJjim.jpg";
   const Haemul_Pa_Jeon = "https://i.postimg.cc/8J3PmJK9/Haemul-Pa-Jeon.jpg";
   const Jap_Chae = "https://i.postimg.cc/HJ6LjPQp/Jap-Chae.jpg";
   const Yeo_San_Tteokgalbi = "https://i.postimg.cc/k6DgSFcW/Yeo-San-Tteokgalbi.jpg";
 
+  var menuList ={ 
+
+    "Daepae_Woo_Seol": [Daepae_Woo_Seol , "Daepae Woo Seol" , "Prime beef tongue" , 24000,"Barbecue"],
+    "Kkot_Sal": [Kkot_Sal,"Kkot Sal","Prime cut and very tender raw boneless beef." , 32000,"Barbecue"],
+    "Mansinchang_Samgyeopsal_soy": [Mansinchang_Samgyeopsal_soy,"Mansinchang Samgyeopsal in Soy-Sauce","The Born-Ga’s special soy-sauce adds unique flavor to this pork belly meat.",24000,"Barbecue"],
+    "Mansinchang_Samgyeopsal_spicy": [Mansinchang_Samgyeopsal_spicy,"Mansinchang Samgyeopsal in Spicy Sauce","Spicy sauce marinates through cuts made by knife on the Pork Belly meat, amplifying the flavor." , 24000,"Barbecue"],
+    "Mansinchang_Samgyeopsal": [Mansinchang_Samgyeopsal,"Mansinchang Samgyeopsal","Fine cuts are made through the meat for quality grill, a tender bite and mild flavor.", 21000,"Barbecue"] ,
+    "Modum_Yachae_Gui": [Modum_Yachae_Gui,"Modum Yachae Gui","Side dish of vegetables that accompanies grilled meat courses." , 20000,"Barbecue"],
+    "Saeng_Galbi": [Saeng_Galbi,"Saeng Galbi","Prime cut and very tender raw beef ribs" , 14000,"Barbecue"],
+    "SSaeu_Gui": [SSaeu_Gui,"Saeu Gui","Grill shrimp marinated with special sweet sauce." , 18000,"Barbecue"],
+    "Woo_Samgyup": [Woo_Samgyup,"Woo Samgyup","The best and famous menu! The pioneer of Woo Samgyup! Thinly sliced beef brisket dressed with Born-Ga’s special sauce." , 24000,"Barbecue"],
+    "Bibim_Naengmyeon": [Bibim_Naengmyeon,"Bibim Naengmyeon","Buckwheat noodles in a spicy chili sauce." , 24000,"Rice_Noodle_Soup"],
+    "Bornga_Naengmyeon": [Bornga_Naengmyeon,"Bornga Naengmyeon","Bornga house specialty. Buckwheat noodles with cold broth." , 28000,"Rice_Noodle_Soup"],
+    "Bulgogi_jjigae": [Bulgogi_jjigae,"Bulgogi-jjigae","Marinated beef stew and glass noodles served in a hot stone pot" , 26000,"Rice_Noodle_Soup"],
+    "Galbitang": [Galbitang,"Galbitang","Beef short rib soup" , 24000,"Rice_Noodle_Soup"],
+    "Kimchi_Jjigae": [Kimchi_Jjigae,"Kimchi Jjigae","Spicy stew with kimchi, pork, tofu, and various vegetables" , 12000,"Rice_Noodle_Soup"],
+    "Suntofu_Jjigae_Spicy": [Suntofu_Jjigae_Spicy,"Suntofu Jjigae – Spicy","Assorted seafood and soft tofu – Spicy" , 12000,"Rice_Noodle_Soup"],
+    "Nokdu_Samgyetang": [Nokdu_Samgyetang,"Nokdu Samgyetang","Korea’s popular healthy dish made even more nutritious with green beans." , 14000,"Rice_Noodle_Soup"],
+    "Suntofu_Jjigae_Mild": [Suntofu_Jjigae_Mild,"Suntofu Jjigae – Mild","Assorted seafood and soft tofu – Mild" , 32000,"Rice_Noodle_Soup"],
+    "Yukgaejang": [Yukgaejang,"Yukgaejang","Spicy soup consisting of shredded beef, scallion and bean sprouts and glass noodles." , 30000,"Rice_Noodle_Soup"],
+    "Gyeran_Jjim": [Gyeran_Jjim,"Gyeran Jjim","Steamed egg pot" , 21000,"Side_dish"],
+    "Bornga_Bulgogi": [Bornga_Bulgogi,"Bornga Bulgogi","traditional-style Bulgogi dish. Grilled Korean beef and vegetables in broth." , 24000,"Side_dish"],
+    "Budae_Jjigae": [Budae_Jjigae,"Budae Jjigae","Spicy stew with Kimchi, sausage, and ham." , 27000,"Stew_Hot_pot"],
+    "Chadol_Duenjang_Jjigae": [Chadol_Duenjang_Jjigae,"Chadol Duenjang Jjigae","A traditional Korean soybean paste stew with beef." , 20000,"Stew_Hot_pot"],
+    "Dwaeji_Gochujang_Barbecue": [Dwaeji_Gochujang_Barbecue,"Dwaeji Gochujang Barbecue","Spicy pork fire-grilled to create a flavorful, fiery stir-fry dish." , 24000,"Stew_Hot_pot"],
+    "Haemul_Dduk_Jjim": [Haemul_Dduk_Jjim,"Haemul Dduk Jjim","Seafood, vegetables and cabbage mixed with spicy sauce and simmered dish." , 180000,"Traditional_Dish"],
+    "Haemul_Pa_Jeon": [Haemul_Pa_Jeon,"Haemul Pa Jeon","Pancakes made from scallions and a variety of seafood." , 16000,"Traditional_Dish"],
+    "Jap_Chae": [Jap_Chae,"Jap Chae","Stir-fried pork and vegetables with glass noodles" , 24000,"Traditional_Dish"],
+    "Yeo_San_Tteokgalbi": [Yeo_San_Tteokgalbi,"Yeo-San Tteokgalbi","Chopped Galbi-meat grilled and mixed with Korean rice cakes." , 22000,"Traditional_Dish"]
+
+  }
 
   window.onload = function(){
 
@@ -1652,7 +1562,6 @@
     $("#Modum_Yachae_Gui").attr("src",Modum_Yachae_Gui);
     $("#Saeng_Galbi").attr("src",Saeng_Galbi);
     $("#SSaeu_Gui").attr("src",SSaeu_Gui);
-    $("#view").attr("src",view);
     $("#Woo_Samgyup").attr("src",Woo_Samgyup);
 
     $("#Bibim_Naengmyeon").attr("src",Bibim_Naengmyeon);
@@ -1678,17 +1587,14 @@
     $("#Haemul_Pa_Jeon").attr("src",Haemul_Pa_Jeon);
     $("#Jap_Chae").attr("src",Jap_Chae);
     $("#Yeo_San_Tteokgalbi").attr("src",Yeo_San_Tteokgalbi);
-
-  }
-
-  function openPop(menuName) {
     
+    for( var i = 0 ; i < Object.keys(menuList).length ; i++){
+      // alert(Object.keys(menuList)[i])
+      // $("#"+Object.keys(menuList)[i][1]).parent().find("h3").text("test");
 
-  }
+    }
 
-  //팝업 닫기
-  function closePop() {
-    $("#popup_layer").modal("hidden");
+
 
   }
 
