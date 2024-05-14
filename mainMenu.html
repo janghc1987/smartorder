@@ -1590,7 +1590,8 @@
     
     for( var i = 0 ; i < Object.keys(menuList).length ; i++){
       // alert(Object.keys(menuList)[i])
-      // $("#"+Object.keys(menuList)[i][1]).parent().find("h3").text("test");
+      $("#"+Object.keys(menuList)[i]).parent().find("h3").text(menuList[Object.keys(menuList)[i]][1]);
+      $("#"+Object.keys(menuList)[i]).parent().find("span").text(menuList[Object.keys(menuList)[i]][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원");
 
     }
 
