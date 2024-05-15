@@ -1,19 +1,240 @@
-<!--
-// v0 by Vercel.
-// https://v0.dev/t/QkGNBm1kviD
--->
+<!DOCTYPE html>
+<html lang="ko">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
 </head>
+<style>
+
+  .layerPopup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      margin: -30px 0 0 -30px;
+  }
+  .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border: 8px solid #f3f3f3; /* Light grey */
+      border-top: 8px solid white; /* Blue */
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spinner 2s linear infinite;
+  }
+  
+  @keyframes spinner {
+      0% {
+          transform: rotate(0deg);
+      }
+      100% {
+          transform: rotate(360deg);
+      }
+  }
+  
+  .popup_layer {position:fixed;top:0;left:0;z-index: 10000; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); }
+  /*팝업 박스*/
+  .popup_box{position: relative;top:50%;left:50%; overflow: auto; height: 300px; width:375px;transform:translate(-50%, -50%);z-index:1002;box-sizing:border-box;background:#fff;box-shadow: 2px 5px 10px 0px rgba(0,0,0,0.35);-webkit-box-shadow: 2px 5px 10px 0px rgba(0,0,0,0.35);-moz-box-shadow: 2px 5px 10px 0px rgba(0,0,0,0.35);}
+  /*컨텐츠 영역*/
+  .popup_box .popup_cont {padding:50px;line-height:1.4rem;font-size:14px; }
+  .popup_box .popup_cont h2 {padding:15px 0;color:#333;margin:0;}
+  .popup_box .popup_cont p{ border-top: 1px solid #666;padding-top: 30px;}
+  /*버튼영역*/
+  .popup_box .popup_btn {display:table;table-layout: fixed;width:100%;height:70px; background:#ECECEC;word-break: break-word;}
+  .popup_box .popup_btn a {position: relative; display: table-cell; align-items: center; height:40px; font-size:17px;text-align:center;vertical-align:middle;text-decoration:none; background:#ECECEC; border-radius: 30%;}
+  .popup_box .popup_btn a.close_day {background:#5d5d5d; }
+  .popup_box .popup_btn a.close_day:before, .popup_box .popup_btn a.close_day:after{display:none;}
+  /*오버레이 뒷배경*/
+  .popup_overlay{position:fixed;top:0px;right:0;left:0;bottom:0;z-index:1001;;background:rgba(0,0,0,0.5);}
+  
+  .keyup_select{border-radius: 10%; background-color: aqua;}
+  
+  .modal-dialog{max-width: 800px; max-height: 650px;}
+
+  .loginForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .loginBox {
+    width: 300px;
+    text-align: center;
+    background-color: #ffffff;
+  }
+  .videoBox {
+    width: 560px;
+    text-align: center;
+    background-color: #ffffff;
+  }
+  .input-form-box {
+    border: 0px solid #ff0000;
+    display: flex;
+    margin-bottom: 5px;
+  }
+  .input-form-box > span {
+    display: block;
+    text-align: left;
+    padding-top: 5px;
+    min-width: 65px;
+  }
+  .button-login-box {
+    margin: 10px 0;
+  }
+  .loginBoxTitle {
+    color:#000000;
+    font-weight: bold;
+    font-size: 28px;
+    text-transform: uppercase;
+    padding: 5px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #270a09, #8ca6ce);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .inputBox {
+    margin: 10px;
+  }
+
+  .inputBox button {
+    padding: 3px 5px;
+  }
+
+  html, body {
+    height: 100%;
+    background: #ffffff;
+  }
+</style>
 <script type="text/javascript">
   
-  var detailMenuId = '';
+  const Daepae_Woo_Seol = "https://telegra.ph/file/03e67b1774713572b6517.jpg";
+  const Kkot_Sal = "https://telegra.ph/file/d148bb7435d918b860d14.jpg";
+  const Mansinchang_Samgyeopsal_soy = "https://telegra.ph/file/9f4b59e52ca7419cbdaf4.jpg";
+  const Mansinchang_Samgyeopsal_spicy = "https://telegra.ph/file/3c5332d8ccd1282ac4e2f.jpg";
+  const Mansinchang_Samgyeopsal = "https://telegra.ph/file/cf48bacaca81a660e8a8d.jpg";
+  const Modum_Yachae_Gui = "https://telegra.ph/file/e464eb06755c4fc3e6e2d.jpg";
+  const Saeng_Galbi = "https://telegra.ph/file/71dcbd18c60a6f0ddd482.jpg";
+  const SSaeu_Gui = "https://telegra.ph/file/bae8da9dd40fed1216eaf.jpg";
+  const Woo_Samgyup = "https://telegra.ph/file/8ebe6e3964785e59ea6f4.jpg";
+
+  const Bibim_Naengmyeon = "https://i.postimg.cc/yD5QB7GB/Bibim-Naengmyeon.jpg";
+  const Bornga_Naengmyeon = "https://i.postimg.cc/QBT6dRL7/Bornga-Naengmyeon.jpg";
+  const Bulgogi_jjigae = "https://i.postimg.cc/N9vd9pYz/Bulgogi-jjigae.jpg";
+  const Dolsot_Bibimbap = "https://i.postimg.cc/fSw55yV7/Dolsot-Bibimbap.jpg";
+  const Galbitang = "https://i.postimg.cc/S2LDWCxN/Galbitang.jpg";
+  const Kimchi_Jjigae = "https://i.postimg.cc/XX32nHsZ/Kimchi-Jjigae.jpg";
+  const Suntofu_Jjigae_Spicy = "https://i.postimg.cc/bsVLHzpb/Suntofu-Jjigae-Spicy.jpg";
+  const Nokdu_Samgyetang = "https://i.postimg.cc/V5RKvqhK/Nokdu-Samgyetang.jpg";
+  const Suntofu_Jjigae_Mild = "https://i.postimg.cc/VdkDCSQm/Suntofu-Jjigae-Mild.jpg";
+  const Yukgaejang = "https://i.postimg.cc/WdD85Q1y/Yukgaejang.jpg";
+
+  const Gyeran_Jjim = "https://i.postimg.cc/hJcJXd60/Gyeran-Jjim.jpg";
+  const Haemul_Ssamjang = "https://i.postimg.cc/Ty0KgPXv/Haemul-Ssamjang.jpg";
+
+  const Bornga_Bulgogi = "https://i.postimg.cc/N9PLCPMN/Bornga-Bulgogi.jpg";
+  const Budae_Jjigae = "https://i.postimg.cc/PvpJgzvd/Budae-Jjigae.jpg";
+  const Chadol_Duenjang_Jjigae = "https://i.postimg.cc/14f8VPCb/Chadol-Duenjang-Jjigae.jpg";
+
+  const Dwaeji_Gochujang_Barbecue = "https://i.postimg.cc/Hr4n1Ln8/Dwaeji-Gochujang-Barbecue.jpg";
+  const Haemul_Dduk_Jjim = "https://i.postimg.cc/cKxHxNt9/Haemul-Dduk-menuListJjim.jpg";
+  const Haemul_Pa_Jeon = "https://i.postimg.cc/8J3PmJK9/Haemul-Pa-Jeon.jpg";
+  const Jap_Chae = "https://i.postimg.cc/HJ6LjPQp/Jap-Chae.jpg";
+  const Yeo_San_Tteokgalbi = "https://i.postimg.cc/k6DgSFcW/Yeo-San-Tteokgalbi.jpg";
+
+  var menuList ={ 
+
+    "Daepae_Woo_Seol": [Daepae_Woo_Seol , "Daepae Woo Seol" , "Prime beef tongue" , 24000,"Barbecue"],
+    "Kkot_Sal": [Kkot_Sal,"Kkot Sal","Prime cut and very tender raw boneless beef." , 32000,"Barbecue"],
+    "Mansinchang_Samgyeopsal_soy": [Mansinchang_Samgyeopsal_soy,"Mansinchang Samgyeopsal in Soy-Sauce","The Born-Ga’s special soy-sauce adds unique flavor to this pork belly meat.",24000,"Barbecue"],
+    "Mansinchang_Samgyeopsal_spicy": [Mansinchang_Samgyeopsal_spicy,"Mansinchang Samgyeopsal in Spicy Sauce","Spicy sauce marinates through cuts made by knife on the Pork Belly meat, amplifying the flavor." , 24000,"Barbecue"],
+    "Mansinchang_Samgyeopsal": [Mansinchang_Samgyeopsal,"Mansinchang Samgyeopsal","Fine cuts are made through the meat for quality grill, a tender bite and mild flavor.", 21000,"Barbecue"] ,
+    "Modum_Yachae_Gui": [Modum_Yachae_Gui,"Modum Yachae Gui","Side dish of vegetables that accompanies grilled meat courses." , 20000,"Barbecue"],
+    "Saeng_Galbi": [Saeng_Galbi,"Saeng Galbi","Prime cut and very tender raw beef ribs" , 14000,"Barbecue"],
+    "SSaeu_Gui": [SSaeu_Gui,"Saeu Gui","Grill shrimp marinated with special sweet sauce." , 18000,"Barbecue"],
+    "Woo_Samgyup": [Woo_Samgyup,"Woo Samgyup","The best and famous menu! The pioneer of Woo Samgyup! Thinly sliced beef brisket dressed with Born-Ga’s special sauce." , 24000,"Barbecue"],
+    "Bibim_Naengmyeon": [Bibim_Naengmyeon,"Bibim Naengmyeon","Buckwheat noodles in a spicy chili sauce." , 24000,"Rice_Noodle_Soup"],
+    "Bornga_Naengmyeon": [Bornga_Naengmyeon,"Bornga Naengmyeon","Bornga house specialty. Buckwheat noodles with cold broth." , 28000,"Rice_Noodle_Soup"],
+    "Bulgogi_jjigae": [Bulgogi_jjigae,"Bulgogi-jjigae","Marinated beef stew and glass noodles served in a hot stone pot" , 26000,"Rice_Noodle_Soup"],
+    "Galbitang": [Galbitang,"Galbitang","Beef short rib soup" , 24000,"Rice_Noodle_Soup"],
+    "Kimchi_Jjigae": [Kimchi_Jjigae,"Kimchi Jjigae","Spicy stew with kimchi, pork, tofu, and various vegetables" , 12000,"Rice_Noodle_Soup"],
+    "Suntofu_Jjigae_Spicy": [Suntofu_Jjigae_Spicy,"Suntofu Jjigae – Spicy","Assorted seafood and soft tofu – Spicy" , 12000,"Rice_Noodle_Soup"],
+    "Nokdu_Samgyetang": [Nokdu_Samgyetang,"Nokdu Samgyetang","Korea’s popular healthy dish made even more nutritious with green beans." , 14000,"Rice_Noodle_Soup"],
+    "Suntofu_Jjigae_Mild": [Suntofu_Jjigae_Mild,"Suntofu Jjigae – Mild","Assorted seafood and soft tofu – Mild" , 32000,"Rice_Noodle_Soup"],
+    "Yukgaejang": [Yukgaejang,"Yukgaejang","Spicy soup consisting of shredded beef, scallion and bean sprouts and glass noodles." , 30000,"Rice_Noodle_Soup"],
+    "Gyeran_Jjim": [Gyeran_Jjim,"Gyeran Jjim","Steamed egg pot" , 21000,"Side_dish"],
+    "Bornga_Bulgogi": [Bornga_Bulgogi,"Bornga Bulgogi","traditional-style Bulgogi dish. Grilled Korean beef and vegetables in broth." , 24000,"Side_dish"],
+    "Budae_Jjigae": [Budae_Jjigae,"Budae Jjigae","Spicy stew with Kimchi, sausage, and ham." , 27000,"Stew_Hot_pot"],
+    "Chadol_Duenjang_Jjigae": [Chadol_Duenjang_Jjigae,"Chadol Duenjang Jjigae","A traditional Korean soybean paste stew with beef." , 20000,"Stew_Hot_pot"],
+    "Dwaeji_Gochujang_Barbecue": [Dwaeji_Gochujang_Barbecue,"Dwaeji Gochujang Barbecue","Spicy pork fire-grilled to create a flavorful, fiery stir-fry dish." , 24000,"Stew_Hot_pot"],
+    "Haemul_Dduk_Jjim": [Haemul_Dduk_Jjim,"Haemul Dduk Jjim","Seafood, vegetables and cabbage mixed with spicy sauce and simmered dish." , 180000,"Traditional_Dish"],
+    "Haemul_Pa_Jeon": [Haemul_Pa_Jeon,"Haemul Pa Jeon","Pancakes made from scallions and a variety of seafood." , 16000,"Traditional_Dish"],
+    "Jap_Chae": [Jap_Chae,"Jap Chae","Stir-fried pork and vegetables with glass noodles" , 24000,"Traditional_Dish"],
+    "Yeo_San_Tteokgalbi": [Yeo_San_Tteokgalbi,"Yeo-San Tteokgalbi","Chopped Galbi-meat grilled and mixed with Korean rice cakes." , 22000,"Traditional_Dish"]
+
+  }
+
+  window.onload = function(){
+
+    $("#Daepae_Woo_Seol").attr("src",Daepae_Woo_Seol);
+    $("#Kkot_Sal").attr("src",Kkot_Sal);
+    $("#Mansinchang_Samgyeopsal_soy").attr("src",Mansinchang_Samgyeopsal_soy);
+    $("#Mansinchang_Samgyeopsal_spicy").attr("src",Mansinchang_Samgyeopsal_spicy);
+    $("#Mansinchang_Samgyeopsal").attr("src",Mansinchang_Samgyeopsal);
+    $("#Modum_Yachae_Gui").attr("src",Modum_Yachae_Gui);
+    $("#Saeng_Galbi").attr("src",Saeng_Galbi);
+    $("#SSaeu_Gui").attr("src",SSaeu_Gui);
+    $("#Woo_Samgyup").attr("src",Woo_Samgyup);
+
+    $("#Bibim_Naengmyeon").attr("src",Bibim_Naengmyeon);
+    $("#Bornga_Naengmyeon").attr("src",Bornga_Naengmyeon);
+    $("#Bulgogi_jjigae").attr("src",Bulgogi_jjigae);
+    $("#Dolsot_Bibimbap").attr("src",Dolsot_Bibimbap);
+    $("#Galbitang").attr("src",Galbitang);
+    $("#Kimchi_Jjigae").attr("src",Kimchi_Jjigae);
+    $("#Suntofu_Jjigae_Spicy").attr("src",Suntofu_Jjigae_Spicy);
+    $("#Nokdu_Samgyetang").attr("src",Nokdu_Samgyetang);
+    $("#Suntofu_Jjigae_Mild").attr("src",Suntofu_Jjigae_Mild);
+    $("#Yukgaejang").attr("src",Yukgaejang);
+
+    $("#Gyeran_Jjim").attr("src",Gyeran_Jjim);
+    $("#Haemul_Ssamjang").attr("src",Haemul_Ssamjang);
+
+    $("#Bornga_Bulgogi").attr("src",Bornga_Bulgogi);
+    $("#Budae_Jjigae").attr("src",Budae_Jjigae);
+    $("#Chadol_Duenjang_Jjigae").attr("src",Chadol_Duenjang_Jjigae);
+
+    $("#Dwaeji_Gochujang_Barbecue").attr("src",Dwaeji_Gochujang_Barbecue);
+    $("#Haemul_Dduk_Jjim").attr("src",Haemul_Dduk_Jjim);
+    $("#Haemul_Pa_Jeon").attr("src",Haemul_Pa_Jeon);
+    $("#Jap_Chae").attr("src",Jap_Chae);
+    $("#Yeo_San_Tteokgalbi").attr("src",Yeo_San_Tteokgalbi);
+    
+    for( var i = 0 ; i < Object.keys(menuList).length ; i++){
+      $("#"+Object.keys(menuList)[i]).parent().find("h3").text(menuList[Object.keys(menuList)[i]][1]);
+      $("#"+Object.keys(menuList)[i]).parent().find("span").text(menuList[Object.keys(menuList)[i]][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원");
+
+    }
+
+    showCategory('Barbecue');
+
+  }
 
   function showMain(){
     $("#main").show();
@@ -125,7 +346,7 @@
     $(obj).addClass("keyup_select");
 
     $(".menuDiv").hide();
-
+    
     if(categoryId == 'Barbecue'){
       $(".Barbecue").show();
     }else if(categoryId == 'Rice Noodle Soup'){
@@ -143,113 +364,69 @@
   function showMyOrder(){
     showPay();
   }
-</script>
-<style>
 
-.layerPopup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    margin: -30px 0 0 -30px;
-}
-.spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border: 8px solid #f3f3f3; /* Light grey */
-    border-top: 8px solid white; /* Blue */
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spinner 2s linear infinite;
-}
-@keyframes spinner {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.popup_layer {position:fixed;top:0;left:0;z-index: 10000; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); }
-/*팝업 박스*/
-.popup_box{position: relative;top:50%;left:50%; overflow: auto; height: 300px; width:375px;transform:translate(-50%, -50%);z-index:1002;box-sizing:border-box;background:#fff;box-shadow: 2px 5px 10px 0px rgba(0,0,0,0.35);-webkit-box-shadow: 2px 5px 10px 0px rgba(0,0,0,0.35);-moz-box-shadow: 2px 5px 10px 0px rgba(0,0,0,0.35);}
-/*컨텐츠 영역*/
-.popup_box .popup_cont {padding:50px;line-height:1.4rem;font-size:14px; }
-.popup_box .popup_cont h2 {padding:15px 0;color:#333;margin:0;}
-.popup_box .popup_cont p{ border-top: 1px solid #666;padding-top: 30px;}
-/*버튼영역*/
-.popup_box .popup_btn {display:table;table-layout: fixed;width:100%;height:70px; background:#ECECEC;word-break: break-word;}
-.popup_box .popup_btn a {position: relative; display: table-cell; align-items: center; height:40px; font-size:17px;text-align:center;vertical-align:middle;text-decoration:none; background:#ECECEC; border-radius: 30%;}
-.popup_box .popup_btn a.close_day {background:#5d5d5d; }
-.popup_box .popup_btn a.close_day:before, .popup_box .popup_btn a.close_day:after{display:none;}
-/*오버레이 뒷배경*/
-.popup_overlay{position:fixed;top:0px;right:0;left:0;bottom:0;z-index:1001;;background:rgba(0,0,0,0.5);}
-
-.keyup_select{border-radius: 10%; background-color: aqua;}
-
-.modal-dialog{max-width: 800px; max-height: 650px;}
-</style>
-
-<div class="flex flex-col h-screen">
-  <header>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  function login(){
+    const loginInfo = {"janghc":"1234"}
     
-    <!-- <div class="flex justify-between items-center">
-      <h1 href="#" class="text-2xl font-bold" onclick="showMain()" style="cursor: pointer">Smart Order</h1>
-      <div class="flex items-center space-x-4">
-        <a class="flex items-center space-x-2" href="#" onclick="showCart()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-6 h-6"
-          >
-            <circle cx="8" cy="21" r="1"></circle>
-            <circle cx="19" cy="21" r="1"></circle>
-            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
-          </svg>
-          <span>Cart</span>
-        </a>
-        <a class="flex items-center space-x-2" href="#" onclick="showMyOrder()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-6 h-6"
-          >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span>My Order</span>
-        </a>
+    if(loginInfo[$("#loginId").val()] == $("#pwd").val()){
+      // 성공
+      $("#loginForm").hide();
+      $("#subForm").show();
+    }else if(loginInfo[$("#loginId").val()] == undefined){
+      alert("아이디가 존재하지 않습니다.");
+    }else{
+      alert("로그인 정보가 올바르지 않습니다.");
+    }
+
+  }
+
+  function goMain(eatType){
+    $("#subForm").hide();
+    $("#mainForm").show();
+  }
+
+</script>
+<body class="text-center">
+<div class="loginForm" id="loginForm">
+  <!--  login 폼 영역을 : loginBox -->
+  <div class="loginBox">
+    <!-- 로그인 페이지 타이틀 -->
+    <div class="loginBoxTitle">ARTE TABLE ORDER</div>
+    <!-- 아이디, 비번, 버튼 박스 -->
+    <div class="inputBox">
+      <div class="input-form-box"><span>아이디 </span><input type="text" id="loginId" name="uid" class="form-control" value="janghc"></div>
+      <div class="input-form-box"><span>비밀번호 </span><input type="password" id="pwd" name="upw" class="form-control" value="1234"></div>
+      <div class="button-login-box" >
+        <button type="button" class="btn btn-primary btn-xs" style="width:100%" onclick="login()">로그인</button>
       </div>
-    </div> -->
-  </header>
+    </div>
+    
+  </div>
+</div>
+<div class="loginForm" id="subForm" style="display: none;">
+  <!--  login 폼 영역을 : loginBox -->
+  <div class="videoBox">
+    <!-- 로그인 페이지 타이틀 -->
+    <div>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/AVECupsWSz0?si=hflc-yZ-hojTAHfZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <!-- 아이디, 비번, 버튼 박스 -->
+    <div class="videoInputBox">
+      <div class="button-login-box" >
+        <button type="button" class="btn btn-primary btn-xs" style="width:100%" onclick="goMain('StoreMeal')">매장에서 먹기</button>
+      </div>
+      <div class="button-login-box" >
+        <button type="button" class="btn btn-primary btn-xs" style="width:100%" onclick="goMain('takeOut')">포장하기</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+<div id="mainForm" class="flex flex-col h-screen" style="display: none;">
   <div class="layerPopup" style="display: none;" id="loading">
     <div class="spinner"></div>
   </div>
-  <main id="main" class="flex-1 bg-gray-100 py-8 px-6" >
+  <main id="main" class="flex-1 bg-gray-100 py-8 px-6 mb-4 pb-20" >
     <div class="row">
       <div class="col-md-2">
         <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
@@ -1308,14 +1485,16 @@
     </main>
   </div>
 </payment>
-<footer class="container-fluid fixed-bottom py-4 bg-gray-100 border-top border-width-2">
+<footer class="container-fluid fixed-bottom py-2 bg-gray-100 border-top border-width-2">
   <div class="row">
     <div class="col-md-1 h-12 rounded ms-1 row">
-      <a href="#" class="col-md-12 pt-2" style="border-radius: 5%; border-width: 2px; border-color: gainsboro; text-align: center;">직원호출</a>
+      <a href="#" class="col-md-12 pt-2" style="border-radius: 5%; border-width: 2px; border-color: gainsboro; text-align: center;"
+      data-bs-toggle="modal" data-bs-target="#waiterCallModal">직원호출</a>
     </div>
     <div class="col-md-9"></div>
     <div class="col-md-1 h-12 rounded me-1 row">
-      <a href="#" class="col-md-12 pt-2" style="border-radius: 5%; border-width: 2px; border-color: gainsboro; text-align: center;">주문내역</a>
+      <a href="#" class="col-md-12 pt-2" style="border-radius: 5%; border-width: 2px; border-color: gainsboro; text-align: center;"
+      data-bs-toggle="modal" data-bs-target="#myOrderModal">주문내역</a>
     </div>
     <div class="col-md-1 h-12 rounded row">
       <a href="#" class="col-md-12 pt-2" style="border-radius: 5%; border-width: 2px; border-color: gainsboro; text-align: center;"
@@ -1394,6 +1573,7 @@
     </div>
   </div>
 </div>
+<!-- 장바구니 팝업 -->
 <div class="modal" id="myCartModal" >
   <div class="modal-dialog">
     <div class="modal-content">
@@ -1413,7 +1593,7 @@
                 <th class="px-4 py-3 text-left">메뉴</th>
                 <th class="px-4 py-3 text-right">가격</th>
                 <th class="px-4 py-3 text-right">수량</th>
-                <th class="px-4 py-3 text-right">총 금액</th>
+                <th class="px-4 py-3 text-right">금액</th>
                 <th class="px-4 py-3 text-right">삭제</th>
               </tr>
             </thead>
@@ -1466,7 +1646,7 @@
             <tbody id="cartDiv">
             </tbody>
           </table>
-          <div class="bg-gray-100 p-4 flex justify-end row">
+          <div class="bg-gray-100 p-4 flex justify-end row m-0">
             <div class="text-right col-md-6 row">
               <p class="text-gray-500 text-2xl font-bold text-right col-md-6">총 금액:</p>
               <p id="totalPrice" class="text-2xl font-bold text-right col-md-6">0원</p>
@@ -1483,120 +1663,183 @@
     </div>
   </div>
 </div>
+<!-- 주문내역 팝업 -->
+<div class="modal" id="myOrderModal" >
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-<script type="text/javascript">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">주문내역</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
 
-  const Daepae_Woo_Seol = "https://telegra.ph/file/03e67b1774713572b6517.jpg";
-  const Kkot_Sal = "https://telegra.ph/file/d148bb7435d918b860d14.jpg";
-  const Mansinchang_Samgyeopsal_soy = "https://telegra.ph/file/9f4b59e52ca7419cbdaf4.jpg";
-  const Mansinchang_Samgyeopsal_spicy = "https://telegra.ph/file/3c5332d8ccd1282ac4e2f.jpg";
-  const Mansinchang_Samgyeopsal = "https://telegra.ph/file/cf48bacaca81a660e8a8d.jpg";
-  const Modum_Yachae_Gui = "https://telegra.ph/file/e464eb06755c4fc3e6e2d.jpg";
-  const Saeng_Galbi = "https://telegra.ph/file/71dcbd18c60a6f0ddd482.jpg";
-  const SSaeu_Gui = "https://telegra.ph/file/bae8da9dd40fed1216eaf.jpg";
-  const Woo_Samgyup = "https://telegra.ph/file/8ebe6e3964785e59ea6f4.jpg";
+      <!-- Modal body -->
+      <div class="modal-body row" style="height: 400px;">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <table class="w-full">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="px-4 py-3 text-left">메뉴</th>
+                <th class="px-4 py-3 text-right">가격</th>
+                <th class="px-4 py-3 text-right">수량</th>
+                <th class="px-4 py-3 text-right">금액</th>
+                <th class="px-4 py-3 text-right">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="cartDivPre" style="display: none;">
+              <tr>
+                <td class="px-4 py-3">
+                  <div class="flex items-center">
+                    <img src="cartImg" alt="메뉴 이미지" class="w-12 h-12 rounded-full mr-4" />
+                    <span>menuName</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-right">menuPrice</td>
+                <td class="px-4 py-3 text-right">
+                  <div class="flex items-center justify-end">
+                    <span id="cnt" class="mx-2">1</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-right">menuTotalPrice</td>
+                <td class="px-4 py-3 text-right">
 
-  const Bibim_Naengmyeon = "https://i.postimg.cc/yD5QB7GB/Bibim-Naengmyeon.jpg";
-  const Bornga_Naengmyeon = "https://i.postimg.cc/QBT6dRL7/Bornga-Naengmyeon.jpg";
-  const Bulgogi_jjigae = "https://i.postimg.cc/N9vd9pYz/Bulgogi-jjigae.jpg";
-  const Dolsot_Bibimbap = "https://i.postimg.cc/fSw55yV7/Dolsot-Bibimbap.jpg";
-  const Galbitang = "https://i.postimg.cc/S2LDWCxN/Galbitang.jpg";
-  const Kimchi_Jjigae = "https://i.postimg.cc/XX32nHsZ/Kimchi-Jjigae.jpg";
-  const Suntofu_Jjigae_Spicy = "https://i.postimg.cc/bsVLHzpb/Suntofu-Jjigae-Spicy.jpg";
-  const Nokdu_Samgyetang = "https://i.postimg.cc/V5RKvqhK/Nokdu-Samgyetang.jpg";
-  const Suntofu_Jjigae_Mild = "https://i.postimg.cc/VdkDCSQm/Suntofu-Jjigae-Mild.jpg";
-  const Yukgaejang = "https://i.postimg.cc/WdD85Q1y/Yukgaejang.jpg";
+                </td>
+              </tr>
+            </tbody>
+            <tbody id="cartDiv">
+            </tbody>
+          </table>
+          <div class="bg-gray-100 p-4 flex justify-end row m-0">
+            <div class="text-right col-md-6 row">
+              <p class="text-gray-500 text-2xl font-bold text-right col-md-6">총 금액:</p>
+              <p class="text-2xl font-bold text-right col-md-6">0원</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  const Gyeran_Jjim = "https://i.postimg.cc/hJcJXd60/Gyeran-Jjim.jpg";
-  const Haemul_Ssamjang = "https://i.postimg.cc/Ty0KgPXv/Haemul-Ssamjang.jpg";
+    </div>
+  </div>
+</div>
+<!-- 직원호출 팝업 -->
+<div class="modal" id="waiterCallModal" >
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-  const Bornga_Bulgogi = "https://i.postimg.cc/N9PLCPMN/Bornga-Bulgogi.jpg";
-  const Budae_Jjigae = "https://i.postimg.cc/PvpJgzvd/Budae-Jjigae.jpg";
-  const Chadol_Duenjang_Jjigae = "https://i.postimg.cc/14f8VPCb/Chadol-Duenjang-Jjigae.jpg";
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">제품추가</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
 
-  const Dwaeji_Gochujang_Barbecue = "https://i.postimg.cc/Hr4n1Ln8/Dwaeji-Gochujang-Barbecue.jpg";
-  const Haemul_Dduk_Jjim = "https://i.postimg.cc/cKxHxNt9/Haemul-Dduk-menuListJjim.jpg";
-  const Haemul_Pa_Jeon = "https://i.postimg.cc/8J3PmJK9/Haemul-Pa-Jeon.jpg";
-  const Jap_Chae = "https://i.postimg.cc/HJ6LjPQp/Jap-Chae.jpg";
-  const Yeo_San_Tteokgalbi = "https://i.postimg.cc/k6DgSFcW/Yeo-San-Tteokgalbi.jpg";
-
-  var menuList ={ 
-
-    "Daepae_Woo_Seol": [Daepae_Woo_Seol , "Daepae Woo Seol" , "Prime beef tongue" , 24000,"Barbecue"],
-    "Kkot_Sal": [Kkot_Sal,"Kkot Sal","Prime cut and very tender raw boneless beef." , 32000,"Barbecue"],
-    "Mansinchang_Samgyeopsal_soy": [Mansinchang_Samgyeopsal_soy,"Mansinchang Samgyeopsal in Soy-Sauce","The Born-Ga’s special soy-sauce adds unique flavor to this pork belly meat.",24000,"Barbecue"],
-    "Mansinchang_Samgyeopsal_spicy": [Mansinchang_Samgyeopsal_spicy,"Mansinchang Samgyeopsal in Spicy Sauce","Spicy sauce marinates through cuts made by knife on the Pork Belly meat, amplifying the flavor." , 24000,"Barbecue"],
-    "Mansinchang_Samgyeopsal": [Mansinchang_Samgyeopsal,"Mansinchang Samgyeopsal","Fine cuts are made through the meat for quality grill, a tender bite and mild flavor.", 21000,"Barbecue"] ,
-    "Modum_Yachae_Gui": [Modum_Yachae_Gui,"Modum Yachae Gui","Side dish of vegetables that accompanies grilled meat courses." , 20000,"Barbecue"],
-    "Saeng_Galbi": [Saeng_Galbi,"Saeng Galbi","Prime cut and very tender raw beef ribs" , 14000,"Barbecue"],
-    "SSaeu_Gui": [SSaeu_Gui,"Saeu Gui","Grill shrimp marinated with special sweet sauce." , 18000,"Barbecue"],
-    "Woo_Samgyup": [Woo_Samgyup,"Woo Samgyup","The best and famous menu! The pioneer of Woo Samgyup! Thinly sliced beef brisket dressed with Born-Ga’s special sauce." , 24000,"Barbecue"],
-    "Bibim_Naengmyeon": [Bibim_Naengmyeon,"Bibim Naengmyeon","Buckwheat noodles in a spicy chili sauce." , 24000,"Rice_Noodle_Soup"],
-    "Bornga_Naengmyeon": [Bornga_Naengmyeon,"Bornga Naengmyeon","Bornga house specialty. Buckwheat noodles with cold broth." , 28000,"Rice_Noodle_Soup"],
-    "Bulgogi_jjigae": [Bulgogi_jjigae,"Bulgogi-jjigae","Marinated beef stew and glass noodles served in a hot stone pot" , 26000,"Rice_Noodle_Soup"],
-    "Galbitang": [Galbitang,"Galbitang","Beef short rib soup" , 24000,"Rice_Noodle_Soup"],
-    "Kimchi_Jjigae": [Kimchi_Jjigae,"Kimchi Jjigae","Spicy stew with kimchi, pork, tofu, and various vegetables" , 12000,"Rice_Noodle_Soup"],
-    "Suntofu_Jjigae_Spicy": [Suntofu_Jjigae_Spicy,"Suntofu Jjigae – Spicy","Assorted seafood and soft tofu – Spicy" , 12000,"Rice_Noodle_Soup"],
-    "Nokdu_Samgyetang": [Nokdu_Samgyetang,"Nokdu Samgyetang","Korea’s popular healthy dish made even more nutritious with green beans." , 14000,"Rice_Noodle_Soup"],
-    "Suntofu_Jjigae_Mild": [Suntofu_Jjigae_Mild,"Suntofu Jjigae – Mild","Assorted seafood and soft tofu – Mild" , 32000,"Rice_Noodle_Soup"],
-    "Yukgaejang": [Yukgaejang,"Yukgaejang","Spicy soup consisting of shredded beef, scallion and bean sprouts and glass noodles." , 30000,"Rice_Noodle_Soup"],
-    "Gyeran_Jjim": [Gyeran_Jjim,"Gyeran Jjim","Steamed egg pot" , 21000,"Side_dish"],
-    "Bornga_Bulgogi": [Bornga_Bulgogi,"Bornga Bulgogi","traditional-style Bulgogi dish. Grilled Korean beef and vegetables in broth." , 24000,"Side_dish"],
-    "Budae_Jjigae": [Budae_Jjigae,"Budae Jjigae","Spicy stew with Kimchi, sausage, and ham." , 27000,"Stew_Hot_pot"],
-    "Chadol_Duenjang_Jjigae": [Chadol_Duenjang_Jjigae,"Chadol Duenjang Jjigae","A traditional Korean soybean paste stew with beef." , 20000,"Stew_Hot_pot"],
-    "Dwaeji_Gochujang_Barbecue": [Dwaeji_Gochujang_Barbecue,"Dwaeji Gochujang Barbecue","Spicy pork fire-grilled to create a flavorful, fiery stir-fry dish." , 24000,"Stew_Hot_pot"],
-    "Haemul_Dduk_Jjim": [Haemul_Dduk_Jjim,"Haemul Dduk Jjim","Seafood, vegetables and cabbage mixed with spicy sauce and simmered dish." , 180000,"Traditional_Dish"],
-    "Haemul_Pa_Jeon": [Haemul_Pa_Jeon,"Haemul Pa Jeon","Pancakes made from scallions and a variety of seafood." , 16000,"Traditional_Dish"],
-    "Jap_Chae": [Jap_Chae,"Jap Chae","Stir-fried pork and vegetables with glass noodles" , 24000,"Traditional_Dish"],
-    "Yeo_San_Tteokgalbi": [Yeo_San_Tteokgalbi,"Yeo-San Tteokgalbi","Chopped Galbi-meat grilled and mixed with Korean rice cakes." , 22000,"Traditional_Dish"]
-
-  }
-
-  window.onload = function(){
-
-    $("#Daepae_Woo_Seol").attr("src",Daepae_Woo_Seol);
-    $("#Kkot_Sal").attr("src",Kkot_Sal);
-    $("#Mansinchang_Samgyeopsal_soy").attr("src",Mansinchang_Samgyeopsal_soy);
-    $("#Mansinchang_Samgyeopsal_spicy").attr("src",Mansinchang_Samgyeopsal_spicy);
-    $("#Mansinchang_Samgyeopsal").attr("src",Mansinchang_Samgyeopsal);
-    $("#Modum_Yachae_Gui").attr("src",Modum_Yachae_Gui);
-    $("#Saeng_Galbi").attr("src",Saeng_Galbi);
-    $("#SSaeu_Gui").attr("src",SSaeu_Gui);
-    $("#Woo_Samgyup").attr("src",Woo_Samgyup);
-
-    $("#Bibim_Naengmyeon").attr("src",Bibim_Naengmyeon);
-    $("#Bornga_Naengmyeon").attr("src",Bornga_Naengmyeon);
-    $("#Bulgogi_jjigae").attr("src",Bulgogi_jjigae);
-    $("#Dolsot_Bibimbap").attr("src",Dolsot_Bibimbap);
-    $("#Galbitang").attr("src",Galbitang);
-    $("#Kimchi_Jjigae").attr("src",Kimchi_Jjigae);
-    $("#Suntofu_Jjigae_Spicy").attr("src",Suntofu_Jjigae_Spicy);
-    $("#Nokdu_Samgyetang").attr("src",Nokdu_Samgyetang);
-    $("#Suntofu_Jjigae_Mild").attr("src",Suntofu_Jjigae_Mild);
-    $("#Yukgaejang").attr("src",Yukgaejang);
-
-    $("#Gyeran_Jjim").attr("src",Gyeran_Jjim);
-    $("#Haemul_Ssamjang").attr("src",Haemul_Ssamjang);
-
-    $("#Bornga_Bulgogi").attr("src",Bornga_Bulgogi);
-    $("#Budae_Jjigae").attr("src",Budae_Jjigae);
-    $("#Chadol_Duenjang_Jjigae").attr("src",Chadol_Duenjang_Jjigae);
-
-    $("#Dwaeji_Gochujang_Barbecue").attr("src",Dwaeji_Gochujang_Barbecue);
-    $("#Haemul_Dduk_Jjim").attr("src",Haemul_Dduk_Jjim);
-    $("#Haemul_Pa_Jeon").attr("src",Haemul_Pa_Jeon);
-    $("#Jap_Chae").attr("src",Jap_Chae);
-    $("#Yeo_San_Tteokgalbi").attr("src",Yeo_San_Tteokgalbi);
-    
-    for( var i = 0 ; i < Object.keys(menuList).length ; i++){
-      // alert(Object.keys(menuList)[i])
-      $("#"+Object.keys(menuList)[i]).parent().find("h3").text(menuList[Object.keys(menuList)[i]][1]);
-      $("#"+Object.keys(menuList)[i]).parent().find("span").text(menuList[Object.keys(menuList)[i]][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원");
-
-    }
-
-
-
-  }
-
-</script>
+      <!-- Modal body -->
+      <div class="modal-body row ps-20 col-md-12 overflow-auto" style="height: 400px;">
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              냅킨
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              물티슈
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              물리필
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              얼음
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              기본리필
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              젓가락
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              앞접시
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              그릇
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              포장
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              유아식기
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              담요
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              테이블정리
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              결제
+            </a>
+          </div>
+        </div>
+        <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+          <div clas="h-100 col-md-12">
+            <a name="Barbecue" href="#" onclick="callWaiter('')" style="background-color: white; border-radius: 5%;">
+              핸드폰충전
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" onclick="callWaiter()">호출하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
