@@ -251,6 +251,7 @@
     $("#detailImg").attr("src",menuList[menuName][0]);
     $("#detailMenuName").text(menuList[menuName][1]);
     $("#detailMenuDes").text(menuList[menuName][2]);
+    $("#perPrice").text(menuList[menuName][3]);
     $("#detailMenuOption").append("");
     $("#selectMenuName").val(menuName);
 
@@ -260,7 +261,20 @@
    
   }
 
+  function pay(){
+
+    $("#myCartModal").hide();
+
+    // 주문내역 영역에 주문이력 쌓아주기
+    $("#myOrderModal").find('a');
+    // $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuTotalPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]));
+    // $("#totalPrice").text((parseInt($("#totalPrice").text().replace("원","").replace(",","")) + menuList[menuName][3]).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원"); 
+
+    showLoading();
+  }
+
   function showPay(){
+    
     $("#main").hide();
     $("#detail").hide();
     $("#payment").hide();
@@ -269,7 +283,7 @@
 
   }
 
-  function addCart(){
+  function addCart(obj){
 
     var menuName = $("#selectMenuName").val();
     $(".btn-close").click();
@@ -286,6 +300,7 @@
       $("#fadeOutDiv").attr("style","position: absolute; left: "+(800+(cnt*15))+"px; top: "+(600+(cnt*4))+"px; width: "+(200-(cnt*2))+"px; height: "+(200-(cnt*2))+"px;")
       cnt++;
     }, 8);
+    var productCnt = $(obj).parent().parent().find("#cnt").text();
 
     $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuTotalPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]));
     $("#totalPrice").text((parseInt($("#totalPrice").text().replace("원","").replace(",","")) + menuList[menuName][3]).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원"); 
@@ -1114,377 +1129,6 @@
       <img id="fadeOutImg" alt="Menu Item" style="height: auto; width: 100%; margin-top: 5px; border-radius: 5%;" src="https://telegra.ph/file/03e67b1774713572b6517.jpg"/>
     </div>
   </main>
-<!-- <cart id="cart" style="display: none;">
-  <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold mb-6">장바구니</h1>
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <table class="w-full">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="px-4 py-3 text-left">메뉴</th>
-            <th class="px-4 py-3 text-right">가격</th>
-            <th class="px-4 py-3 text-right">수량</th>
-            <th class="px-4 py-3 text-right">총 금액</th>
-            <th class="px-4 py-3 text-right">삭제</th>
-          </tr>
-        </thead>
-        <tbody id="cartDivPre" style="display: none;">
-          <tr>
-            <td class="px-4 py-3">
-              <div class="flex items-center">
-                <img src="cartImg" alt="메뉴 이미지" class="w-12 h-12 rounded-full mr-4" />
-                <span>menuName</span>
-              </div>
-            </td>
-            <td class="px-4 py-3 text-right">menuPrice</td>
-            <td class="px-4 py-3 text-right">
-              <div class="flex items-center justify-end">
-                <span style="display: none;" id="perPrice">menuPrice</span>
-                <button onclick="minusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
-                  -
-                </button>
-                <span id="cnt" class="mx-2">1</span>
-                <button onclick="plusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
-                  +
-                </button>
-              </div>
-            </td>
-            <td id="subtotalPrice" class="px-4 py-3 text-right">menuTotalPrice</td>
-            <td class="px-4 py-3 text-right">
-              <button 
-              onclick="deleteMenu(this)"
-              class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-4 h-4"
-                >
-                  <path d="M3 6h18"></path>
-                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                </svg>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-        <tbody id="cartDiv">
-        </tbody>
-      </table>
-      <div class="bg-gray-100 p-4 flex justify-end">
-        <div class="text-right">
-          <p class="text-gray-500">총 금액:</p>
-          <p id="totalPrice" class="text-2xl font-bold">$00.00</p>
-        </div>
-      </div>
-      <div class="p-4 flex justify-end">
-        <button onclick="showPay()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-          주문하기
-        </button>
-      </div>
-    </div>
-  </div>
-</cart> -->
-<!-- <myOrder id="myOrder" style="display: none;">
-  <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold mb-6">주문내역</h1>
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <table class="w-full">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="px-4 py-3 text-left">메뉴</th>
-            <th class="px-4 py-3 text-right">가격</th>
-            <th class="px-4 py-3 text-right">수량</th>
-            <th class="px-4 py-3 text-right">총 금액</th>
-            <th class="px-4 py-3 text-right"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="px-4 py-3">
-              <div class="flex items-center">
-                <span></span>
-              </div>
-            </td>
-            <td class="px-4 py-3 text-right">불고기버거</td>
-            <td class="px-4 py-3 text-right">
-              <div class="flex items-center justify-end">
-                <span style="display: none;" id="perPrice">$14.22</span>
-                <button onclick="minusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
-                  -
-                </button>
-                <span id="cnt" class="mx-2">1</span>
-                <button onclick="plusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
-                  +
-                </button>
-              </div>
-            </td>
-            <td id="subtotalPrice" class="px-4 py-3 text-right">$14.22</td>
-            <td class="px-4 py-3 text-right"></td>
-          </tr>
-        </tbody>
-        <tbody id="cartDiv">
-        </tbody>
-      </table>
-      <div class="bg-gray-100 p-4 flex justify-end">
-        <div class="text-right">
-          <p class="text-gray-500">총 금액:</p>
-          <p id="totalPrice" class="text-2xl font-bold">$14.22</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</myOrder> -->
-<payment id="payment" style="display: none;">
-  <div class="flex flex-col h-screen">
-    <main class="flex-1 container mx-auto py-8">
-      <div class="grid md:grid-cols-2 gap-8">
-        <div>
-          <h2 class="text-lg font-semibold mb-4">Payment</h2>
-          <div class="space-y-4">
-            <div class="flex items-center gap-4 bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-6 w-6 text-gray-500 dark:text-gray-400"
-              >
-                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-                <line x1="2" x2="22" y1="10" y2="10"></line>
-              </svg>
-              <div class="flex-1">
-                <h3 class="text-sm font-medium">Credit Card</h3>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">**** **** **** 1234</p>
-              </div>
-              <div
-                role="radiogroup"
-                aria-required="false"
-                dir="ltr"
-                class="grid gap-2"
-                tabindex="-1"
-                style="outline: none;"
-              >
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked="true"
-                  data-state="checked"
-                  value="credit-card"
-                  class="aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  tabindex="-1"
-                  data-radix-collection-item=""
-                >
-                  <span data-state="checked" class="flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="h-2.5 w-2.5 fill-current text-current"
-                    >
-                      <circle cx="12" cy="12" r="10"></circle>
-                    </svg>
-                  </span>
-                </button>
-                <input
-                  aria-hidden="true"
-                  tabindex="-1"
-                  type="radio"
-                  value="credit-card"
-                  checked=""
-                  style="transform: translateX(-100%); position: absolute; pointer-events: none; opacity: 0; margin: 0px;"
-                />
-              </div>
-            </div>
-            <div class="flex items-center gap-4 bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-6 w-6 text-gray-500 dark:text-gray-400"
-              >
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-              <div class="flex-1">
-                <h3 class="text-sm font-medium">Mobile Pay</h3>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">Apple Pay, Google Pay, Samsung Pay</p>
-              </div>
-              <div
-                role="radiogroup"
-                aria-required="false"
-                dir="ltr"
-                class="grid gap-2"
-                tabindex="-1"
-                style="outline: none;"
-              >
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked="true"
-                  data-state="checked"
-                  value="mobile-pay"
-                  class="aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  tabindex="-1"
-                  data-radix-collection-item=""
-                >
-                  <span data-state="checked" class="flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="h-2.5 w-2.5 fill-current text-current"
-                    >
-                      <circle cx="12" cy="12" r="10"></circle>
-                    </svg>
-                  </span>
-                </button>
-                <input
-                  aria-hidden="true"
-                  tabindex="-1"
-                  type="radio"
-                  value="mobile-pay"
-                  checked=""
-                  style="transform: translateX(-100%); position: absolute; pointer-events: none; opacity: 0; margin: 0px;"
-                />
-              </div>
-            </div>
-            <div class="flex items-center gap-4 bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-6 w-6 text-gray-500 dark:text-gray-400"
-              >
-                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
-                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
-                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
-              </svg>
-              <div class="flex-1">
-                <h3 class="text-sm font-medium">Points</h3>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">You have 500 points</p>
-              </div>
-              <div
-                role="radiogroup"
-                aria-required="false"
-                dir="ltr"
-                class="grid gap-2"
-                tabindex="-1"
-                style="outline: none;"
-              >
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked="true"
-                  data-state="checked"
-                  value="points"
-                  class="aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  tabindex="-1"
-                  data-radix-collection-item=""
-                >
-                  <span data-state="checked" class="flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="h-2.5 w-2.5 fill-current text-current"
-                    >
-                      <circle cx="12" cy="12" r="10"></circle>
-                    </svg>
-                  </span>
-                </button>
-                <input
-                  aria-hidden="true"
-                  tabindex="-1"
-                  type="radio"
-                  value="points"
-                  checked=""
-                  style="transform: translateX(-100%); position: absolute; pointer-events: none; opacity: 0; margin: 0px;"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6">
-          <h2 class="text-lg font-semibold mb-4">Order Summary</h2>
-          <div class="space-y-4">
-            <div class="flex items-center justify-between">
-              <p>Subtotal</p>
-              <p>$25.98</p>
-            </div>
-            <div class="flex items-center justify-between">
-              <p>Tax</p>
-              <p>$2.60</p>
-            </div>
-            <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
-            <div class="flex items-center justify-between">
-              <p class="font-semibold">Total</p>
-              <p class="font-semibold">$28.58</p>
-            </div>
-          </div>
-          <button onclick="showLoading()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full mt-6">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="h-4 w-4 mr-2"
-            >
-              <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-              <line x1="2" x2="22" y1="10" y2="10"></line>
-            </svg>
-            Pay Now
-          </button>
-        </div>
-      </div>
-    </main>
-  </div>
-</payment>
 <footer class="container-fluid fixed-bottom py-2 bg-gray-100 border-top border-width-2">
   <div class="row">
     <div class="col-md-1 h-12 rounded ms-1 row">
@@ -1567,7 +1211,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" onclick="addCart()">장바구니 담기</button>
+        <button type="button" class="btn btn-danger" onclick="addCart(this)">장바구니 담기</button>
       </div>
 
     </div>
@@ -1612,7 +1256,7 @@
                     <button onclick="minusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
                       -
                     </button>
-                    <span id="cnt" class="mx-2">1</span>
+                    <span id="cnt" class="mx-2">productCnt</span>
                     <button onclick="plusCnt(this)" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
                       +
                     </button>
@@ -1657,7 +1301,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" onclick="showPay()">주문하기</button>
+        <button type="button" class="btn btn-danger" onclick="pay()">주문하기</button>
       </div>
 
     </div>
