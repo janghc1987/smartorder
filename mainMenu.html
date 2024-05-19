@@ -127,7 +127,17 @@
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/TmonMonsori.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-}
+  }
+
+  h3{font-family: 'TmonMonsori'}
+  /* h4{font-family: 'TmonMonsori'} */
+  span{font-family: 'TmonMonsori'}
+  a{font-family: 'TmonMonsori'}
+  button{font-family: 'TmonMonsori'}
+  
+  /* div{font-family: 'TmonMonsori'}
+  p{font-family: 'TmonMonsori'}
+  a{font-family: 'TmonMonsori'} */
 
 </style>
 <script type="text/javascript">
@@ -262,6 +272,7 @@
     $("#perPrice").text(menuList[menuName][3]);
     $("#detailMenuOption").append("");
     $("#selectMenuName").val(menuName);
+    $("#myModal").find("#cnt").text('1');
 
   }
 
@@ -271,10 +282,10 @@
 
   function pay(){
 
-    $("#myCartModal").hide();
+    $("#myCartModal").find(".btn-close").click();
 
     // 주문내역 영역에 주문이력 쌓아주기
-    $("#myOrderModal").find('a');
+     $("#myOrderModal").find('#cartDiv').append($("#myCartModal").find("#cartDiv").html().replaceAll('onclick="deleteMenu(this)"','onclick="deleteMenu(this)" style="display:none;"').replaceAll('onclick="minusCnt(this)"','onclick="minusCnt(this)" style="display:none;"').replaceAll('onclick="plusCnt(this)"','onclick="plusCnt(this)" style="display:none;"'));
     // $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuTotalPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]));
     // $("#totalPrice").text((parseInt($("#totalPrice").text().replace("원","").replace(",","")) + menuList[menuName][3]).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원"); 
 
@@ -309,8 +320,10 @@
       cnt++;
     }, 8);
     var productCnt = $(obj).parent().parent().find("#cnt").text();
+    var subTotalPrice = menuList[menuName][3]*productCnt;
 
-    $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuTotalPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]));
+    $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuTotalPrice",subTotalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]).replace("productCnt",productCnt));
+    // $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuSubTotalPrice",).replace("menuTotalPrice",subTotalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]).replace("productCnt",productCnt));
     $("#totalPrice").text((parseInt($("#totalPrice").text().replace("원","").replace(",","")) + menuList[menuName][3]).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원"); 
     
   }
@@ -498,14 +511,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col" >
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Daepae Woo Seol</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('1')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -520,15 +529,10 @@
                   alt="Menu Item"
                   style="height: 200px;  width: 100%; margin-top: 5px;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Kkot Sal</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('1')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -543,15 +547,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Mansinchang Samgyeopsal soy</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Mansinchang_Samgyeopsal_soy')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -566,15 +565,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Mansinchang Samgyeopsal spicy</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Mansinchang_Samgyeopsal_spicy')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -588,15 +582,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Mansinchang Samgyeopsal</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Mansinchang_Samgyeopsal')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -610,15 +599,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Modum Yachae Gui</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Modum_Yachae_Gui')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -632,15 +616,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Saeng Galbi</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Saeng_Galbi')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -654,15 +633,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">SSaeu Gui</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('SSaeu_Gui')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -676,15 +650,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Woo Samgyup</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Woo_Samgyup')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -698,15 +667,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Bibim Naengmyeon</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Bibim_Naengmyeon')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -720,15 +684,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Bornga Naengmyeon</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Bornga_Naengmyeon')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -742,15 +701,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Bulgogi jjigae</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Bulgogi_jjigae')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -764,15 +718,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Dolsot Bibimbap</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Dolsot_Bibimbap')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -786,15 +735,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Galbitang</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Galbitang')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -808,15 +752,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Kimchi Jjigae</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Kimchi_Jjigae')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -830,15 +769,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Suntofu Jjigae Spicy</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Suntofu_Jjigae_Spicy')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -852,15 +786,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Nokdu Samgyetang</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Nokdu_Samgyetang')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -874,15 +803,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Suntofu Jjigae Mild</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Suntofu_Jjigae_Mild')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -896,15 +820,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Yukgaejang</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Yukgaejang')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -918,15 +837,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Gyeran Jjim</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Gyeran_Jjim')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -940,15 +854,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Haemul Ssamjang</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Haemul_Ssamjang')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -962,15 +871,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Bornga Bulgogi</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Bornga_Bulgogi')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -984,15 +888,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Budae Jjigae</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Budae_Jjigae')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -1006,15 +905,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Chadol Duenjang Jjigae</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Chadol_Duenjang_Jjigae')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -1028,15 +922,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Dwaeji Gochujang Barbecue</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Dwaeji_Gochujang_Barbecue')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -1050,15 +939,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Haemul Dduk Jjim</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Haemul_Dduk_Jjim')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -1072,15 +956,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Haemul Pa Jeon</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Haemul_Pa_Jeon')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -1094,15 +973,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Jap Chae</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Jap_Chae')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
@@ -1116,15 +990,10 @@
                   alt="Menu Item"
                   style="height: 200px; width: 100%; margin-top: 5px; border-radius: 5%;"
                 />
-                <div class="col">
+                <div class="col pt-2">
                   <h3 style="font-family: TmonMonsori;">Yeo San Tteokgalbi</h3>
-                  <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">$12.99</span>
-                    <button 
-                    onclick="addCart('Yeo_San_Tteokgalbi')"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                      
-                    </button>
+                  <div class="flex justify-between items-center row pt-2">
+                    <span class="text-lg font-bold" style="text-align: right;">$12.99</span>
                   </div>
                 </div>
               </a>
