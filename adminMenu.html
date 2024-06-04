@@ -219,47 +219,20 @@
 
   window.onload = function(){
 
-    $("#Daepae_Woo_Seol").attr("src",Daepae_Woo_Seol);
-    $("#Kkot_Sal").attr("src",Kkot_Sal);
-    $("#Mansinchang_Samgyeopsal_soy").attr("src",Mansinchang_Samgyeopsal_soy);
-    $("#Mansinchang_Samgyeopsal_spicy").attr("src",Mansinchang_Samgyeopsal_spicy);
-    $("#Mansinchang_Samgyeopsal").attr("src",Mansinchang_Samgyeopsal);
-    $("#Modum_Yachae_Gui").attr("src",Modum_Yachae_Gui);
-    $("#Saeng_Galbi").attr("src",Saeng_Galbi);
-    $("#SSaeu_Gui").attr("src",SSaeu_Gui);
-    $("#Woo_Samgyup").attr("src",Woo_Samgyup);
+    var productOptList = {};
+    var arrayStr = [];
+    arrayStr.push('1111')
+    productOptList.key1 = arrayStr;
 
-    $("#Bibim_Naengmyeon").attr("src",Bibim_Naengmyeon);
-    $("#Bornga_Naengmyeon").attr("src",Bornga_Naengmyeon);
-    $("#Bulgogi_jjigae").attr("src",Bulgogi_jjigae);
-    $("#Dolsot_Bibimbap").attr("src",Dolsot_Bibimbap);
-    $("#Galbitang").attr("src",Galbitang);
-    $("#Kimchi_Jjigae").attr("src",Kimchi_Jjigae);
-    $("#Suntofu_Jjigae_Spicy").attr("src",Suntofu_Jjigae_Spicy);
-    $("#Nokdu_Samgyetang").attr("src",Nokdu_Samgyetang);
-    $("#Suntofu_Jjigae_Mild").attr("src",Suntofu_Jjigae_Mild);
-    $("#Yukgaejang").attr("src",Yukgaejang);
+    arrayStr.push('2222')
 
-    $("#Gyeran_Jjim").attr("src",Gyeran_Jjim);
-    $("#Haemul_Ssamjang").attr("src",Haemul_Ssamjang);
+    productOptList.key1 = arrayStr;
 
-    $("#Bornga_Bulgogi").attr("src",Bornga_Bulgogi);
-    $("#Budae_Jjigae").attr("src",Budae_Jjigae);
-    $("#Chadol_Duenjang_Jjigae").attr("src",Chadol_Duenjang_Jjigae);
+    // alert(productOptList.hasOwnProperty('key1'))
+    // alert(productOptList.hasOwnProperty('key2'))
 
-    $("#Dwaeji_Gochujang_Barbecue").attr("src",Dwaeji_Gochujang_Barbecue);
-    $("#Haemul_Dduk_Jjim").attr("src",Haemul_Dduk_Jjim);
-    $("#Haemul_Pa_Jeon").attr("src",Haemul_Pa_Jeon);
-    $("#Jap_Chae").attr("src",Jap_Chae);
-    $("#Yeo_San_Tteokgalbi").attr("src",Yeo_San_Tteokgalbi);
     
-    for( var i = 0 ; i < Object.keys(menuList).length ; i++){
-      $("#"+Object.keys(menuList)[i]).parent().find("h3").text(menuList[Object.keys(menuList)[i]][1]);
-      $("#"+Object.keys(menuList)[i]).parent().find("span").text(menuList[Object.keys(menuList)[i]][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원");
 
-    }
-
-    //showCategory('Barbecue');
 
   }
 
@@ -429,13 +402,56 @@
   function showCategoryMng(){ 
     $("#optionModal").find('main').hide();
     $("#optionModal").find('category').show();
+    $("#optionModal").find('product').hide();
+    $("#optionModal").find('productOpt').hide();
     $("#categoryDiv").children().remove();
     $("#categoryDiv").html(saveCategoryTag);
+  }
+
+  function showProductOptMng(){ 
+    $("#optionModal").find('main').hide();
+    $("#optionModal").find('category').hide();
+    $("#optionModal").find('product').hide();
+    $("#optionModal").find('productOpt').show();
+    
+    $("#productCategory").children().remove();
+
+    for(var i = 0 ; i < categoryList.length ; i++){
+
+      var categoryOption = $("<option>",{value:categoryList[i]}).append(categoryList[i]);
+      $("#productCategory").append(categoryOption) ;
+      
+    }
+    
+  }
+
+  function chgOptCategory(category){
+
+  }
+
+  function chgOptProduct(productName){
+
+    $("#productOptDiv").children().remove();
+
+    if(productOptList.hasOwnProperty(productName.value)){
+      for(var i= 0 ; i < productOptList[productName.value].length ; i++){
+
+        var optionTag = $("<div>",{class:'row'});
+        optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:productOptList[productName.value][i][0],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
+        optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:productOptList[productName.value][i][1],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
+        optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:''})));
+
+        $("#productOptDiv").append();
+      }
+    }
+
   }
 
   function showOptionMng(){
     $("#optionModal").find('main').show();
     $("#optionModal").find('category').hide();
+    $("#optionModal").find('productOpt').hide();
+    $("#optionModal").find('product').hide();
   }
 
   function addCategory(){
@@ -445,6 +461,51 @@
     $("#categoryDiv").append(categoryTag);
 
   }
+
+  function addOption(){
+
+    var optionTag = $("<div>",{class:'row'});
+      optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
+      optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
+      optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:''})));
+
+    $("#productOptDiv").append(optionTag);
+
+  }
+ 
+  var productOptList = {};
+  function saveProductOpt(obj){
+    var productName = $(obj).find('#productOption').val();
+    var productOptDetailList = [];
+    
+    // productOptList.hasOwnProperty(productName)
+
+    if(productName === '' || productName == undefined){
+      alert('상품명을 선택해주세요.')
+      return;
+    }
+
+    if($("input[name=optionName]").length > 0){
+      for(var i = 0 ; i < $("input[name=optionName]").length ; i++){
+        var productOptDetail = [];
+        productOptDetail.push($("input[name=optionName]").eq(i).val());
+        productOptDetail.push($("input[name=optionAmt]").eq(i).val());
+        productOptDetailList.push(productOptDetail);
+
+        if($("input[name=optionName]").eq(i).val() == '' || $("input[name=optionAmt]").eq(i).val() == ''){
+          alert('옵션값은 필수입니다.')
+          return;
+        }
+
+      }
+    }
+    
+    productOptList[productName] = productOptDetailList;
+    alert("저장완료")
+    $("#optionModal").find(".btn-close").click();
+
+  }
+
 
   var saveCategoryTag;
   var categoryList = [];
@@ -464,23 +525,6 @@
   }
 
   function refreshMain(){
-    // <div class="row">
-    //     <div id="mainMenu" class="col-md-12 ps-4 pb-5 text-gray-500">
-    //       <div class="row py-4">
-    //         <div class="col-md-2 mt-3 m-2 Barbecue menuDiv">
-    //           <div class="row">
-    //             <a class="col-md-11 shadowBox" name="Barbecue" href="#" onclick="showDetail('Daepae_Woo_Seol')" 
-    //             style="height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;"
-    //             data-bs-toggle="modal" data-bs-target="#optionModal">
-    //               <img src="https://i.postimg.cc/dtdjSWvZ/pngwing-com.png">
-    //             </a>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    
-    
     if(categoryList.length < 1){
       var categoryDiv = $("<div>",{class:'row'})
           categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
@@ -506,11 +550,61 @@
         
       }
     }
-
-    
-
     
   }
+
+  function showProductMng(){ 
+    $("#optionModal").find('main').hide();
+    $("#optionModal").find('category').hide();
+    $("#optionModal").find('productOpt').hide();
+    $("#optionModal").find('product').show();
+    
+    $("#product_category").children().remove();
+
+    for(var i = 0 ; i < categoryList.length ; i++){
+
+      var categoryOption = $("<option>",{value:categoryList[i]}).append(categoryList[i]);
+      $("#product_category").append(categoryOption) ;
+      
+    }
+    
+  }
+
+  var productList = {}
+  function saveProduct(obj){
+
+    var productDetailList = [];
+    var productDetail = [];
+    
+    var categoryName = $(obj).find("#product_category").val();
+    var productName = $(obj).find("#productadd_productName").val();
+    var productAmt = $(obj).find("#productadd_productAmt").val();
+    var productDes = $(obj).find("#productadd_productDes").val();
+
+    if(productName === '' || productName == undefined){
+      alert('상품명을 선택해주세요.')
+      return;
+    }
+    
+    if(productOptList.hasOwnProperty(categoryName)){
+      
+      productDetailList = productList[categoryName];  
+
+    }  
+    
+    productDetail.push(productName);
+    productDetail.push(productAmt);
+    productDetail.push(productDes);
+    productDetailList.push(productDetail);
+
+    productList[categoryName] = productDetailList;
+
+    alert('저장완료');
+    refreshMain();
+    $("#optionModal").find(".btn-close").click();
+
+  }
+
 
 
 </script>
@@ -616,51 +710,160 @@
             </div>
             <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
               <div clas="h-100 col-md-12">
-                <a name="Barbecue" href="#" onclick="showOptionMng()" style="background-color: white; border-radius: 5%;">
+                <a name="Barbecue" href="#" onclick="showProductMng()" style="background-color: white; border-radius: 5%;">
+                  상품관리
+                </a>
+              </div>
+            </div>
+            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+              <div clas="h-100 col-md-12">
+                <a name="Barbecue" href="#" onclick="showProductOptMng()" style="background-color: white; border-radius: 5%;">
                   옵션
                 </a>
               </div>
             </div>
           </div>
-      </main>
-      <category style="display: none;">
+        </main>
+        <category style="display: none;">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">상품 카테고리 설정</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="row mt-3 ps-2">
+              <div class="col-md-2">상품 카테고리 </div>
+              <div class="col-md-2">
+                <div class="border border-2 rounded-2 border-secondary row" style="align-items:center">
+                  <div clas="h-100 col-md-12">
+                    <a name="Barbecue" href="#" onclick="addCategory('')" style="background-color: white; border-radius: 5%;">+추가</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="categoryDiv">
+              <div>
+                <div class="border border-2 rounded-2 border-secondary m-3 row" style="align-items:center">
+                  <input value="기본" readonly />
+                </div>
+              </div>
+              <div>
+                <div class="border border-2 rounded-2 border-secondary  m-3 row" style="align-items:center">
+                  <input value="" placeholder="카테고리를 입력해주세요." />
+                </div>
+              </div>
+            </div>
+            <div style="height: 100px;">
+              <div class="h-100 rounded-2 border-secondary m-3 row bg-secondary bg-opacity-10" style="align-items:center">
+                상품 카테고리를 만들고 여러 상품에 적용 해보세요.
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" onclick="saveCategory(this)">저장</button>
+            </div>
+        </category>
+        <productOpt style="display: none;">
           <!-- Modal Header -->
           <div class="modal-header">
-            <h4 class="modal-title">상품 카테고리 설정</h4>
+            <h4 class="modal-title">옵션관리</h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품 카테고리 </div>
+          <div id="productOptCategoryDiv" class="row mt-3 ps-2">
+            <div class="col-md-3">
+              <div>상품 카테고리</div>
+              <div class="row">
+                <select class="col-md-12" id="productCategory" onchange="chgOptCategory(this)"></select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div>상품명</div>
+              <div class="row">
+                <select class="col-md-12" id="productOption" onchange="chgOptProduct(this)"></select>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-5 m-4">
+            <div class="col-md-2">옵션</div>
             <div class="col-md-2">
               <div class="border border-2 rounded-2 border-secondary row" style="align-items:center">
                 <div clas="h-100 col-md-12">
-                  <a name="Barbecue" href="#" onclick="addCategory('')" style="background-color: white; border-radius: 5%;">+추가</a>
+                  <a name="Barbecue" href="#" onclick="addOption('')" style="background-color: white; border-radius: 5%;">+추가</a>
                 </div>
               </div>
             </div>
           </div>
-          <div id="categoryDiv">
-            <div>
-              <div class="border border-2 rounded-2 border-secondary m-3 row" style="align-items:center">
-                <input value="기본" readonly />
-              </div>
+          <div id="productOptDiv" class="m-4">
+          </div>
+          <div class="row m-4">
+            <div class="col-md-2">필수/선택</div>
+          </div>
+          <div class="row m-4">
+            <div class="col-md-1">
+              <input name="productOptChk" type="radio" checked value="Y"/><label>필수</label>
             </div>
-            <div>
-              <div class="border border-2 rounded-2 border-secondary  m-3 row" style="align-items:center">
-                <input value="" placeholder="카테고리를 입력해주세요." />
-              </div>
+            <div class="col-md-1">
+              <input name="productOptChk" type="radio" value="N"/><label>선택</label>
             </div>
           </div>
-          <div style="height: 100px;">
-            <div class="h-100 rounded-2 border-secondary m-3 row bg-secondary bg-opacity-10" style="align-items:center">
-              상품 카테고리를 만들고 여러 상품에 적용 해보세요.
-            </div>
+          <div class="m-4" style="height: 100px; align-items:left">
+            <input name="" type="checkbox"><label>저장 후 입력한 정보 유지 (체크할 경우 상품 이전의 상품 정보가 유지 됩니다)</label>
           </div>
-           <!-- Modal footer -->
+          <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" onclick="saveCategory(this)">저장</button>
+            <button type="button" class="btn btn-danger" onclick="saveProductOpt(this)">저장</button>
           </div>
-      </category>
+        </productOpt>
+        <product style="display: none;">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">상품추가</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-12 row">
+              <div>상품 카테고리</div>
+              <div class="row col-md-4">
+                <select class="col-md-12" id="product_category"></select>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품명</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="productadd_productName" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">가격</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="productadd_productAmt" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품설명</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="productadd_productDes" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품이미지</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                
+              </div>
+            </div>
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" onclick="saveProduct(this)">저장</button>
+          </div>
+        </product>
       </div>
     </div>
   </div>
