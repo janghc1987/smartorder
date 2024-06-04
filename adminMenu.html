@@ -422,10 +422,24 @@
       $("#productCategory").append(categoryOption) ;
       
     }
+
+    chgOptCategory();
     
   }
 
   function chgOptCategory(category){
+
+    $("#productOption").children().remove();
+    var productCategory = $("#productCategory").val();
+    var chgProductList;
+    if(productList.hasOwnProperty(productCategory)){
+      chgProductList = productList[productCategory];
+      
+      for(var i = 0 ; i < chgProductList.length ; i++){
+       $("#productOption").append($("<option>",{name:'productOpt_productName',value:chgProductList[i][0]}));
+      }
+    }
+
 
   }
 
@@ -576,10 +590,10 @@
     var productDetailList = [];
     var productDetail = [];
     
-    var categoryName = $(obj).find("#product_category").val();
-    var productName = $(obj).find("#productadd_productName").val();
-    var productAmt = $(obj).find("#productadd_productAmt").val();
-    var productDes = $(obj).find("#productadd_productDes").val();
+    var categoryName = $("#product_category").val();
+    var productName = $("#productadd_productName").val();
+    var productAmt = $("#productadd_productAmt").val();
+    var productDes = $("#productadd_productDes").val();
 
     if(productName === '' || productName == undefined){
       alert('상품명을 선택해주세요.')
