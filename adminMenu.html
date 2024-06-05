@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,9 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 <style>
 
@@ -219,18 +219,15 @@
 
   window.onload = function(){
 
-    var productOptList = {};
-    var arrayStr = [];
-    arrayStr.push('1111')
-    productOptList.key1 = arrayStr;
-
-    arrayStr.push('2222')
-
-    productOptList.key1 = arrayStr;
-
-    // alert(productOptList.hasOwnProperty('key1'))
-    // alert(productOptList.hasOwnProperty('key2'))
-
+    if(window.localStorage.getItem("loginChk")){
+      $("#loginForm").hide();
+      $("#mainForm").show();
+      refreshMain();
+      
+    }else{
+      $("#loginForm").show();
+      $("#mainForm").hide();
+    }
     
 
 
@@ -382,9 +379,11 @@
     
     if(loginInfo[$("#loginId").val()] == $("#pwd").val()){
       // 성공
+      window.localStorage.setItem("loginChk","true");
       refreshMain();
       $("#loginForm").hide();
       $("#mainForm").show();
+
     }else if(loginInfo[$("#loginId").val()] == undefined){
       alert("아이디가 존재하지 않습니다.");
     }else{
@@ -405,7 +404,23 @@
     $("#optionModal").find('product').hide();
     $("#optionModal").find('productOpt').hide();
     $("#categoryDiv").children().remove();
-    $("#categoryDiv").html(saveCategoryTag);
+    
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+
+    for(var i = 0 ; i < categoryList.length ; i++){
+      var categoryTag = $("<div>")
+      categoryTag.append($("<div>",{class:'border border-2 rounded-2 border-secondary  m-3 row',style:'align-items:center'}).append($('<input>',{value:categoryList[i],placeholder:'카테고리를 입력해주세요.',name:'categoryVal'})))
+      $("#categoryDiv").append(categoryTag);
+    }
+
+    // var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+
+    // for(var i = 0 ; i < categoryList.length ; i++){
+    //   var categoryTag = $("<div>")
+    //   categoryTag.append($("<div>",{class:'border border-2 rounded-2 border-secondary  m-3 row',style:'align-items:center'}).append($('<input>',{value:'',placeholder:'카테고리를 입력해주세요.',name:'categoryVal'})))
+    //   $("#categoryDiv").append(categoryTag);
+    // }
+    
   }
 
   function showProductOptMng(){ 
@@ -416,6 +431,8 @@
     
     $("#productCategory").children().remove();
 
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+    
     for(var i = 0 ; i < categoryList.length ; i++){
 
       var categoryOption = $("<option>",{value:categoryList[i]}).append(categoryList[i]);
@@ -432,11 +449,13 @@
     $("#productOption").children().remove();
     var productCategory = $("#productCategory").val();
     var chgProductList;
+    var productList = JSON.parse(window.localStorage.getItem('productList')) == null ? {} : JSON.parse(window.localStorage.getItem('productList'));
+
     if(productList.hasOwnProperty(productCategory)){
       chgProductList = productList[productCategory];
       
       for(var i = 0 ; i < chgProductList.length ; i++){
-       $("#productOption").append($("<option>",{name:'productOpt_productName',value:chgProductList[i][0]}));
+       $("#productOption").append($("<option>",{name:'productOpt_productName',value:chgProductList[i][0]}).append(chgProductList[i][0]));
       }
     }
 
@@ -445,8 +464,9 @@
 
   function chgOptProduct(productName){
 
+    var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? [] : JSON.parse(window.localStorage.getItem('productOptList'));
     $("#productOptDiv").children().remove();
-
+    
     if(productOptList.hasOwnProperty(productName.value)){
       for(var i= 0 ; i < productOptList[productName.value].length ; i++){
 
@@ -487,11 +507,13 @@
 
   }
  
-  var productOptList = {};
+  //var productOptList = {};
   function saveProductOpt(obj){
-    var productName = $(obj).find('#productOption').val();
+    var productName = $("#productOption").val();
     var productOptDetailList = [];
     
+    var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
+
     // productOptList.hasOwnProperty(productName)
 
     if(productName === '' || productName == undefined){
@@ -515,15 +537,18 @@
     }
     
     productOptList[productName] = productOptDetailList;
+    window.localStorage.setItem('productOptList',JSON.stringify(productOptList));
     alert("저장완료")
     $("#optionModal").find(".btn-close").click();
 
   }
 
 
-  var saveCategoryTag;
-  var categoryList = [];
+  
+  //var categoryList = [];
   function saveCategory(){
+
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
 
     for( var i=0 ; i < $("input[name=categoryVal]").length ; i++){
       if(!$("input[name=categoryVal]").eq(i).attr('readonly')){
@@ -531,14 +556,23 @@
         $("input[name=categoryVal]").eq(i).attr("readonly",true);
       }
     }
-    saveCategoryTag = $("#categoryDiv").clone();
+    var saveCategoryTag = $("#categoryDiv").clone();
+    window.localStorage.setItem('saveCategoryTag',JSON.stringify(saveCategoryTag))
     alert('저장완료');
     refreshMain();
     $("#optionModal").find(".btn-close").click();
 
+
+
+    window.localStorage.setItem("categoryList",JSON.stringify(categoryList));
+
+
   }
 
   function refreshMain(){
+    
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+
     if(categoryList.length < 1){
       var categoryDiv = $("<div>",{class:'row'})
           categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
@@ -575,16 +609,18 @@
     
     $("#product_category").children().remove();
 
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+    
     for(var i = 0 ; i < categoryList.length ; i++){
 
       var categoryOption = $("<option>",{value:categoryList[i]}).append(categoryList[i]);
       $("#product_category").append(categoryOption) ;
-      
+
     }
-    
+
   }
 
-  var productList = {}
+  //var productList = {}
   function saveProduct(obj){
 
     var productDetailList = [];
@@ -594,6 +630,9 @@
     var productName = $("#productadd_productName").val();
     var productAmt = $("#productadd_productAmt").val();
     var productDes = $("#productadd_productDes").val();
+
+    var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
+    var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
 
     if(productName === '' || productName == undefined){
       alert('상품명을 선택해주세요.')
@@ -611,7 +650,10 @@
     productDetail.push(productDes);
     productDetailList.push(productDetail);
 
+    //productList[categoryName] = productDetailList;
     productList[categoryName] = productDetailList;
+
+    window.localStorage.setItem('productList',JSON.stringify(productList));
 
     alert('저장완료');
     refreshMain();
@@ -623,7 +665,7 @@
 
 </script>
 <body class="text-center" style="background-color: white;">
-  <div class="loginForm" id="loginForm">
+  <div class="loginForm" id="loginForm" style="display: none;">
     <!--  login 폼 영역을 : loginBox -->
     <div class="loginBox">
       <!-- 로그인 페이지 타이틀 -->
@@ -634,25 +676,6 @@
         <div class="input-form-box"><span>매장 비밀번호 </span><input type="password" id="pwd" name="upw" class="form-control" value="1234"></div>
         <div class="button-login-box" >
           <button type="button" class="btn btn-primary btn-xs" style="width:100%" onclick="login()">로그인</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-  <div class="loginForm" id="subForm" style="display: none;">
-    <!--  login 폼 영역을 : loginBox -->
-    <div class="videoBox">
-      <!-- 로그인 페이지 타이틀 -->
-      <div>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/AVECupsWSz0?si=hflc-yZ-hojTAHfZ&amp;autoplay=1&amp;mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-      <!-- 아이디, 비번, 버튼 박스 -->
-      <div class="videoInputBox">
-        <div class="button-login-box" >
-          <button type="button" class="btn btn-primary btn-xs" style="width:100%" onclick="goMain('StoreMeal')">매장에서 먹기</button>
-        </div>
-        <div class="button-login-box" >
-          <button type="button" class="btn btn-primary btn-xs" style="width:100%" onclick="goMain('takeOut')">포장하기</button>
         </div>
       </div>
       
