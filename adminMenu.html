@@ -278,29 +278,16 @@
     showLoading();
   }
 
-  function addCart(obj){
+  function addCart(menuName, menuPrice){
+    
+    var menuCategory = $('<div>',{class:'row py-8',style:'cursor:pointer;'});
+    menuCategory.append($('<div>',{class:'col-md-4'}).append(menuName));
+    menuCategory.append($('<div>',{class:'col-md-4'}).append('x1'));
+    menuCategory.append($('<div>',{class:'col-md-4'}).append(menuPrice));
 
-    var menuName = $("#selectMenuName").val();
-    $(".btn-close").click();
-    $("#myModal").fadeOut("slow");
-    $("#fadeOutDiv").show();
-    $("#fadeOutDiv").fadeOut(1600);
-    var cnt = 1;
-    let timerId = setInterval(() => {
-      if(cnt > 50){
-        clearInterval(timerId);
-        $("#fadeOutDiv").attr("style","position: fixed; left: 800px; top: 400px; width: 200px; height: 200px; display: none;")
-        return;
-      }
-      $("#fadeOutDiv").attr("style","position: fixed; left: "+(800+(cnt*18))+"px; top: "+(400+(cnt*8))+"px; width: "+(200-(cnt*2))+"px; height: "+(200-(cnt*2))+"px;")
-      cnt++;
-    }, 8);
-    var productCnt = $(obj).parent().parent().find("#cnt").text();
-    var subTotalPrice = menuList[menuName][3]*productCnt;
-
-    $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuTotalPrice",subTotalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]).replace("productCnt",productCnt));
-    // $("#cartDiv").append($("#cartDivPre").html().replace("menuName",menuList[menuName][1]).replace("menuPrice",menuList[menuName][3].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("menuSubTotalPrice",).replace("menuTotalPrice",subTotalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")).replace("cartImg",menuList[menuName][0]).replace("productCnt",productCnt));
-    $("#totalPrice").text((parseInt($("#totalPrice").text().replace("원","").replace(",","")) + menuList[menuName][3]).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+"원"); 
+    
+    $("#main>div:eq(1)").append(menuCategory);
+    
     
   }
 
@@ -412,14 +399,6 @@
       categoryTag.append($("<div>",{class:'border border-2 rounded-2 border-secondary  m-3 row',style:'align-items:center'}).append($('<input>',{value:categoryList[i],placeholder:'카테고리를 입력해주세요.',name:'categoryVal'})))
       $("#categoryDiv").append(categoryTag);
     }
-
-    // var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
-
-    // for(var i = 0 ; i < categoryList.length ; i++){
-    //   var categoryTag = $("<div>")
-    //   categoryTag.append($("<div>",{class:'border border-2 rounded-2 border-secondary  m-3 row',style:'align-items:center'}).append($('<input>',{value:'',placeholder:'카테고리를 입력해주세요.',name:'categoryVal'})))
-    //   $("#categoryDiv").append(categoryTag);
-    // }
     
   }
 
@@ -572,6 +551,8 @@
   function refreshMain(){
     
     var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+    var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
+    var targetProductList;
 
     if(categoryList.length < 1){
       var categoryDiv = $("<div>",{class:'row'})
@@ -579,25 +560,37 @@
                      .append($('<div>',{class:'row py-4'})
                      .append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
                      .append($('<div>',{class:'row'})
-                     .append($('<a>',{class:'col-md-11 shadowBox',href:'#',onclick:'showDetail(this)',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
+                     .append($('<a>',{class:'col-md-11 shadowBox',href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
                      .append($('<img>',{src:'https://i.postimg.cc/dtdjSWvZ/pngwing-com.png'})))))));
-        $("#main").append(categoryDiv);
+        $("#main").find("div").eq(0).append(categoryDiv);
     }else{
       
-      $("#main").children().remove();
+      $("#main").find("div").eq(0).children().remove();
       for( var i = 0 ; i < categoryList.length ; i++){
-        var categoryDiv = $("<div>",{class:'row'})
-          categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
-                     .append($('<div>',{class:'row py-4'})
-                     .append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
-                     .append($('<div>',{class:'row'})
-                     .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',onclick:'showDetail(this)',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
-                     .append($('<img>',{src:'https://i.postimg.cc/dtdjSWvZ/pngwing-com.png'})))))));
-        $("#main").append(categoryDiv);
-        
-        
+
+        if(productList.hasOwnProperty(categoryList[i])){
+          targetProductList = productList[categoryList[i]];
+          
+          var categoryDiv;
+          for(var i = 0 ; i < targetProductList.length ; i++){
+            
+            if(i==0){
+              categoryDiv = $("<div>",{class:'row menuDiv '+categoryList[i]})
+              categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
+                      .append($('<div>',{class:'row py-4'})));
+            }
+            
+            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addCart("'+targetProductList[i][0]+'","'+targetProductList[i][1]+'")'})
+                      .append($('<div>',{class:'row'})
+                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
+                      .append($('<img>',{src:targetProductList[i][3]})))));
+            
+          }
+        }
+        $("#main").find("div").eq(0).append(categoryDiv);
       }
     }
+    
     
   }
 
@@ -630,24 +623,25 @@
     var productName = $("#productadd_productName").val();
     var productAmt = $("#productadd_productAmt").val();
     var productDes = $("#productadd_productDes").val();
+    var formFile = $("#prev_View_area").attr('src');
 
     var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
     var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
 
     if(productName === '' || productName == undefined){
       alert('상품명을 선택해주세요.')
       return;
     }
     
-    if(productOptList.hasOwnProperty(categoryName)){
-      
+    if(productList.hasOwnProperty(categoryName)){
       productDetailList = productList[categoryName];  
-
     }  
     
     productDetail.push(productName);
     productDetail.push(productAmt);
     productDetail.push(productDes);
+    productDetail.push(formFile);
     productDetailList.push(productDetail);
 
     //productList[categoryName] = productDetailList;
@@ -661,6 +655,74 @@
 
   }
 
+  function previewImage(targetObj, View_area) {
+    var preview = document.getElementById(View_area); //div id
+    var ua = window.navigator.userAgent;
+
+    //ie일때(IE8 이하에서만 작동)
+    if (ua.indexOf("MSIE") > -1) {
+      targetObj.select();
+      try {
+        var src = document.selection.createRange().text; // get file full path(IE9, IE10에서 사용 불가)
+        var ie_preview_error = document.getElementById("ie_preview_error_" + View_area);
+
+
+        if (ie_preview_error) {
+          preview.removeChild(ie_preview_error); //error가 있으면 delete
+        }
+
+        var img = document.getElementById(View_area); //이미지가 뿌려질 곳
+
+        //이미지 로딩, sizingMethod는 div에 맞춰서 사이즈를 자동조절 하는 역할
+        img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+src+"', sizingMethod='scale')";
+      } catch (e) {
+        if (!document.getElementById("ie_preview_error_" + View_area)) {
+          var info = document.createElement("<p>");
+          info.id = "ie_preview_error_" + View_area;
+          info.innerHTML = e.name;
+          preview.insertBefore(info, null);
+        }
+      }
+    //ie가 아닐때(크롬, 사파리, FF)
+    } else {
+      var files = targetObj.files;
+      for ( var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var imageType = /image.*/; //이미지 파일일경우만.. 뿌려준다.
+        if (!file.type.match(imageType))
+          continue;
+        var prevImg = document.getElementById("prev_" + View_area); //이전에 미리보기가 있다면 삭제
+        if (prevImg) {
+          preview.removeChild(prevImg);
+        }
+        var img = document.createElement("img"); 
+        img.id = "prev_" + View_area;
+        img.classList.add("obj");
+        img.file = file;
+        img.style.width = '100px'; 
+        img.style.height = '100px';
+        preview.appendChild(img);
+        if (window.FileReader) { // FireFox, Chrome, Opera 확인.
+          var reader = new FileReader();
+          reader.onloadend = (function(aImg) {
+            return function(e) {
+              aImg.src = e.target.result;
+            };
+          })(img);
+          reader.readAsDataURL(file);
+        } else { // safari is not supported FileReader
+          //alert('not supported FileReader');
+          if (!document.getElementById("sfr_preview_error_"
+              + View_area)) {
+            var info = document.createElement("p");
+            info.id = "sfr_preview_error_" + View_area;
+            info.innerHTML = "not supported FileReader";
+            preview.insertBefore(info, null);
+          }
+        }
+      }
+    }
+  }
 
 
 </script>
@@ -697,13 +759,18 @@
         <div class="col-md-1 h-12 row"><a href="#">로그아웃</a></div>
       </div>
     </header>
-    <main id="main" class="py-3" >
-
-      
-
-      <!-- <div id="fadeOutDiv" style=" position: absolute; left: 800px;  top: 600px; width: 200px; height: 200px; display: none;">
-        <img id="fadeOutImg" alt="Menu Item" style="height: auto; width: 100%; margin-top: 5px; border-radius: 5%;" src="https://telegra.ph/file/03e67b1774713572b6517.jpg"/>
-      </div> -->
+    <main id="main" class="py-3 mt-5 row" style="height: 100%">
+      <div class="col-md-8"></div>
+      <div class="col-md-4 border-start">
+        <div class="row" style="height: 50px;">
+          <div class="col-md-3">할인</div>
+          <div class="col-md-3">삭제</div>
+        </div>
+        <div class="row" style="height: 50px;">
+          <div class="col-md-6">-</div>
+          <div class="col-md-6">+</div>
+        </div>
+      </div>
     </main>
     <footer class="container-fluid fixed-bottom py-2 bg-white border-top border-width-2">
       <div class="row">
@@ -890,9 +957,13 @@
           </div>
           <div class="row mt-3 ps-2">
             <div class="col-md-2">상품이미지</div>
-            <div class="col-md-2">
+            <div class="col-md-10">
               <div class="m-3 row" style="align-items:center">
-                
+                <div class="mb-3">
+                  <label for="productadd_formFile" class="form-label">Default file input example</label>
+                  <input class="form-control" type="file" id="productadd_formFile" onchange="previewImage(this,'View_area')">
+                  <div id='View_area' style='position:relative; max-width: 300px; max-height: 300px; color: black; border: 0px solid black; display: inline;'></div>
+                </div>
               </div>
             </div>
           </div>
