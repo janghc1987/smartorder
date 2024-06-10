@@ -279,16 +279,36 @@
   }
 
   function addCart(menuName, menuPrice){
-    
-    var menuCategory = $('<div>',{class:'row py-8',style:'cursor:pointer;'});
-    menuCategory.append($('<div>',{class:'col-md-4'}).append(menuName));
-    menuCategory.append($('<div>',{class:'col-md-4'}).append('x1'));
-    menuCategory.append($('<div>',{class:'col-md-4'}).append(menuPrice));
 
+    if($("#main>div:eq(1)").find('#cart_'+menuName).length > 0){
+      var cnt = parseInt($("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)').text().replaceAll(',','').replaceAll('원',''));
+      var amt = parseInt($("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+
+      $("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)').text(cnt+1);
+      $("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(2)').text((amt+(amt/cnt)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    }else{
+
+      var menuCategory = $('<div>',{class:'row py-8',style:'cursor:pointer;',id:'cart_'+menuName,onclick:'clickProduct(this)',name:'cartProduct'});
+      menuCategory.append($('<div>',{class:'col-md-4'}).append(menuName));
+      menuCategory.append($('<div>',{class:'col-md-4'}).append('1'));
+      menuCategory.append($('<div>',{class:'col-md-4'}).append(menuPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원'));
+      
+      $("#main>div:eq(1)").append(menuCategory);
+
+    }
     
-    $("#main>div:eq(1)").append(menuCategory);
+  }
+
+  function clickProduct(obj){
+
+    for(var i =0 ; i < $("div[name=cartProduct]").length ; i++){
+      $("div[name=cartProduct]").eq(i).removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10');
+    }
+
+    $(obj).addClass('bg-info').addClass('bg-gradient').addClass('bg-opacity-10');
     
     
+
   }
 
   function showLoading(){
@@ -764,21 +784,29 @@
       <div class="col-md-8"></div>
       <div class="col-md-4 border-start">
         <div class="row" style="height: 50px;">
-          <div class="col-md-3">할인</div>
-          <div class="col-md-3">삭제</div>
+          <div class="col-md-3">
+            <button type="button" class="btn btn-outline-primary col-md-12">할인</button>
+          </div>
+          <div class="col-md-3">
+            <button type="button" class="btn btn-outline-danger col-md-12">삭제</button>
+          </div>
         </div>
         <div class="row" style="height: 50px;">
-          <div class="col-md-6">-</div>
-          <div class="col-md-6">+</div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-outline-secondary col-md-12">-</button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-outline-secondary col-md-12">+</button>
+          </div>
         </div>
         <div class="row fixed-bottom mb-5" >
           <div class="col-md-8"></div>
           <div class="col-md-2 h-12 row">
-            <a href="#" class="col-md-12 pt-2 " style="text-align: center;"
+            <a href="#" class="col-md-12 pt-2 bg-info bg-gradient" style="text-align: center;"
             data-bs-toggle="modal" data-bs-target="#appModal">결제하기</a>
           </div>
           <div class="col-md-2 h-12 row">
-            <a href="#" class="col-md-12 pt-2  " style="text-align: center;">금액입력</a>
+            <a href="#" class="col-md-12 pt-2 bg-secondary bg-gradient bg-opacity-10" style="text-align: center;">금액입력</a>
           </div>
         </div>
       </div>
@@ -1088,7 +1116,7 @@
             </div>
             <div class=" border-top" style="height: 10vh; width:100%">
               <div class="h-50">현금영수증 발급</div>
-              <div class="h-50" class="btn-close">닫기</div>
+              <div class="h-50" class="btn-close" data-bs-dismiss="modal">닫기</div>
             </div>
           </div>
         </div>
