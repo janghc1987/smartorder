@@ -555,6 +555,7 @@
     var targetProductList;
 
     if(categoryList.length < 1){
+      
       var categoryDiv = $("<div>",{class:'row'})
           categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
                      .append($('<div>',{class:'row py-4'})
@@ -572,18 +573,18 @@
           targetProductList = productList[categoryList[i]];
           
           var categoryDiv;
-          for(var i = 0 ; i < targetProductList.length ; i++){
+          for(var j = 0 ; j < targetProductList.length ; j++){
             
-            if(i==0){
+            if(j==0){
               categoryDiv = $("<div>",{class:'row menuDiv '+categoryList[i]})
               categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
                       .append($('<div>',{class:'row py-4'})));
             }
             
-            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addCart("'+targetProductList[i][0]+'","'+targetProductList[i][1]+'")'})
+            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addCart("'+targetProductList[j][0]+'","'+targetProductList[j][1]+'")'})
                       .append($('<div>',{class:'row'})
                       .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
-                      .append($('<img>',{src:targetProductList[i][3]})))));
+                      .append($('<img>',{src:targetProductList[j][3]})))));
             
           }
         }
@@ -770,23 +771,33 @@
           <div class="col-md-6">-</div>
           <div class="col-md-6">+</div>
         </div>
+        <div class="row fixed-bottom mb-5" >
+          <div class="col-md-8"></div>
+          <div class="col-md-2 h-12 row">
+            <a href="#" class="col-md-12 pt-2 " style="text-align: center;"
+            data-bs-toggle="modal" data-bs-target="#appModal">결제하기</a>
+          </div>
+          <div class="col-md-2 h-12 row">
+            <a href="#" class="col-md-12 pt-2  " style="text-align: center;">금액입력</a>
+          </div>
+        </div>
       </div>
     </main>
-    <footer class="container-fluid fixed-bottom py-2 bg-white border-top border-width-2">
+    <footer class="container-fluid fixed-bottom bg-white border-top border-width-2" style="height: 3rem;">
       <div class="row">
-        <div class="col-md-3 h-12 row">
+        <div class="col-md-3 h-100 row">
           <a href="#" class="col-md-12 pt-2 " style="text-align: center;"
           data-bs-toggle="modal" data-bs-target="#waiterCallModal">직원호출</a>
         </div>
-        <div class="col-md-3 h-12 row">
+        <div class="col-md-3 h-100 row">
           <a href="#" class="col-md-12 pt-2  " style="text-align: center;"
           data-bs-toggle="modal" data-bs-target="#myOrderModal">주문내역</a>
         </div>
-        <div class="col-md-3 h-12 row">
+        <div class="col-md-3 h-100 row">
           <a href="#" class="col-md-12 pt-2  " style="text-align: center;"
           data-bs-toggle="modal" data-bs-target="#myOrderModal">주문내역</a>
         </div>
-        <div class="col-md-3 h-12 row">
+        <div class="col-md-3 h-100 row">
           <a href="#" class="col-md-12 pt-2 " style="text-align: center;"
           data-bs-toggle="modal" data-bs-target="#myCartModal">장바구니</a>
         </div>
@@ -972,6 +983,153 @@
             <button type="button" class="btn btn-danger" onclick="saveProduct(this)">저장</button>
           </div>
         </product>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="appModal" tabindex="-1"  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">결제</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body row col-md-12 overflow-auto" style="height: 80vh;">
+          <div class="col-md-4 h-100 row">
+            <div style="height: 60vh; width: 100%;"></div>
+            <div class=" border-top" style="height: 20vh; width:100%">
+              <div class="h-25">공급가액</div>
+              <div class="h-25">부가세</div>
+              <div class="h-25">면세물품 가액</div>
+              <div class="h-25">총액</div>
+            </div>
+          </div>
+          <div class="col-md-8 h-100 border-start">
+            <div class="row" style="height: 30vh; margin-top:50vh; width:100%">
+              <div class="h-50"></div>
+              <div class="h-50 row" style="width: 100%;">
+                <div class="col-md-4 border-2" data-bs-toggle="modal" data-bs-target="#appCashModal">카드결제</div>
+                <div class="col-md-4 border-2">현금결제</div>
+                <div class="col-md-4 border-2">기타결제수단</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="appCashModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">현금결제</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body row col-md-12 overflow-auto" style="height: 60vh;">
+          <div class="col-md-8 h-100 row">
+            <div style="height: 50vh; width: 100%;"></div>
+            <div class=" border-top" style="height: 10vh; width:100%">
+              <div class="h-50">거스름돈</div>
+              <div class="h-50" data-bs-toggle="modal" data-bs-target="#appCashCompleteModal">결재완료</div>
+            </div>
+          </div>
+          <div class="col-md-4 h-100 border-start">
+            <div class="row" style="height: 60vh; width:100%">
+              <div class="h-10 row">
+                <div class="col-md-3">1</div>
+                <div class="col-md-3">2</div>
+                <div class="col-md-3">3</div>
+              </div>
+              <div class="h-10 row">
+                <div class="col-md-3">4</div>
+                <div class="col-md-3">5</div>
+                <div class="col-md-3">6</div>
+              </div>
+              <div class="h-10 row">
+                <div class="col-md-3">7</div>
+                <div class="col-md-3">8</div>
+                <div class="col-md-3">9</div>
+              </div>
+              <div class="h-10 row">
+                <div class="col-md-3">C</div>
+                <div class="col-md-3">0</div>
+                <div class="col-md-3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="appCashCompleteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">결재완료</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body row col-md-12 overflow-auto" style="height: 60vh;">
+          <div class="col-md-12 h-100 row">
+            <div style="height: 50vh; width: 100%;">
+              <div>현금결제</div>
+              <div>공급가액</div>
+              <div>부가세</div>
+              <div>결제금액</div>
+              <div class="border-top">받을금액</div>
+              <div>거스름돈</div>
+            </div>
+            <div class=" border-top" style="height: 10vh; width:100%">
+              <div class="h-50">현금영수증 발급</div>
+              <div class="h-50" class="btn-close">닫기</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="appCardModal" style="width: 100%; height: 100%;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <main>
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">카드결제</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+    
+          <!-- Modal body -->
+          <div class="modal-body row ps-20 col-md-12 overflow-auto" style="height: 400px;">
+            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+              <div clas="h-100">
+                <a name="Barbecue" href="#" onclick="showCategoryMng()" style="background-color: white; border-radius: 5%;">
+                  상품카테고리
+                </a>
+              </div>
+            </div>
+            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+              <div clas="h-100 col-md-12">
+                <a name="Barbecue" href="#" onclick="showProductMng()" style="background-color: white; border-radius: 5%;">
+                  상품관리
+                </a>
+              </div>
+            </div>
+            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
+              <div clas="h-100 col-md-12">
+                <a name="Barbecue" href="#" onclick="showProductOptMng()" style="background-color: white; border-radius: 5%;">
+                  옵션
+                </a>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     </div>
   </div>
