@@ -301,8 +301,8 @@
 
   function clickProduct(obj){
 
-    for(var i =0 ; i < $("div[name=cartProduct]").length ; i++){
-      $("div[name=cartProduct]").eq(i).removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10');
+    for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
+      $("#main>div:eq(1)>div[name=cartProduct]").eq(i).removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10');
     }
 
     $(obj).addClass('bg-info').addClass('bg-gradient').addClass('bg-opacity-10');
@@ -798,30 +798,30 @@
 
   function cardApproval(){
 
-    var cnt;
-    var amt;
-    var totalAmt;
+    var cnt = 0;
+    var amt = 0;
+    var totalAmt = 0;
     $("#appTargetDiv").children().remove();
-    if($("div[name=cartProduct]").length > 0){
+    if($("#main>div:eq(1)>div[name=cartProduct]").length > 0){
 
       $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text('');
       $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('');
       $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('');
       $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text('');
 
-      for(var i =0 ; i < $("div[name=cartProduct]").length ; i++){
+      for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
       
-      cnt = parseInt($("div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
-      amt = parseInt($("div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
-
-      totalAmt += amt;
-
-      $("#appTargetDiv").append($("div[name=cartProduct]").eq(i).removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10'));
-      $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").append(amt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-      $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").append(amt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-      $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('0원');
-      $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
-    }
+        cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+        amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+        
+        totalAmt += amt;
+        
+        $("#appTargetDiv").append($("#main>div:eq(1)>div[name=cartProduct]").eq(i).clone().removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10'));
+        $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+        $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+        $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('0원');
+        $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
+      }
 
     }else{
       $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text('0원');
