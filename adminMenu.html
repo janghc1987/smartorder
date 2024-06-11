@@ -582,7 +582,7 @@
                      .append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
                      .append($('<div>',{class:'row'})
                      .append($('<a>',{class:'col-md-11 shadowBox',href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
-                     .append($('<img>',{src:'https://i.postimg.cc/dtdjSWvZ/pngwing-com.png'})))))));
+                     .append('+'))))));
         $("#main").find("div").eq(0).append(categoryDiv);
     }else{
       
@@ -604,7 +604,8 @@
             categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addCart("'+targetProductList[j][0]+'","'+targetProductList[j][1]+'")'})
                       .append($('<div>',{class:'row'})
                       .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
-                      .append($('<img>',{src:targetProductList[j][3]})))));
+                      .append($('<div>',{text:targetProductList[j][0],style:'height:70%; padding-top:1rem;'}))
+                      .append($('<div>',{text:targetProductList[j][1].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',style:'height:30%'})))));
             
           }
         }
@@ -745,6 +746,93 @@
     }
   }
 
+  function deleteCartProduct(){
+    
+    for(var i =0 ; i < $("div[name=cartProduct]").length ; i++){
+      
+      if($("div[name=cartProduct]").eq(i).hasClass('bg-info')){
+        $("div[name=cartProduct]").eq(i).remove();
+
+      }
+      
+    }
+
+    
+  }
+
+  function plusCartProduct(){
+    for(var i =0 ; i < $("div[name=cartProduct]").length ; i++){
+      
+      if($("div[name=cartProduct]").eq(i).hasClass('bg-info')){
+        var menuId = $("div[name=cartProduct]").eq(i).attr('id');
+        var cnt = parseInt($("#main>div:eq(1)").find('#'+menuId+'>div:eq(1)').text().replaceAll(',','').replaceAll('원',''));
+        var amt = parseInt($("#main>div:eq(1)").find('#'+menuId+'>div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+
+        $("#main>div:eq(1)").find('#'+menuId+'>div:eq(1)').text(cnt+1);
+        $("#main>div:eq(1)").find('#'+menuId+'>div:eq(2)').text((amt+(amt/cnt)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+
+      }
+      
+    }
+  }
+
+  function minusCartProduct(){
+    for(var i =0 ; i < $("div[name=cartProduct]").length ; i++){
+      
+      if($("div[name=cartProduct]").eq(i).hasClass('bg-info')){
+        var menuId = $("div[name=cartProduct]").eq(i).attr('id');
+        var cnt = parseInt($("#main>div:eq(1)").find('#'+menuId+'>div:eq(1)').text().replaceAll(',','').replaceAll('원',''));
+        var amt = parseInt($("#main>div:eq(1)").find('#'+menuId+'>div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+        if(cnt == 1){
+          return;
+        }
+
+        $("#main>div:eq(1)").find('#'+menuId+'>div:eq(2)').text((amt-(amt/cnt)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+        $("#main>div:eq(1)").find('#'+menuId+'>div:eq(1)').text(cnt-1);
+        
+
+      }
+      
+    }
+  }
+
+  function cardApproval(){
+
+    var cnt;
+    var amt;
+    var totalAmt;
+    $("#appTargetDiv").children().remove();
+    if($("div[name=cartProduct]").length > 0){
+
+      $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text('');
+      $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('');
+      $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('');
+      $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text('');
+
+      for(var i =0 ; i < $("div[name=cartProduct]").length ; i++){
+      
+      cnt = parseInt($("div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+      amt = parseInt($("div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+
+      totalAmt += amt;
+
+      $("#appTargetDiv").append($("div[name=cartProduct]").eq(i).removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10'));
+      $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").append(amt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").append(amt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('0원');
+      $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
+    }
+
+    }else{
+      $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text('0원');
+      $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('0원');
+      $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
+      $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text('0원');
+    }
+    
+    
+    
+  }
 
 </script>
 <body class="text-center" style="background-color: white;">
@@ -788,25 +876,25 @@
             <button type="button" class="btn btn-outline-primary col-md-12">할인</button>
           </div>
           <div class="col-md-3">
-            <button type="button" class="btn btn-outline-danger col-md-12">삭제</button>
+            <button type="button" class="btn btn-outline-danger col-md-12" onclick="deleteCartProduct()">삭제</button>
           </div>
         </div>
         <div class="row" style="height: 50px;">
           <div class="col-md-6">
-            <button type="button" class="btn btn-outline-secondary col-md-12">-</button>
+            <button type="button" class="btn btn-outline-secondary col-md-12" onclick="minusCartProduct()">-</button>
           </div>
           <div class="col-md-6">
-            <button type="button" class="btn btn-outline-secondary col-md-12">+</button>
+            <button type="button" class="btn btn-outline-secondary col-md-12" onclick="plusCartProduct()">+</button>
           </div>
         </div>
         <div class="row fixed-bottom mb-5" >
           <div class="col-md-8"></div>
           <div class="col-md-2 h-12 row">
             <a href="#" class="col-md-12 pt-2 bg-info bg-gradient" style="text-align: center;"
-            data-bs-toggle="modal" data-bs-target="#appModal">결제하기</a>
+            data-bs-toggle="modal" data-bs-target="#appModal" onclick="cardApproval()">결제하기</a>
           </div>
           <div class="col-md-2 h-12 row">
-            <a href="#" class="col-md-12 pt-2 bg-secondary bg-gradient bg-opacity-10" style="text-align: center;">금액입력</a>
+            <a href="#" class="col-md-12 pt-2 bg-secondary bg-opacity-10" style="text-align: center;">금액입력</a>
           </div>
         </div>
       </div>
@@ -1025,22 +1113,52 @@
   
         <!-- Modal body -->
         <div class="modal-body row col-md-12 overflow-auto" style="height: 80vh;">
-          <div class="col-md-4 h-100 row">
-            <div style="height: 60vh; width: 100%;"></div>
-            <div class=" border-top" style="height: 20vh; width:100%">
-              <div class="h-25">공급가액</div>
-              <div class="h-25">부가세</div>
-              <div class="h-25">면세물품 가액</div>
-              <div class="h-25">총액</div>
+          <div class="col-md-6 h-100 row">
+            <div id="appTargetDiv" style="height: 60vh; width: 100%;"></div>
+            <div id="appTargetTotalDiv" class=" border-top" style="height: 20vh; width:100%">
+              <div class="h-25 row">
+                <div class="col-md-6 text-start">공급가액</div>
+                <div class="col-md-6 text-end"></div>
+              </div>
+              <div class="h-25 row">
+                <div class="col-md-6 text-start">부가세</div>
+                <div class="col-md-6 text-end"></div>
+              </div>
+              <div class="h-25 row">
+                <div class="col-md-6 text-start">면세물품 가액</div>
+                <div class="col-md-6 text-end"></div>
+              </div>
+              <div class="h-25 row">
+                <div class="col-md-6 text-start">총액</div>
+                <div class="col-md-6 text-end"></div>
+              </div>
             </div>
           </div>
-          <div class="col-md-8 h-100 border-start">
+          <div class="col-md-6 h-100 border-start">
             <div class="row" style="height: 30vh; margin-top:50vh; width:100%">
-              <div class="h-50"></div>
-              <div class="h-50 row" style="width: 100%;">
-                <div class="col-md-4 border-2" data-bs-toggle="modal" data-bs-target="#appCashModal">카드결제</div>
-                <div class="col-md-4 border-2">현금결제</div>
-                <div class="col-md-4 border-2">기타결제수단</div>
+              <div class="row" style="height: 15vh;"></div>
+              <div class="row" style="height: 15vh;">
+                <div class="col-md-4 border-2 bg-info text-white" data-bs-toggle="modal" data-bs-target="#appCashModal" style='cursor:pointer;'>
+                  <table style="height: 15vh; width: 100%;">
+                    <tr>
+                      <td class="align-middle ">카드결제</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-md-4 border-2 bg-primary text-white" style='cursor:pointer;' onclick="cashApproval()">
+                  <table style="height: 15vh; width: 100%;">
+                    <tr>
+                      <td class="align-middle" >현금결제</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-md-4 border-2 bg-secondary bg-opacity-10 " style='cursor:pointer;'>
+                  <table style="height: 15vh; width: 100%;">
+                    <tr>
+                      <td class="align-middle">기타결제수단</td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
