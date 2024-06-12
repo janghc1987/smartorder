@@ -612,11 +612,70 @@
         $("#main").find("div").eq(0).append(categoryDiv);
       }
     }
-    
-    
   }
 
-  function showProductMng(){ 
+  //상품 가져오기 
+  function showProductMng(){
+    
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+    var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
+    var targetProductList;
+
+    if(categoryList.length > 0){
+      
+      $("#productMngModal").find("#displayDiv").children().remove();
+      for( var i = 0 ; i < categoryList.length ; i++){
+
+        if(productList.hasOwnProperty(categoryList[i])){
+          targetProductList = productList[categoryList[i]];
+          
+          var categoryDiv;
+          for(var j = 0 ; j < targetProductList.length ; j++){
+            
+            if(j==0){
+              categoryDiv = $("<div>",{class:'row menuDiv '+categoryList[i]})
+              categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
+                      .append($('<div>',{class:'row py-4'})));
+            }
+            
+            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'editProduct("'+targetProductList[j][0]+'","'+categoryList[i]+'")'})
+                      .append($('<div>',{class:'row'})
+                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
+                      .append($('<div>',{text:targetProductList[j][0],style:'height:70%; padding-top:1rem;'}))
+                      .append($('<div>',{text:targetProductList[j][1].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',style:'height:30%'})))));
+            
+          }
+        }
+        $("#productMngModal").find("#displayDiv").append(categoryDiv);
+      }
+    }
+  }
+
+  //상품 수정하기
+  function editProduct(menuName,categoryName){
+    $("#productMngModal").modal('hide');
+    $("#productEditModal").modal('show');
+
+
+    $("#product_edit_category").children().remove();
+
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+    
+    for(var i = 0 ; i < categoryList.length ; i++){
+      var categoryOption
+      if(categoryList[i] == categoryName){
+        categoryOption = $("<option>",{value:categoryList[i],selected:'selected'}).append(categoryList[i]);
+      }else{
+        categoryOption = $("<option>",{value:categoryList[i]}).append(categoryList[i]);
+      }
+      
+      $("#product_edit_category").append(categoryOption) ;
+
+    }
+
+  }
+
+  function showProductAdd(){ 
     $("#optionModal").find('main').hide();
     $("#optionModal").find('category').hide();
     $("#optionModal").find('productOpt').hide();
@@ -796,7 +855,7 @@
     }
   }
 
-  function cardApproval(){
+  function approval(){
 
     var cnt = 0;
     var amt = 0;
@@ -832,6 +891,55 @@
     
     
     
+  }
+
+  function cashApproval(){
+    $("#cashTrgVal").text($("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text());
+  }
+
+  function cardApproval(){
+    var amt = parseInt($("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text().replaceAll(',','').replace('원',''));
+    $("#cardCompleteModalDiv>div:eq(2)>div:eq(2)").text((amt*0.9).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $("#cardCompleteModalDiv>div:eq(3)>div:eq(2)").text((amt*0.1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $("#cardCompleteModalDiv>div:eq(4)>div:eq(2)").text(amt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+  }
+  
+  function cartInit(){
+    
+    $('div[name=cartProduct]').remove();
+  }
+
+  function clickCashCal(obj){
+
+   var clickVal = $(obj).find('span:eq(0)').text();
+   var clickNum = 0;
+   var cashInputVal = $("#cashInputVal").val().replaceAll(',','').replaceAll('원','');
+   var cashTrgNum = $("#cashTrgVal").text().replaceAll(',','').replaceAll('원','') == '' ? 0 : parseInt($("#cashTrgVal").text().replaceAll(',','').replaceAll('원',''));
+   
+   if('C' === clickVal){
+    $("#cashInputVal").val('0원');
+    $('#cashReturnVal').text('0원');
+   }else if('◁' === clickVal){
+    cashInputVal = cashInputVal != '' ? cashInputVal.slice(0,-1) : cashInputVal;
+    $("#cashInputVal").val(cashInputVal.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $('#cashReturnVal').text((parseInt(cashInputVal) - cashTrgNum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+   }else{
+    clickNum = parseInt(clickVal);
+    cashInputVal += clickVal
+    $("#cashInputVal").val(parseInt(cashInputVal).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $('#cashReturnVal').text((parseInt(cashInputVal) - cashTrgNum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+   }
+
+  }
+  
+  function cashApprovalComplete(){
+    var amt = parseInt($("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text().replaceAll(',','').replace('원',''));
+    $("#cashCompleteModalDiv>div:eq(2)>div:eq(2)").text($("#cashTrgVal").text());
+    $("#cashCompleteModalDiv>div:eq(3)>div:eq(2)").text($("#cashInputVal").val());
+    $("#cashCompleteModalDiv>div:eq(4)>div:eq(2)").text($("#cashReturnVal").text());
+    $("#cashTrgVal").text('');
+    $("#cashInputVal").val('');
+    $("#cashReturnVal").text('');
   }
 
 </script>
@@ -891,7 +999,7 @@
           <div class="col-md-8"></div>
           <div class="col-md-2 h-12 row">
             <a href="#" class="col-md-12 pt-2 bg-info bg-gradient" style="text-align: center;"
-            data-bs-toggle="modal" data-bs-target="#appModal" onclick="cardApproval()">결제하기</a>
+            data-bs-toggle="modal" data-bs-target="#appModal" onclick="approval()">결제하기</a>
           </div>
           <div class="col-md-2 h-12 row">
             <a href="#" class="col-md-12 pt-2 bg-secondary bg-opacity-10" style="text-align: center;">금액입력</a>
@@ -941,7 +1049,8 @@
             </div>
             <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
               <div clas="h-100 col-md-12">
-                <a name="Barbecue" href="#" onclick="showProductMng()" style="background-color: white; border-radius: 5%;">
+                <a name="Barbecue" href="#" onclick="showProductMng()" style="background-color: white; border-radius: 5%;"
+                data-bs-toggle="modal" data-bs-target="#productMngModal">
                   상품관리
                 </a>
               </div>
@@ -1102,6 +1211,86 @@
       </div>
     </div>
   </div>
+  <!-- 상품수정 화면 -->
+  <div class="modal fade" id="productEditModal" tabindex="-1"  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">상품수정</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body" >
+          <div class="row mt-3 ps-2">
+            <div class="col-md-12 row">
+              <div>상품 카테고리</div>
+              <div class="row col-md-4">
+                <select class="col-md-12" id="product_edit_category"></select>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품명</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="product_edit_productName" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">가격</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="product_edit_productAmt" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품설명</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="product_edit_productDes" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품이미지</div>
+            <div class="col-md-10">
+              <div class="m-3 row" style="align-items:center">
+                <div class="mb-3">
+                  <label for="product_edit_formFile" class="form-label">Default file input example</label>
+                  <input class="form-control" type="file" id="product_edit_formFile" onchange="previewImage(this,'View_area')">
+                  <div id='View_area' style='position:relative; max-width: 300px; max-height: 300px; color: black; border: 0px solid black; display: inline;'></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" onclick="saveProduct(this)">저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 상품관리 화면 -->
+  <div class="modal fade" id="productMngModal" tabindex="-1"  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">상품관리</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div id="displayDiv" class="modal-body" style="height: 80vh;"></div>
+      </div>
+    </div>
+  </div>
+  <!--  결제상세 화면 -->
   <div class="modal fade" id="appModal" tabindex="-1"  >
     <div class="modal-dialog">
       <div class="modal-content">
@@ -1112,8 +1301,8 @@
         </div>
   
         <!-- Modal body -->
-        <div class="modal-body row col-md-12 overflow-auto" style="height: 80vh;">
-          <div class="col-md-6 h-100 row">
+        <div class="modal-body row col-md-12" style="height: 80vh;">
+          <div class="col-md-5">
             <div id="appTargetDiv" style="height: 60vh; width: 100%;"></div>
             <div id="appTargetTotalDiv" class=" border-top" style="height: 20vh; width:100%">
               <div class="h-25 row">
@@ -1134,25 +1323,42 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 h-100 border-start">
-            <div class="row" style="height: 30vh; margin-top:50vh; width:100%">
-              <div class="row" style="height: 15vh;"></div>
+          <div class="col-md-7 border-start" style="height: 78vh;">
+            <div style="height: 30vh; margin-top:48vh; width:100%">
               <div class="row" style="height: 15vh;">
-                <div class="col-md-4 border-2 bg-info text-white" data-bs-toggle="modal" data-bs-target="#appCashModal" style='cursor:pointer;'>
+                <div class="col bg-secondary bg-opacity-10" style='cursor:pointer;' >
+                  <table style="height: 15vh; width: 100%;">
+                    <tr>
+                      <td class="align-middle ">할인/쿠폰</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col bg-secondary bg-opacity-10" style='cursor:pointer; margin-left: 2px;' >
+                  <table style="height: 15vh; width: 100%;">
+                    <tr>
+                      <td class="align-middle ">분할결제</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <div class="row cols-3 border-1 border-white" style="height: 15vh; margin-top: 2px;">
+                <div class="col bg-info text-white" data-bs-toggle="modal" data-bs-target="#appCardModal" style='cursor:pointer;' 
+                     onclick="cardApproval()">
                   <table style="height: 15vh; width: 100%;">
                     <tr>
                       <td class="align-middle ">카드결제</td>
                     </tr>
                   </table>
                 </div>
-                <div class="col-md-4 border-2 bg-primary text-white" style='cursor:pointer;' onclick="cashApproval()">
+                <div class="col bg-primary text-white" data-bs-toggle="modal" data-bs-target="#appCashModal" style='cursor:pointer; margin-left: 2px;'  
+                      onclick="cashApproval()">
                   <table style="height: 15vh; width: 100%;">
                     <tr>
                       <td class="align-middle" >현금결제</td>
                     </tr>
                   </table>
                 </div>
-                <div class="col-md-4 border-2 bg-secondary bg-opacity-10 " style='cursor:pointer;'>
+                <div class="col bg-secondary bg-opacity-10 "  style='cursor:pointer; margin-left: 2px;' >
                   <table style="height: 15vh; width: 100%;">
                     <tr>
                       <td class="align-middle">기타결제수단</td>
@@ -1176,35 +1382,58 @@
         </div>
   
         <!-- Modal body -->
-        <div class="modal-body row col-md-12 overflow-auto" style="height: 60vh;">
+        <div class="modal-body row col-md-12" style="height: 60vh;">
           <div class="col-md-8 h-100 row">
-            <div style="height: 50vh; width: 100%;"></div>
-            <div class=" border-top" style="height: 10vh; width:100%">
-              <div class="h-50">거스름돈</div>
-              <div class="h-50" data-bs-toggle="modal" data-bs-target="#appCashCompleteModal">결재완료</div>
+            <div style="height: 45vh; width: 100%;">
+              <div class="text-center fs-4 fw-bold">현금결제</div>
+              <div class="text-center fs-6">현금으로 받은 금액을 입력하세요.</div>
+              <div class="row pt-1 mt-2">
+                <div class="col-md-1"></div>  
+                <div class="text-start col-md-5 fs-6">결제금액</div>
+                <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
+                <div class="col-md-1"></div>
+              </div>
+              <div class="row pt-1">
+                <div class="col-md-1"></div>  
+                <div class="text-start col-md-5 fs-6">받은금액</div>
+                <div class="col-md-5"></div>
+              </div>
+              <div class="row pt-1">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                  <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
+                </div>
+                <div class="col-md-1"></div>
+              </div>
+            </div>
+            <div class="border-top" style="width:100%;">
+              <div class="h-50 row pt-2" >
+                <div class="col-md-1"></div>  
+                <div class="text-start col-md-5 fs-6">거스름돈</div>
+                <div id="cashReturnVal" class="text-end col-md-5 fs-6">0원</div>
+                <div class="col-md-1"></div>
+              </div>
+              <div class="h-50" >
+                <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
+                data-bs-toggle="modal" data-bs-target="#appCashCompleteModal" onclick="{cartInit(),cashApprovalComplete()}">결재완료</button>
+              </div>
             </div>
           </div>
-          <div class="col-md-4 h-100 border-start">
-            <div class="row" style="height: 60vh; width:100%">
-              <div class="h-10 row">
-                <div class="col-md-3">1</div>
-                <div class="col-md-3">2</div>
-                <div class="col-md-3">3</div>
-              </div>
-              <div class="h-10 row">
-                <div class="col-md-3">4</div>
-                <div class="col-md-3">5</div>
-                <div class="col-md-3">6</div>
-              </div>
-              <div class="h-10 row">
-                <div class="col-md-3">7</div>
-                <div class="col-md-3">8</div>
-                <div class="col-md-3">9</div>
-              </div>
-              <div class="h-10 row">
-                <div class="col-md-3">C</div>
-                <div class="col-md-3">0</div>
-                <div class="col-md-3"></div>
+          <div class="col-md-4 h-100 border-start bg-secondary bg-opacity-25">
+            <div class="" style="height: 60vh; width:100%">
+              <div class="row row-cols-3"> 
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>1</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>2</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>3</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>4</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>5</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>6</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>7</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>8</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>9</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>C</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>0</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>◁</span></div>
               </div>
             </div>
           </div>
@@ -1222,19 +1451,33 @@
         </div>
   
         <!-- Modal body -->
-        <div class="modal-body row col-md-12 overflow-auto" style="height: 60vh;">
-          <div class="col-md-12 h-100 row">
-            <div style="height: 50vh; width: 100%;">
-              <div>현금결제</div>
-              <div>공급가액</div>
-              <div>부가세</div>
-              <div>결제금액</div>
-              <div class="border-top">받을금액</div>
-              <div>거스름돈</div>
+        <div class="modal-body" style="height: 60vh;">
+          <div class="h-100">
+            <div id="cashCompleteModalDiv" style="height: 50vh; width: 100%;">
+              <div class="text-center fs-3 fw-bold">현금결제</div>
+              <div class="text-center fs-5">현금 결제가 완료되었습니다.</div>
+              <div class="row pt-1">
+                <div class="col-md-1"></div>  
+                <div class="text-start col-md-5 fs-6">결제금액</div>
+                <div class="text-end col-md-5 fs-6"></div>
+                <div class="col-md-1"></div>
+              </div>
+              <div class="row pt-1 border-top">
+                <div class="col-md-1"></div>  
+                <div class="text-start col-md-5 fs-6">받은금액</div>
+                <div class="text-end col-md-5 fs-6"></div>
+                <div class="col-md-1"></div>
+              </div>
+              <div class="row pt-1">
+                <div class="col-md-1"></div>  
+                <div class="text-start col-md-5 fs-6">거스름돈</div>
+                <div class="text-end col-md-5 fs-6"></div>
+                <div class="col-md-1"></div>
+              </div>
             </div>
-            <div class=" border-top" style="height: 10vh; width:100%">
-              <div class="h-50">현금영수증 발급</div>
-              <div class="h-50" class="btn-close" data-bs-dismiss="modal">닫기</div>
+            <div class="border-top"  style="width: 100%;">
+              <button type="button" class="btn btn-primary text-white mt-3" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
+              onclick="cartInit()">확인</button>
             </div>
           </div>
         </div>
@@ -1244,38 +1487,43 @@
   <div class="modal" id="appCardModal" style="width: 100%; height: 100%;">
     <div class="modal-dialog">
       <div class="modal-content">
-        <main>
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">카드결제</h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">결재완료</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body" style="height: 60vh;">
+          <div class="h-100">
+            <div id="cardCompleteModalDiv" style="height: 50vh; width: 100%;">
+              <div class="text-center fs-3 fw-bold">카드결제</div>
+              <div class="text-center fs-5">카드 결제가 완료되었습니다.</div>
+              <div class="row pt-1">
+                <div class="col-md-1"></div>
+                <div class="text-start col-md-5 fs-6">공급가액</div>
+                <div class="text-end col-md-5 fs-6">10000원</div>
+                <div class="col-md-1"></div>
+              </div>
+              <div class="row pt-1">
+                <div class="col-md-1"></div>
+                <div class="text-start col-md-5 fs-6">부가세</div>
+                <div class="text-end col-md-5 fs-6">10000원</div>
+                <div class="col-md-1"></div>
+              </div>
+              <div class="row pt-1">
+                <div class="col-md-1"></div>  
+                <div class="text-start col-md-5 fs-6">결제금액</div>
+                <div class="text-end col-md-5 fs-6">10000원</div>
+                <div class="col-md-1"></div>
+              </div>
+            </div>
+            <div class="border-top"  style="width: 100%;">
+              <button type="button" class="btn btn-primary text-white mt-3" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
+              onclick="cartInit()">확인</button>
+            </div>
           </div>
-    
-          <!-- Modal body -->
-          <div class="modal-body row ps-20 col-md-12 overflow-auto" style="height: 400px;">
-            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
-              <div clas="h-100">
-                <a name="Barbecue" href="#" onclick="showCategoryMng()" style="background-color: white; border-radius: 5%;">
-                  상품카테고리
-                </a>
-              </div>
-            </div>
-            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
-              <div clas="h-100 col-md-12">
-                <a name="Barbecue" href="#" onclick="showProductMng()" style="background-color: white; border-radius: 5%;">
-                  상품관리
-                </a>
-              </div>
-            </div>
-            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
-              <div clas="h-100 col-md-12">
-                <a name="Barbecue" href="#" onclick="showProductOptMng()" style="background-color: white; border-radius: 5%;">
-                  옵션
-                </a>
-              </div>
-            </div>
-          </div>
-        </main>
+        </div>
       </div>
     </div>
   </div>
