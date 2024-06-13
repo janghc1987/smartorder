@@ -568,6 +568,7 @@
 
   }
 
+  // 상품정보 Refresh
   function refreshMain(){
     
     var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
@@ -576,14 +577,14 @@
 
     if(categoryList.length < 1){
       
-      var categoryDiv = $("<div>",{class:'row'})
-          categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
-                     .append($('<div>',{class:'row py-4'})
-                     .append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
-                     .append($('<div>',{class:'row'})
-                     .append($('<a>',{class:'col-md-11 shadowBox',href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
-                     .append('+'))))));
-        $("#main").find("div").eq(0).append(categoryDiv);
+      // var categoryDiv = $("<div>",{class:'row'})
+      //     categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
+      //                .append($('<div>',{class:'row py-4'})
+      //                .append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
+      //                .append($('<div>',{class:'row'})
+      //                .append($('<a>',{class:'col-md-11 shadowBox',href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
+      //                .append('+'))))));
+      //   $("#main").find("div").eq(0).append(categoryDiv);
     }else{
       
       $("#main").find("div").eq(0).children().remove();
@@ -608,9 +609,21 @@
                       .append($('<div>',{text:targetProductList[j][1].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',style:'height:30%'})))));
             
           }
+
+
+          
+          categoryDiv.find('div').eq(1).append($("<div>",{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addShowProduct("'+categoryList[i]+'")'})
+                     .append($('<div>',{class:'row'})
+                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
+                      .append($('<div>',{style:'height:100%'}).append($('<table>',{style:'height:100%; width:100%'}).append($('<tr>').append($('<td>',{class:'align-middle',text:'+'}))))))));
+
         }
         $("#main").find("div").eq(0).append(categoryDiv);
+
+        
       }
+
+      
     }
   }
 
@@ -638,7 +651,7 @@
                       .append($('<div>',{class:'row py-4'})));
             }
             
-            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'editProduct("'+targetProductList[j][0]+'","'+categoryList[i]+'")'})
+            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'editShowProduct("'+targetProductList[j][0]+'","'+categoryList[i]+'")'})
                       .append($('<div>',{class:'row'})
                       .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
                       .append($('<div>',{text:targetProductList[j][0],style:'height:70%; padding-top:1rem;'}))
@@ -651,13 +664,12 @@
     }
   }
 
-  //상품 수정하기
-  function editProduct(menuName,categoryName){
-    $("#productMngModal").modal('hide');
-    $("#productEditModal").modal('show');
+  // 상품 추가하기
 
-
-    $("#product_edit_category").children().remove();
+  function addShowProduct(categoryName){
+    
+    $("#productAddModal").modal('show');
+    $("#product_add_category").children().remove();
 
     var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
     
@@ -669,9 +681,51 @@
         categoryOption = $("<option>",{value:categoryList[i]}).append(categoryList[i]);
       }
       
+      $("#product_add_category").append(categoryOption) ;
+
+    }
+
+  }
+
+  //상품 수정하기
+  function editShowProduct(menuName,categoryName){
+    $("#productMngModal").modal('hide');
+    $("#productEditModal").modal('show');
+
+
+    $("#product_edit_category").children().remove();
+
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+    var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
+
+    for(var i = 0 ; i < categoryList.length ; i++){
+      var categoryOption
+      if(categoryList[i] == categoryName){
+        categoryOption = $("<option>",{value:categoryList[i],selected:'selected'}).append(categoryList[i]);
+      }else{
+        categoryOption = $("<option>",{value:categoryList[i]}).append(categoryList[i]);
+      }
+      
       $("#product_edit_category").append(categoryOption) ;
 
     }
+
+    var productInfoList = productList[categoryName];
+    var productInfo;
+    for(var i = 0 ; i < productInfoList.length ; i++){
+      if(productInfoList[i][0] == menuName){
+        productInfo = productInfoList[i];
+        break;
+      }
+    }
+
+    $("#product_edit_productName").val(productInfo[0]);
+    $("#product_edit_productAmt").val(productInfo[1]);
+    $("#product_edit_productDes").val(productInfo[2]);
+    // $("#product_edit_formFile").val(productInfo[3]);
+
+    showIewImage('View_area_edit',productInfo[3])
+    
 
   }
 
@@ -700,11 +754,11 @@
     var productDetailList = [];
     var productDetail = [];
     
-    var categoryName = $("#product_category").val();
-    var productName = $("#productadd_productName").val();
-    var productAmt = $("#productadd_productAmt").val();
-    var productDes = $("#productadd_productDes").val();
-    var formFile = $("#prev_View_area").attr('src');
+    var categoryName = $("#product_add_category").val();
+    var productName = $("#product_add_productName").val();
+    var productAmt = $("#product_add_productAmt").val();
+    var productDes = $("#product_add_productDes").val();
+    var formFile = $("#prev_View_area_add").attr('src');
 
     var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
     var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
@@ -725,6 +779,77 @@
     productDetail.push(formFile);
     productDetailList.push(productDetail);
 
+    productList[categoryName] = productDetailList;
+    window.localStorage.setItem('productList',JSON.stringify(productList));
+
+
+   // 제품옵션 추가
+    var productOptDetailList = [];
+    var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
+
+    console.log('($(obj).find("input[name=optionName]").length',$(obj).find("input[name=optionName]").length);
+    console.log('$(obj)',$(obj));
+    if($(obj).find("input[name=optionName]").length > 0){
+      for(var i = 0 ; i < $(obj).find("input[name=optionName]").length ; i++){
+        var productOptDetail = [];
+        productOptDetail.push($(obj).find("input[name=optionName]").eq(i).val());
+        productOptDetail.push($(obj).find("input[name=optionAmt]").eq(i).val());
+        productOptDetailList.push(productOptDetail);
+        console.log('productOptDetailList',productOptDetailList)
+        if($(obj).find("input[name=optionName]").eq(i).val() == '' || $(obj).find("input[name=optionAmt]").eq(i).val() == ''){
+          alert('옵션값은 필수입니다.')
+          return;
+        }
+      }
+    }
+    
+    // productOptList[productName] = productOptDetailList;
+    // window.localStorage.setItem('productOptList',JSON.stringify(productOptList));
+
+    // alert('저장완료');
+    // refreshMain();
+    // $("#productAddModal").find(".btn-close").click();
+
+  }
+
+  //var productList = {}
+  function editProduct(obj){
+
+    var productDetailList = [];
+    var productDetail = [];
+
+    var categoryName = $("#product_edit_category").val();
+    var productName = $("#product_edit_productName").val();
+    var productAmt = $("#product_edit_productAmt").val();
+    var productDes = $("#product_edit_productDes").val();
+    var formFile = $("#prev_View_area_edit").attr('src');
+
+    var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
+    var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+
+    if(productName === '' || productName == undefined){
+      alert('상품명을 선택해주세요.')
+      return;
+    }
+
+    if(productList.hasOwnProperty(categoryName)){
+      productDetailList = productList[categoryName];  
+    }  
+
+    for(var i=0 ; i < productDetailList.length ; i++){
+      if(productName == productDetailList[i][0]){
+        productDetailList.splice(i,1);
+        break;
+      }
+    }
+
+    productDetail.push(productName);
+    productDetail.push(productAmt);
+    productDetail.push(productDes);
+    productDetail.push(formFile);
+    productDetailList.push(productDetail);
+
     //productList[categoryName] = productDetailList;
     productList[categoryName] = productDetailList;
 
@@ -732,8 +857,69 @@
 
     alert('저장완료');
     refreshMain();
-    $("#optionModal").find(".btn-close").click();
+    $("#productEditModal").find(".btn-close").click();
 
+  }
+
+  function showIewImage(View_area,src) {
+    var preview = document.getElementById(View_area); //div id
+    var ua = window.navigator.userAgent;
+
+    //ie일때(IE8 이하에서만 작동)
+    if (ua.indexOf("MSIE") > -1) {
+      targetObj.select();
+      try {
+        var ie_preview_error = document.getElementById("ie_preview_error_" + View_area);
+
+
+        if (ie_preview_error) {
+          preview.removeChild(ie_preview_error); //error가 있으면 delete
+        }
+
+        var img = document.getElementById(View_area); //이미지가 뿌려질 곳
+
+        //이미지 로딩, sizingMethod는 div에 맞춰서 사이즈를 자동조절 하는 역할
+        img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+src+"', sizingMethod='scale')";
+      } catch (e) {
+        if (!document.getElementById("ie_preview_error_" + View_area)) {
+          var info = document.createElement("<p>");
+          info.id = "ie_preview_error_" + View_area;
+          info.innerHTML = e.name;
+          preview.insertBefore(info, null);
+        }
+      }
+    //ie가 아닐때(크롬, 사파리, FF)
+    } else {    
+        var prevImg = document.getElementById("prev_" + View_area); //이전에 미리보기가 있다면 삭제
+        if (prevImg) {
+          preview.removeChild(prevImg);
+        }
+        var img = document.createElement("img"); 
+        img.id = "prev_" + View_area;
+        img.classList.add("obj");
+        img.src = src;
+        img.style.width = '100px'; 
+        img.style.height = '100px';
+        preview.appendChild(img);
+        if (window.FileReader) { // FireFox, Chrome, Opera 확인.
+          var reader = new FileReader();
+          reader.onloadend = (function(aImg) {
+            return function(e) {
+              aImg.src = e.target.result;
+            };
+          })(img);
+          reader.readAsDataURL(file);
+        } else { // safari is not supported FileReader
+          //alert('not supported FileReader');
+          if (!document.getElementById("sfr_preview_error_"
+              + View_area)) {
+            var info = document.createElement("p");
+            info.id = "sfr_preview_error_" + View_area;
+            info.innerHTML = "not supported FileReader";
+            preview.insertBefore(info, null);
+          }
+        }
+    }
   }
 
   function previewImage(targetObj, View_area) {
@@ -769,6 +955,7 @@
       var files = targetObj.files;
       for ( var i = 0; i < files.length; i++) {
         var file = files[i];
+        console.log('file',file)
         var imageType = /image.*/; //이미지 파일일경우만.. 뿌려준다.
         if (!file.type.match(imageType))
           continue;
@@ -1102,23 +1289,62 @@
               <button type="button" class="btn btn-danger" onclick="saveCategory(this)">저장</button>
             </div>
         </category>
-        <productOpt style="display: none;">
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">옵션관리</h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div id="productOptCategoryDiv" class="row mt-3 ps-2">
-            <div class="col-md-3">
+      </div>
+    </div>
+  </div>
+  <!-- 상품추가 화면 -->
+  <div class="modal fade" id="productAddModal" tabindex="-1"  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">상품추가</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body" >
+          <div class="row mt-3 ps-2">
+            <div class="col-md-12 row">
               <div>상품 카테고리</div>
-              <div class="row">
-                <select class="col-md-12" id="productCategory" onchange="chgOptCategory(this)"></select>
+              <div class="row col-md-4">
+                <select class="col-md-12" id="product_add_category"></select>
               </div>
             </div>
-            <div class="col-md-3">
-              <div>상품명</div>
-              <div class="row">
-                <select class="col-md-12" id="productOption" onchange="chgOptProduct(this)"></select>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품명</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="product_add_productName" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">가격</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="product_add_productAmt" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품설명</div>
+            <div class="col-md-2">
+              <div class="m-3 row" style="align-items:center">
+                <input id="product_add_productDes" class="border border-2 rounded-2 border-secondary " value="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">상품이미지</div>
+            <div class="col-md-10">
+              <div class="m-3 row" style="align-items:center">
+                <div class="mb-3">
+                  <label for="product_add_formFile" class="form-label">Default file input example</label>
+                  <input class="form-control" type="file" id="product_add_formFile" onchange="previewImage(this,'View_area_add')">
+                  <div id='View_area_add' style='position:relative; max-width: 300px; max-height: 300px; color: black; border: 0px solid black; display: inline;'></div>
+                </div>
               </div>
             </div>
           </div>
@@ -1150,64 +1376,9 @@
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" onclick="saveProductOpt(this)">저장</button>
-          </div>
-        </productOpt>
-        <product style="display: none;">
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">상품추가</h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-12 row">
-              <div>상품 카테고리</div>
-              <div class="row col-md-4">
-                <select class="col-md-12" id="product_category"></select>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품명</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="productadd_productName" class="border border-2 rounded-2 border-secondary " value="" />
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">가격</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="productadd_productAmt" class="border border-2 rounded-2 border-secondary " value="" />
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품설명</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="productadd_productDes" class="border border-2 rounded-2 border-secondary " value="" />
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품이미지</div>
-            <div class="col-md-10">
-              <div class="m-3 row" style="align-items:center">
-                <div class="mb-3">
-                  <label for="productadd_formFile" class="form-label">Default file input example</label>
-                  <input class="form-control" type="file" id="productadd_formFile" onchange="previewImage(this,'View_area')">
-                  <div id='View_area' style='position:relative; max-width: 300px; max-height: 300px; color: black; border: 0px solid black; display: inline;'></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Modal footer -->
-          <div class="modal-footer">
             <button type="button" class="btn btn-danger" onclick="saveProduct(this)">저장</button>
           </div>
-        </product>
+        </div>
       </div>
     </div>
   </div>
@@ -1261,15 +1432,15 @@
               <div class="m-3 row" style="align-items:center">
                 <div class="mb-3">
                   <label for="product_edit_formFile" class="form-label">Default file input example</label>
-                  <input class="form-control" type="file" id="product_edit_formFile" onchange="previewImage(this,'View_area')">
-                  <div id='View_area' style='position:relative; max-width: 300px; max-height: 300px; color: black; border: 0px solid black; display: inline;'></div>
+                  <input class="form-control" type="file" id="product_edit_formFile" onchange="previewImage(this,'View_area_edit')">
+                  <div id='View_area_edit' style='position:relative; max-width: 300px; max-height: 300px; color: black; border: 0px solid black; display: inline;'></div>
                 </div>
               </div>
             </div>
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" onclick="saveProduct(this)">저장</button>
+            <button type="button" class="btn btn-danger" onclick="editProduct(this)">저장</button>
           </div>
         </div>
       </div>
