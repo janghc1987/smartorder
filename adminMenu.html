@@ -495,14 +495,14 @@
 
   }
 
-  function addOption(){
+  function addOption(trgName){
 
     var optionTag = $("<div>",{class:'row'});
       optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
       optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
       optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:''})));
 
-    $("#productOptDiv").append(optionTag);
+    $("#"+trgName).append(optionTag);
 
   }
  
@@ -697,6 +697,7 @@
 
     var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
     var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
+    var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? [] : JSON.parse(window.localStorage.getItem('productOptList'));
 
     for(var i = 0 ; i < categoryList.length ; i++){
       var categoryOption
@@ -724,7 +725,24 @@
     $("#product_edit_productDes").val(productInfo[2]);
     // $("#product_edit_formFile").val(productInfo[3]);
 
-    showIewImage('View_area_edit',productInfo[3])
+    showIewImage('View_area_edit',productInfo[3]);
+
+    
+    $("#productEditOptDiv").children().remove();
+    
+    if(productOptList.hasOwnProperty(productInfo[0])){
+      
+      for(var i= 0 ; i < productOptList[productInfo[0]].length ; i++){
+
+        var optionTag = $("<div>",{class:'row'});
+        optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:productOptList[productInfo[0]][i][0],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
+        optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:productOptList[productInfo[0]][i][1],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
+        optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:''})));
+
+        $("#productEditOptDiv").append(optionTag);
+      }
+    }
+
     
 
   }
@@ -749,7 +767,7 @@
   }
 
   //var productList = {}
-  function saveProduct(obj){
+  function saveProduct(trgName){
 
     var productDetailList = [];
     var productDetail = [];
@@ -787,28 +805,27 @@
     var productOptDetailList = [];
     var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
 
-    console.log('($(obj).find("input[name=optionName]").length',$(obj).find("input[name=optionName]").length);
-    console.log('$(obj)',$(obj));
-    if($(obj).find("input[name=optionName]").length > 0){
-      for(var i = 0 ; i < $(obj).find("input[name=optionName]").length ; i++){
+
+    if($("#"+trgName).find("input[name=optionName]").length > 0){
+      for(var i = 0 ; i < $("#"+trgName).find("input[name=optionName]").length ; i++){
         var productOptDetail = [];
-        productOptDetail.push($(obj).find("input[name=optionName]").eq(i).val());
-        productOptDetail.push($(obj).find("input[name=optionAmt]").eq(i).val());
+        productOptDetail.push($("#"+trgName).find("input[name=optionName]").eq(i).val());
+        productOptDetail.push($("#"+trgName).find("input[name=optionAmt]").eq(i).val());
         productOptDetailList.push(productOptDetail);
         console.log('productOptDetailList',productOptDetailList)
-        if($(obj).find("input[name=optionName]").eq(i).val() == '' || $(obj).find("input[name=optionAmt]").eq(i).val() == ''){
+        if($("#"+trgName).find("input[name=optionName]").eq(i).val() == '' || $("#"+trgName).find("input[name=optionAmt]").eq(i).val() == ''){
           alert('옵션값은 필수입니다.')
           return;
         }
       }
     }
     
-    // productOptList[productName] = productOptDetailList;
-    // window.localStorage.setItem('productOptList',JSON.stringify(productOptList));
+    productOptList[productName] = productOptDetailList;
+    window.localStorage.setItem('productOptList',JSON.stringify(productOptList));
 
-    // alert('저장완료');
-    // refreshMain();
-    // $("#productAddModal").find(".btn-close").click();
+    alert('저장완료');
+    refreshMain();
+    $("#productAddModal").find(".btn-close").click();
 
   }
 
@@ -908,7 +925,6 @@
               aImg.src = e.target.result;
             };
           })(img);
-          reader.readAsDataURL(file);
         } else { // safari is not supported FileReader
           //alert('not supported FileReader');
           if (!document.getElementById("sfr_preview_error_"
@@ -1353,12 +1369,12 @@
             <div class="col-md-2">
               <div class="border border-2 rounded-2 border-secondary row" style="align-items:center">
                 <div clas="h-100 col-md-12">
-                  <a name="Barbecue" href="#" onclick="addOption('')" style="background-color: white; border-radius: 5%;">+추가</a>
+                  <a name="Barbecue" href="#" onclick="addOption('productAddOptDiv')" style="background-color: white; border-radius: 5%;">+추가</a>
                 </div>
               </div>
             </div>
           </div>
-          <div id="productOptDiv" class="m-4">
+          <div id="productAddOptDiv" class="m-4">
           </div>
           <div class="row m-4">
             <div class="col-md-2">필수/선택</div>
@@ -1376,7 +1392,7 @@
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" onclick="saveProduct(this)">저장</button>
+            <button type="button" class="btn btn-danger" onclick="saveProduct('productAddOptDiv')">저장</button>
           </div>
         </div>
       </div>
@@ -1437,6 +1453,32 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="row mt-5 m-4">
+            <div class="col-md-2">옵션</div>
+            <div class="col-md-2">
+              <div class="border border-2 rounded-2 border-secondary row" style="align-items:center">
+                <div clas="h-100 col-md-12">
+                  <a href="#" onclick="addOption('productEditOptDiv')" style="background-color: white; border-radius: 5%;">+추가</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="productEditOptDiv" class="m-4">
+          </div>
+          <div class="row m-4">
+            <div class="col-md-2">필수/선택</div>
+          </div>
+          <div class="row m-4">
+            <div class="col-md-1">
+              <input name="productOptChk" type="radio" checked value="Y"/><label>필수</label>
+            </div>
+            <div class="col-md-1">
+              <input name="productOptChk" type="radio" value="N"/><label>선택</label>
+            </div>
+          </div>
+          <div class="m-4" style="height: 100px; align-items:left">
+            <input name="" type="checkbox"><label>저장 후 입력한 정보 유지 (체크할 경우 상품 이전의 상품 정보가 유지 됩니다)</label>
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
