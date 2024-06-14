@@ -151,71 +151,7 @@
 </style>
 <script type="text/javascript">
   
-  const Daepae_Woo_Seol = "https://telegra.ph/file/03e67b1774713572b6517.jpg";
-  const Kkot_Sal = "https://telegra.ph/file/d148bb7435d918b860d14.jpg";
-  const Mansinchang_Samgyeopsal_soy = "https://telegra.ph/file/9f4b59e52ca7419cbdaf4.jpg";
-  const Mansinchang_Samgyeopsal_spicy = "https://telegra.ph/file/3c5332d8ccd1282ac4e2f.jpg";
-  const Mansinchang_Samgyeopsal = "https://telegra.ph/file/cf48bacaca81a660e8a8d.jpg";
-  const Modum_Yachae_Gui = "https://telegra.ph/file/e464eb06755c4fc3e6e2d.jpg";
-  const Saeng_Galbi = "https://telegra.ph/file/71dcbd18c60a6f0ddd482.jpg";
-  const SSaeu_Gui = "https://telegra.ph/file/bae8da9dd40fed1216eaf.jpg";
-  const Woo_Samgyup = "https://telegra.ph/file/8ebe6e3964785e59ea6f4.jpg";
-
-  const Bibim_Naengmyeon = "https://i.postimg.cc/yD5QB7GB/Bibim-Naengmyeon.jpg";
-  const Bornga_Naengmyeon = "https://i.postimg.cc/QBT6dRL7/Bornga-Naengmyeon.jpg";
-  const Bulgogi_jjigae = "https://i.postimg.cc/N9vd9pYz/Bulgogi-jjigae.jpg";
-  const Dolsot_Bibimbap = "https://i.postimg.cc/fSw55yV7/Dolsot-Bibimbap.jpg";
-  const Galbitang = "https://i.postimg.cc/S2LDWCxN/Galbitang.jpg";
-  const Kimchi_Jjigae = "https://i.postimg.cc/XX32nHsZ/Kimchi-Jjigae.jpg";
-  const Suntofu_Jjigae_Spicy = "https://i.postimg.cc/bsVLHzpb/Suntofu-Jjigae-Spicy.jpg";
-  const Nokdu_Samgyetang = "https://i.postimg.cc/V5RKvqhK/Nokdu-Samgyetang.jpg";
-  const Suntofu_Jjigae_Mild = "https://i.postimg.cc/VdkDCSQm/Suntofu-Jjigae-Mild.jpg";
-  const Yukgaejang = "https://i.postimg.cc/WdD85Q1y/Yukgaejang.jpg";
-
-  const Gyeran_Jjim = "https://i.postimg.cc/hJcJXd60/Gyeran-Jjim.jpg";
-  const Haemul_Ssamjang = "https://i.postimg.cc/Ty0KgPXv/Haemul-Ssamjang.jpg";
-
-  const Bornga_Bulgogi = "https://i.postimg.cc/N9PLCPMN/Bornga-Bulgogi.jpg";
-  const Budae_Jjigae = "https://i.postimg.cc/PvpJgzvd/Budae-Jjigae.jpg";
-  const Chadol_Duenjang_Jjigae = "https://i.postimg.cc/14f8VPCb/Chadol-Duenjang-Jjigae.jpg";
-
-  const Dwaeji_Gochujang_Barbecue = "https://i.postimg.cc/Hr4n1Ln8/Dwaeji-Gochujang-Barbecue.jpg";
-  const Haemul_Dduk_Jjim = "https://i.postimg.cc/cKxHxNt9/Haemul-Dduk-menuListJjim.jpg";
-  const Haemul_Pa_Jeon = "https://i.postimg.cc/8J3PmJK9/Haemul-Pa-Jeon.jpg";
-  const Jap_Chae = "https://i.postimg.cc/HJ6LjPQp/Jap-Chae.jpg";
-  const Yeo_San_Tteokgalbi = "https://i.postimg.cc/k6DgSFcW/Yeo-San-Tteokgalbi.jpg";
-
-  var menuList ={ 
-
-    "Daepae_Woo_Seol": [Daepae_Woo_Seol , "Daepae Woo Seol" , "Prime beef tongue" , 24000,"Barbecue"],
-    "Kkot_Sal": [Kkot_Sal,"Kkot Sal","Prime cut and very tender raw boneless beef." , 32000,"Barbecue"],
-    "Mansinchang_Samgyeopsal_soy": [Mansinchang_Samgyeopsal_soy,"Mansinchang Samgyeopsal in Soy-Sauce","The Born-Ga’s special soy-sauce adds unique flavor to this pork belly meat.",24000,"Barbecue"],
-    "Mansinchang_Samgyeopsal_spicy": [Mansinchang_Samgyeopsal_spicy,"Mansinchang Samgyeopsal in Spicy Sauce","Spicy sauce marinates through cuts made by knife on the Pork Belly meat, amplifying the flavor." , 24000,"Barbecue"],
-    "Mansinchang_Samgyeopsal": [Mansinchang_Samgyeopsal,"Mansinchang Samgyeopsal","Fine cuts are made through the meat for quality grill, a tender bite and mild flavor.", 21000,"Barbecue"] ,
-    "Modum_Yachae_Gui": [Modum_Yachae_Gui,"Modum Yachae Gui","Side dish of vegetables that accompanies grilled meat courses." , 20000,"Barbecue"],
-    "Saeng_Galbi": [Saeng_Galbi,"Saeng Galbi","Prime cut and very tender raw beef ribs" , 14000,"Barbecue"],
-    "SSaeu_Gui": [SSaeu_Gui,"Saeu Gui","Grill shrimp marinated with special sweet sauce." , 18000,"Barbecue"],
-    "Woo_Samgyup": [Woo_Samgyup,"Woo Samgyup","The best and famous menu! The pioneer of Woo Samgyup! Thinly sliced beef brisket dressed with Born-Ga’s special sauce." , 24000,"Barbecue"],
-    "Bibim_Naengmyeon": [Bibim_Naengmyeon,"Bibim Naengmyeon","Buckwheat noodles in a spicy chili sauce." , 24000,"Rice_Noodle_Soup"],
-    "Bornga_Naengmyeon": [Bornga_Naengmyeon,"Bornga Naengmyeon","Bornga house specialty. Buckwheat noodles with cold broth." , 28000,"Rice_Noodle_Soup"],
-    "Bulgogi_jjigae": [Bulgogi_jjigae,"Bulgogi-jjigae","Marinated beef stew and glass noodles served in a hot stone pot" , 26000,"Rice_Noodle_Soup"],
-    "Galbitang": [Galbitang,"Galbitang","Beef short rib soup" , 24000,"Rice_Noodle_Soup"],
-    "Kimchi_Jjigae": [Kimchi_Jjigae,"Kimchi Jjigae","Spicy stew with kimchi, pork, tofu, and various vegetables" , 12000,"Rice_Noodle_Soup"],
-    "Suntofu_Jjigae_Spicy": [Suntofu_Jjigae_Spicy,"Suntofu Jjigae – Spicy","Assorted seafood and soft tofu – Spicy" , 12000,"Rice_Noodle_Soup"],
-    "Nokdu_Samgyetang": [Nokdu_Samgyetang,"Nokdu Samgyetang","Korea’s popular healthy dish made even more nutritious with green beans." , 14000,"Rice_Noodle_Soup"],
-    "Suntofu_Jjigae_Mild": [Suntofu_Jjigae_Mild,"Suntofu Jjigae – Mild","Assorted seafood and soft tofu – Mild" , 32000,"Rice_Noodle_Soup"],
-    "Yukgaejang": [Yukgaejang,"Yukgaejang","Spicy soup consisting of shredded beef, scallion and bean sprouts and glass noodles." , 30000,"Rice_Noodle_Soup"],
-    "Gyeran_Jjim": [Gyeran_Jjim,"Gyeran Jjim","Steamed egg pot" , 21000,"Side_dish"],
-    "Bornga_Bulgogi": [Bornga_Bulgogi,"Bornga Bulgogi","traditional-style Bulgogi dish. Grilled Korean beef and vegetables in broth." , 24000,"Side_dish"],
-    "Budae_Jjigae": [Budae_Jjigae,"Budae Jjigae","Spicy stew with Kimchi, sausage, and ham." , 27000,"Stew_Hot_pot"],
-    "Chadol_Duenjang_Jjigae": [Chadol_Duenjang_Jjigae,"Chadol Duenjang Jjigae","A traditional Korean soybean paste stew with beef." , 20000,"Stew_Hot_pot"],
-    "Dwaeji_Gochujang_Barbecue": [Dwaeji_Gochujang_Barbecue,"Dwaeji Gochujang Barbecue","Spicy pork fire-grilled to create a flavorful, fiery stir-fry dish." , 24000,"Stew_Hot_pot"],
-    "Haemul_Dduk_Jjim": [Haemul_Dduk_Jjim,"Haemul Dduk Jjim","Seafood, vegetables and cabbage mixed with spicy sauce and simmered dish." , 180000,"Traditional_Dish"],
-    "Haemul_Pa_Jeon": [Haemul_Pa_Jeon,"Haemul Pa Jeon","Pancakes made from scallions and a variety of seafood." , 16000,"Traditional_Dish"],
-    "Jap_Chae": [Jap_Chae,"Jap Chae","Stir-fried pork and vegetables with glass noodles" , 24000,"Traditional_Dish"],
-    "Yeo_San_Tteokgalbi": [Yeo_San_Tteokgalbi,"Yeo-San Tteokgalbi","Chopped Galbi-meat grilled and mixed with Korean rice cakes." , 22000,"Traditional_Dish"]
-
-  }
+  const trashImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAADuElEQVR4nO2cz08TQRTH31r9D7ApP6LBi0AJeBCwoIlcoca2eCknMCZCNBFISiFKSkJjAj15Uw/4W08aTJB4ASTGkzdJNP4ZiBeDMuYts6SWAk2k9M30+0leslmG7Lz57HRmtt0hAgAAAAAAAAAAAAAAAAAAAACAg+YTESnL46NJt40qkzAGt8KZzIqVQRCyUnIJVggxNSoqarYbn49zzxkrJJWaK/ndnDng4JxMFPKZKxwI1FolJZWac3PSMjhHYzhORF+44n7/CTUx8abkjZn5z5icfKsCgVOejG9EFCDDsEbKpAUyCpYyPb2oorEhVR8Mqfpgu4pEh9xz+cpdjtxSdQ0hVddweOW0jE0bZHj4iWiVE6qpOb0j4VjPsAq1X1F9/Y/caGmLqkh0eEc5ltbSGjv0clxnLWNV52IF/t0Wiw2NHerqtSdqYPC1G339s25PyS3H57jhDrtc1ozKGhkeeYWcrA1uN8qADj4npZyJU9xCgRAhXCKiZQuELBFRmAznbu5jCYOFKB1pMrhncAK/iGjUAiFJnYsytacsZyVCFghhxvTxIhnIuq58pUVCKvXxDzKQ3OmiDULI5GkwhAgDQoQBIcKAEGFAiDAgRBgQInRhWGXROqRaH6+RgSzpyvPjBluEjJv86CSc9XDRewZkspDxrIeL3WQoaQsfv0+R4YR1FzddyKLJPSMfpguxDggRBoQIA0KEASHCgBBhQIgJQprOdGLaK0kIB9YhpQFChIGPLGFgUBcGhAgDH1nCwKAuDAgRBoQIA0KEgUFdGJj2CgNChAEhwthja43HJmytYR38oqRKp9//k3A0NqLOdfS4DdLXP6vOtkZUJDqyo2F4YxjeIMYr19IWcf+3mOWmphaUyb/l3Y/vnNzo6PM82zMNu3dnfTDkNtRu2ynx37bKtbuNV+xyicQzT8hXspAFTq63dyLvl1QSIx6/7QmZJwu5wck1N3eWvKEzBUZT00VPyCBZSA2R89vnO6bGxl6VvLEz+0Qy+UL5fEcV11m/F2IlD/mOa2y8UPIGz+wRMzMfVDDY4fWO+2QxVY5z5Geen/hLjT827LFYyC5Bm47jqO7uAXE9o6vruuK6cR1te/1gL27qhN2Pr2TypYgxIxg8n90zeBJSVoQdx3EXizx48owmHr/jzv1zF4/FCL5GIvHUndrytbcGcJbhrJVTz8ilgojuEdGGgPFig4geZG0nVdZU67n+O70q9l6pLmas62vN62tbO7UFAAAAAAAAAAAAAAAAAKi8+QtdwCoCkd0PLgAAAABJRU5ErkJggg=='
 
   window.onload = function(){
 
@@ -249,21 +185,6 @@
     $(".Traditional_Dish").show();
     $(".keyup_select").removeClass("keyup_select");
 
-  }
-  function showDetail(menuName){
-
-    $("#detailImg").attr("src",menuList[menuName][0]);
-    $("#detailMenuName").text(menuList[menuName][1]);
-    $("#detailMenuDes").text(menuList[menuName][2]);
-    $("#perPrice").text(menuList[menuName][3]);
-    $("#detailMenuOption").append("");
-    $("#selectMenuName").val(menuName);
-    $("#myModal").find("#cnt").text('1');
-
-  }
-
-  function showCart(){
-   
   }
 
   function pay(){
@@ -472,7 +393,7 @@
         var optionTag = $("<div>",{class:'row'});
         optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:productOptList[productName.value][i][0],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
         optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:productOptList[productName.value][i][1],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
-        optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:''})));
+        optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:trashImg,style:'cursor:pointer',onclick:'deleteOption(this)'})));
 
         $("#productOptDiv").append();
       }
@@ -500,47 +421,52 @@
     var optionTag = $("<div>",{class:'row'});
       optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
       optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
-      optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:''})));
+      optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:trashImg,style:'cursor:pointer',onclick:'deleteOption(this)'})));
 
     $("#"+trgName).append(optionTag);
 
   }
+
+  function deleteOption(obj){
+
+    $(obj).parent().parent().remove();
+  }
  
   //var productOptList = {};
-  function saveProductOpt(obj){
-    var productName = $("#productOption").val();
-    var productOptDetailList = [];
+  // function saveProductOpt(obj){
+  //   var productName = $("#productOption").val();
+  //   var productOptDetailList = [];
     
-    var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
+  //   var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
 
-    // productOptList.hasOwnProperty(productName)
+  //   // productOptList.hasOwnProperty(productName)
 
-    if(productName === '' || productName == undefined){
-      alert('상품명을 선택해주세요.')
-      return;
-    }
+  //   if(productName === '' || productName == undefined){
+  //     alert('상품명을 선택해주세요.')
+  //     return;
+  //   }
 
-    if($("input[name=optionName]").length > 0){
-      for(var i = 0 ; i < $("input[name=optionName]").length ; i++){
-        var productOptDetail = [];
-        productOptDetail.push($("input[name=optionName]").eq(i).val());
-        productOptDetail.push($("input[name=optionAmt]").eq(i).val());
-        productOptDetailList.push(productOptDetail);
+  //   if($("input[name=optionName]").length > 0){
+  //     for(var i = 0 ; i < $("input[name=optionName]").length ; i++){
+  //       var productOptDetail = [];
+  //       productOptDetail.push($("input[name=optionName]").eq(i).val());
+  //       productOptDetail.push($("input[name=optionAmt]").eq(i).val());
+  //       productOptDetailList.push(productOptDetail);
 
-        if($("input[name=optionName]").eq(i).val() == '' || $("input[name=optionAmt]").eq(i).val() == ''){
-          alert('옵션값은 필수입니다.')
-          return;
-        }
+  //       if($("input[name=optionName]").eq(i).val() == '' || $("input[name=optionAmt]").eq(i).val() == ''){
+  //         alert('옵션값은 필수입니다.')
+  //         return;
+  //       }
 
-      }
-    }
+  //     }
+  //   }
     
-    productOptList[productName] = productOptDetailList;
-    window.localStorage.setItem('productOptList',JSON.stringify(productOptList));
-    alert("저장완료")
-    $("#optionModal").find(".btn-close").click();
+  //   productOptList[productName] = productOptDetailList;
+  //   window.localStorage.setItem('productOptList',JSON.stringify(productOptList));
+  //   alert("저장완료")
+  //   $("#optionModal").find(".btn-close").click();
 
-  }
+  // }
 
 
   
@@ -597,6 +523,7 @@
           for(var j = 0 ; j < targetProductList.length ; j++){
             
             if(j==0){
+              $("#main").find("div").eq(0).append($("<div>",{class:'bg-secondary bg-opacity-10 text-start m-2 fs-2 fw-bolder',style:'height:3rem;',text:categoryList[i]}));
               categoryDiv = $("<div>",{class:'row menuDiv '+categoryList[i]})
               categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
                       .append($('<div>',{class:'row py-4'})));
@@ -723,7 +650,12 @@
     $("#product_edit_productName").val(productInfo[0]);
     $("#product_edit_productAmt").val(productInfo[1]);
     $("#product_edit_productDes").val(productInfo[2]);
-    // $("#product_edit_formFile").val(productInfo[3]);
+    
+    for(var i=0 ; i < $("input[name=product_edit_OptChk]").length ; i++){
+      if($("input[name=product_edit_OptChk]").eq(i).val() == productInfo[4]){
+        $("input[name=product_edit_OptChk]").eq(i).prop("checked", true);  
+      }
+    }
 
     showIewImage('View_area_edit',productInfo[3]);
 
@@ -737,7 +669,7 @@
         var optionTag = $("<div>",{class:'row'});
         optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:productOptList[productInfo[0]][i][0],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
         optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:productOptList[productInfo[0]][i][1],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
-        optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:''})));
+        optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:trashImg,style:'cursor:pointer',onclick:'deleteOption(this)'})));
 
         $("#productEditOptDiv").append(optionTag);
       }
@@ -777,6 +709,7 @@
     var productAmt = $("#product_add_productAmt").val();
     var productDes = $("#product_add_productDes").val();
     var formFile = $("#prev_View_area_add").attr('src');
+    var optChk = $("input[name=product_add_OptChk]:checked").val();
 
     var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
     var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
@@ -795,7 +728,8 @@
     productDetail.push(productAmt);
     productDetail.push(productDes);
     productDetail.push(formFile);
-    productDetailList.push(productDetail);
+    productDetail.push(optChk);
+    productDetailList.push(productDetail);  
 
     productList[categoryName] = productDetailList;
     window.localStorage.setItem('productList',JSON.stringify(productList));
@@ -840,7 +774,8 @@
     var productAmt = $("#product_edit_productAmt").val();
     var productDes = $("#product_edit_productDes").val();
     var formFile = $("#prev_View_area_edit").attr('src');
-
+    var optChk = $("input[name=product_edit_OptChk]:checked").val();
+    
     var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
     var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
     var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
@@ -865,6 +800,7 @@
     productDetail.push(productAmt);
     productDetail.push(productDes);
     productDetail.push(formFile);
+    productDetail.push(optChk);
     productDetailList.push(productDetail);
 
     //productList[categoryName] = productDetailList;
@@ -1145,6 +1081,15 @@
     $("#cashReturnVal").text('');
   }
 
+  function showDiscount(){
+
+  }
+
+  function clickDiscountTab(obj){
+    $(obj).parent().children().removeClass('border-bottom').removeClass('border-primary');
+    $(obj).addClass('border-bottom border-primary')
+  }
+
 </script>
 <body class="text-center" style="background-color: white;">
   <div class="loginForm" id="loginForm" style="display: none;">
@@ -1184,7 +1129,7 @@
       <div class="col-md-4 border-start">
         <div class="row" style="height: 50px;">
           <div class="col-md-3">
-            <button type="button" class="btn btn-outline-primary col-md-12">할인</button>
+            <button type="button" class="btn btn-outline-primary col-md-12" data-bs-toggle="modal" data-bs-target="#discountModal" onclick="showDiscount()">할인</button>
           </div>
           <div class="col-md-3">
             <button type="button" class="btn btn-outline-danger col-md-12" onclick="deleteCartProduct()">삭제</button>
@@ -1255,13 +1200,6 @@
                 <a name="Barbecue" href="#" onclick="showProductMng()" style="background-color: white; border-radius: 5%;"
                 data-bs-toggle="modal" data-bs-target="#productMngModal">
                   상품관리
-                </a>
-              </div>
-            </div>
-            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
-              <div clas="h-100 col-md-12">
-                <a name="Barbecue" href="#" onclick="showProductOptMng()" style="background-color: white; border-radius: 5%;">
-                  옵션
                 </a>
               </div>
             </div>
@@ -1381,10 +1319,10 @@
           </div>
           <div class="row m-4">
             <div class="col-md-1">
-              <input name="productOptChk" type="radio" checked value="Y"/><label>필수</label>
+              <input name="product_add_OptChk" type="radio" checked value="Y"/><label>필수</label>
             </div>
             <div class="col-md-1">
-              <input name="productOptChk" type="radio" value="N"/><label>선택</label>
+              <input name="product_add_OptChk" type="radio" value="N"/><label>선택</label>
             </div>
           </div>
           <div class="m-4" style="height: 100px; align-items:left">
@@ -1422,7 +1360,7 @@
             <div class="col-md-2">상품명</div>
             <div class="col-md-2">
               <div class="m-3 row" style="align-items:center">
-                <input id="product_edit_productName" class="border border-2 rounded-2 border-secondary " value="" />
+                <input id="product_edit_productName" class="border border-2 rounded-2 border-secondary " readonly value="" />
               </div>
             </div>
           </div>
@@ -1471,10 +1409,10 @@
           </div>
           <div class="row m-4">
             <div class="col-md-1">
-              <input name="productOptChk" type="radio" checked value="Y"/><label>필수</label>
+              <input name="product_edit_OptChk" type="radio" value="Y"/><label>필수</label>
             </div>
             <div class="col-md-1">
-              <input name="productOptChk" type="radio" value="N"/><label>선택</label>
+              <input name="product_edit_OptChk" type="radio" value="N"/><label>선택</label>
             </div>
           </div>
           <div class="m-4" style="height: 100px; align-items:left">
@@ -1578,6 +1516,103 @@
                     </tr>
                   </table>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="discountModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">할인/쿠폰</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body row col-md-12" style="height: 60vh;">
+          <div class="col-md-8 h-100 row">
+            <div style="height: 45vh; width: 100%;">
+              <div class="text-center fs-4 fw-bold border-bottom row cols-2">
+                <div class="col" style="cursor: pointer;" onclick="clickDiscountTab(this)">즉시할인</div>
+                <div class="col" style="cursor: pointer;" onclick="clickDiscountTab(this)">쿠폰</div>
+              </div>  
+              <div name="discountTap">
+                <div class="row pt-1 mt-2">
+                  <div class="col-md-1"></div>  
+                  <div class="text-start col-md-5 fs-6">결제금액</div>
+                  <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
+                  <div class="col-md-1"></div>
+                </div>
+                <div class="row pt-1 mt-2">
+                  <div class="col-md-1"></div>  
+                  <div class="text-start col-md-10 fs-6 border-top">할인금액</div>
+                  <div class="col-md-1"></div>
+                </div>
+                <div class="row pt-1">
+                  <div class="col-md-1"></div>
+                  <div class="col-md-8">
+                    <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
+                  </div>
+                  <div class="col-md-1 border-radius btn bg-body-tertiary">%</div>
+                  <div class="col-md-1 border-radius btn bg-body-tertiary">원</div>
+                  <div class="col-md-1"></div>
+                </div>
+              </div>
+              <div name="discountTap" style="display: none;">
+                <div class="text-center fs-4 fw-bold">현금결제</div>
+                <div class="text-center fs-6">현금으로 받은 금액을 입력하세요.</div>
+                <div class="row pt-1 mt-2">
+                  <div class="col-md-1"></div>  
+                  <div class="text-start col-md-5 fs-6">결제금액</div>
+                  <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
+                  <div class="col-md-1"></div>
+                </div>
+                <div class="row pt-1">
+                  <div class="col-md-1"></div>  
+                  <div class="text-start col-md-5 fs-6">받은금액</div>
+                  <div class="col-md-5"></div>
+                </div>
+                <div class="row pt-1">
+                  <div class="col-md-1"></div>
+                  <div class="col-md-10">
+                    <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
+                  </div>
+                  <div class="col-md-1"></div>
+                </div>
+              </div>
+            </div>
+            <div class="border-top" style="width:100%;">
+              <div class="h-50 row pt-2" >
+                <div class="col-md-1"></div>  
+                <div class="text-start col-md-5 fs-6">거스름돈</div>
+                <div id="cashReturnVal" class="text-end col-md-5 fs-6">0원</div>
+                <div class="col-md-1"></div>
+              </div>
+              <div class="h-50" >
+                <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
+                data-bs-toggle="modal" data-bs-target="#appCashCompleteModal" onclick="{cartInit(),cashApprovalComplete()}">결재완료</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 h-100 border-start bg-secondary bg-opacity-25">
+            <div class="" style="height: 60vh; width:100%">
+              <div class="row row-cols-3"> 
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>1</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>2</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>3</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>4</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>5</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>6</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>7</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>8</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>9</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>C</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>0</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>◁</span></div>
               </div>
             </div>
           </div>
