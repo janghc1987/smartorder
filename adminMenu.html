@@ -417,10 +417,13 @@
   }
 
   function addOption(trgName){
+    var nameCnt = $('#'+trgName).find('input[target=product_add_OptChk]').length;
 
     var optionTag = $("<div>",{class:'row'});
-      optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
-      optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
+      optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
+      optionTag.append($("<div>",{class:'col-md-3'}).append($('<input>',{value:'',class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
+      optionTag.append($("<div>",{class:'col-md-3 row cols-2'}).append($('<div>',{class:'col'}).append($('<input>',{name:'product_add_OptChk_'+nameCnt,type:'radio',checked:true,value:'Y',target:'product_add_OptChk'})).append($('<label>',{text:' 필수'})))
+               .append($('<div>',{class:'col'}).append($('<input>',{name:'product_add_OptChk_'+nameCnt,type:'radio',value:'N',target:'product_add_OptChk'})).append($('<label>',{text:' 선택'}))));
       optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:trashImg,style:'cursor:pointer',onclick:'deleteOption(this)'})));
 
     $("#"+trgName).append(optionTag);
@@ -651,9 +654,9 @@
     $("#product_edit_productAmt").val(productInfo[1]);
     $("#product_edit_productDes").val(productInfo[2]);
     
-    for(var i=0 ; i < $("input[name=product_edit_OptChk]").length ; i++){
-      if($("input[name=product_edit_OptChk]").eq(i).val() == productInfo[4]){
-        $("input[name=product_edit_OptChk]").eq(i).prop("checked", true);  
+    for(var i=0 ; i < $("input[name=product_edit_taxChk]").length ; i++){
+      if($("input[name=product_edit_taxChk]").eq(i).val() == productInfo[4]){
+        $("input[name=product_edit_taxChk]").eq(i).prop("checked", true);  
       }
     }
 
@@ -667,14 +670,15 @@
       for(var i= 0 ; i < productOptList[productInfo[0]].length ; i++){
 
         var optionTag = $("<div>",{class:'row'});
-        optionTag.append($("<div>",{class:'col-md-6'}).append($('<input>',{value:productOptList[productInfo[0]][i][0],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
-        optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:productOptList[productInfo[0]][i][1],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
+        optionTag.append($("<div>",{class:'col-md-5'}).append($('<input>',{value:productOptList[productInfo[0]][i][0],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'옵션명을 입력해주세요.',name:'optionName',style:'width:100%'})));
+        optionTag.append($("<div>",{class:'col-md-3'}).append($('<input>',{value:productOptList[productInfo[0]][i][1],class:'border border-2 rounded-2 border-secondary m-1',placeholder:'금액을 입력해주세요.',name:'optionAmt',style:'width:100%'})));
+        optionTag.append($("<div>",{class:'col-md-3 row cols-2'}).append($('<div>',{class:'col'}).append($('<input>',{name:'product_add_OptChk_'+i,type:'radio',checked:productOptList[productInfo[0]][i][2]=='Y'?true:false,value:'Y',target:'product_add_OptChk'})).append($('<label>',{text:' 필수'})))
+                 .append($('<div>',{class:'col'}).append($('<input>',{name:'product_add_OptChk_'+i,type:'radio',value:'N',target:'product_add_OptChk',checked:productOptList[productInfo[0]][i][2]=='N'?true:false})).append($('<label>',{text:' 선택'}))));
         optionTag.append($("<div>",{class:'col-md-1',style:'align-items:center'}).append($('<img>',{src:trashImg,style:'cursor:pointer',onclick:'deleteOption(this)'})));
 
         $("#productEditOptDiv").append(optionTag);
       }
     }
-
     
 
   }
@@ -709,7 +713,7 @@
     var productAmt = $("#product_add_productAmt").val();
     var productDes = $("#product_add_productDes").val();
     var formFile = $("#prev_View_area_add").attr('src');
-    var optChk = $("input[name=product_add_OptChk]:checked").val();
+    var taxChk = $("input[name=product_add_taxChk]:checked").val();
 
     var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
     var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
@@ -728,7 +732,7 @@
     productDetail.push(productAmt);
     productDetail.push(productDes);
     productDetail.push(formFile);
-    productDetail.push(optChk);
+    productDetail.push(taxChk);
     productDetailList.push(productDetail);  
 
     productList[categoryName] = productDetailList;
@@ -745,6 +749,9 @@
         var productOptDetail = [];
         productOptDetail.push($("#"+trgName).find("input[name=optionName]").eq(i).val());
         productOptDetail.push($("#"+trgName).find("input[name=optionAmt]").eq(i).val());
+        productOptDetail.push(
+          $("#"+trgName).find("input[name=optionName]").eq(i).parent().parent().find('input[target=product_add_OptChk]:checked').val() == 'Y'?'Y':'N'
+        );
         productOptDetailList.push(productOptDetail);
         console.log('productOptDetailList',productOptDetailList)
         if($("#"+trgName).find("input[name=optionName]").eq(i).val() == '' || $("#"+trgName).find("input[name=optionAmt]").eq(i).val() == ''){
@@ -764,7 +771,7 @@
   }
 
   //var productList = {}
-  function editProduct(obj){
+  function editProduct(trgName){
 
     var productDetailList = [];
     var productDetail = [];
@@ -774,7 +781,7 @@
     var productAmt = $("#product_edit_productAmt").val();
     var productDes = $("#product_edit_productDes").val();
     var formFile = $("#prev_View_area_edit").attr('src');
-    var optChk = $("input[name=product_edit_OptChk]:checked").val();
+    var taxChk = $("input[name=product_edit_taxChk]:checked").val();
     
     var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
     var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
@@ -800,13 +807,39 @@
     productDetail.push(productAmt);
     productDetail.push(productDes);
     productDetail.push(formFile);
-    productDetail.push(optChk);
+    productDetail.push(taxChk);
     productDetailList.push(productDetail);
 
     //productList[categoryName] = productDetailList;
     productList[categoryName] = productDetailList;
 
     window.localStorage.setItem('productList',JSON.stringify(productList));
+
+
+    var productOptDetailList = [];
+    var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
+
+
+    if($("#"+trgName).find("input[name=optionName]").length > 0){
+      for(var i = 0 ; i < $("#"+trgName).find("input[name=optionName]").length ; i++){
+        var productOptDetail = [];
+        productOptDetail.push($("#"+trgName).find("input[name=optionName]").eq(i).val());
+        productOptDetail.push($("#"+trgName).find("input[name=optionAmt]").eq(i).val());
+        productOptDetail.push(
+          $("#"+trgName).find("input[name=optionName]").eq(i).parent().parent().find('input[target=product_add_OptChk]:checked').val() == 'Y'?'Y':'N'
+        );
+        productOptDetailList.push(productOptDetail);
+        console.log('productOptDetailList',productOptDetailList)
+        if($("#"+trgName).find("input[name=optionName]").eq(i).val() == '' || $("#"+trgName).find("input[name=optionAmt]").eq(i).val() == ''){
+          alert('옵션값은 필수입니다.')
+          return;
+        }
+      }
+    }
+    
+    productOptList[productName] = productOptDetailList;
+    window.localStorage.setItem('productOptList',JSON.stringify(productOptList));
+
 
     alert('저장완료');
     refreshMain();
@@ -1050,24 +1083,61 @@
 
   function clickCashCal(obj){
 
-   var clickVal = $(obj).find('span:eq(0)').text();
-   var clickNum = 0;
-   var cashInputVal = $("#cashInputVal").val().replaceAll(',','').replaceAll('원','');
-   var cashTrgNum = $("#cashTrgVal").text().replaceAll(',','').replaceAll('원','') == '' ? 0 : parseInt($("#cashTrgVal").text().replaceAll(',','').replaceAll('원',''));
-   
-   if('C' === clickVal){
-    $("#cashInputVal").val('0원');
-    $('#cashReturnVal').text('0원');
-   }else if('◁' === clickVal){
-    cashInputVal = cashInputVal != '' ? cashInputVal.slice(0,-1) : cashInputVal;
-    $("#cashInputVal").val(cashInputVal.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-    $('#cashReturnVal').text((parseInt(cashInputVal) - cashTrgNum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-   }else{
-    clickNum = parseInt(clickVal);
-    cashInputVal += clickVal
-    $("#cashInputVal").val(parseInt(cashInputVal).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-    $('#cashReturnVal').text((parseInt(cashInputVal) - cashTrgNum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+   var gubun = $("#discountType").hasClass('bg-primary')
+
+   if(gubun){//%
+
+    var clickVal = $(obj).find('span:eq(0)').text();
+    var clickNum = 0;
+    var cashInputVal = $("#cashInputVal").val().replaceAll(',','').replaceAll('%','');
+    var cashTrgNum = $("#cashTrgVal").text().replaceAll(',','').replaceAll('원','') == '' ? 0 : parseInt($("#cashTrgVal").text().replaceAll(',','').replaceAll('원',''));
+    
+    if('C' === clickVal){
+      $("#cashInputVal").val('0원');
+      $('#cashDiscountVal').text('0원');
+    }else if('◁' === clickVal){
+      cashInputVal = cashInputVal != '' ? cashInputVal.slice(0,-1) : cashInputVal;
+      $("#cashInputVal").val(cashInputVal.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'%');
+      $('#cashDiscountVal').text((cashTrgNum*(parseInt(cashInputVal)/100)).toFixed(0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    }else{
+      clickNum = parseInt(clickVal);
+      cashInputVal += clickVal  
+      if(parseInt(cashInputVal)>100){
+        alert('할인율은 100% 넘길 수 없습니다.')
+        return;
+      }
+      $("#cashInputVal").val(parseInt(cashInputVal).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'%');
+      $('#cashDiscountVal').text((cashTrgNum*(parseInt(cashInputVal)/100)).toFixed(0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    }
+
+   }else{//원
+
+    var clickVal = $(obj).find('span:eq(0)').text();
+    var clickNum = 0;
+    var cashInputVal = $("#cashInputVal").val().replaceAll(',','').replaceAll('원','');
+    var cashTrgNum = $("#cashTrgVal").text().replaceAll(',','').replaceAll('원','') == '' ? 0 : parseInt($("#cashTrgVal").text().replaceAll(',','').replaceAll('원',''));
+    
+    if('C' === clickVal){
+      $("#cashInputVal").val('0원');
+      $('#cashDiscountVal').text('0원');
+    }else if('◁' === clickVal){
+      cashInputVal = cashInputVal != '' ? cashInputVal.slice(0,-1) : cashInputVal;
+      $("#cashInputVal").val(cashInputVal.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      $('#cashDiscountVal').text((parseInt(cashInputVal)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    }else{
+      clickNum = parseInt(clickVal);
+      cashInputVal += clickVal
+      if(parseInt(cashInputVal) > cashTrgNum){
+        alert('할인가능 금액은 결제금액을 넘길 수 없습니다.')
+        return;
+      }
+      $("#cashInputVal").val(parseInt(cashInputVal).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      $('#cashDiscountVal').text((parseInt(cashInputVal)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    }
+    
    }
+
+   
 
   }
   
@@ -1083,11 +1153,91 @@
 
   function showDiscount(){
 
+    var cnt = 0;
+    var amt = 0;
+    var totalAmt = 0;
+    
+    if($("#main>div:eq(1)>div[name=cartProduct]").length > 0){
+
+
+      for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
+      
+        cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+        amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+        
+        totalAmt += amt;
+        
+      }
+
+    }
+
+    $("#discountModal").find('#cashTrgVal').text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+
+    
+
   }
 
   function clickDiscountTab(obj){
     $(obj).parent().children().removeClass('border-bottom').removeClass('border-primary');
     $(obj).addClass('border-bottom border-primary')
+
+    if($(obj).parent().find('div').eq(0).hasClass('border-primary')){
+      $('tab1').show();
+      $('tab2').hide();
+    }else{
+      $('tab1').hide();
+      $('tab2').show();
+    }
+    
+
+  }
+  
+  function clickDiscountType(obj){  
+    $(obj).parent().children().eq(2).removeClass('bg-primary').removeClass('text-white').addClass('bg-body-tertiary');
+    $(obj).parent().children().eq(3).removeClass('bg-primary').removeClass('text-white').addClass('bg-body-tertiary');
+    $(obj).addClass('bg-primary text-white').removeClass('bg-body-tertiary');
+  
+    if($(obj).parent().children().eq(2).hasClass('bg-primary')){
+      $(obj).parent().find("#cashInputVal").attr('placeholder','0%');
+      $(obj).parent().find("#cashInputVal").val('0%')
+      $('#cashDiscountVal').text('0원');
+    }else{
+      $(obj).parent().find("#cashInputVal").attr('placeholder','0원');
+      $(obj).parent().find("#cashInputVal").val('0원')
+      $('#cashDiscountVal').text('0원');
+    }
+
+    
+    
+  }
+
+  function approveDiscount(trgName){
+
+    var discountAmt = $("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','')==''?'0':$("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','');
+    discountAmt = parseInt(discountAmt);
+    var productCnt = $("#main>div:eq(1)>div[name=cartProduct]").length;
+    var totalAmt = 0;
+    var cnt = 0;
+    var amt = 0;
+    
+    
+    for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
+      
+      cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+      amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+      
+      totalAmt += amt;
+      
+      $("#appTargetDiv").append($("#main>div:eq(1)>div[name=cartProduct]").eq(i).clone().removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10'));
+      $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('0원');
+      $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
+    }
+
+
+    $("#appTotalAmt").text(productCnt+'개 결제하기 '+(totalAmt-discountAmt).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+
   }
 
 </script>
@@ -1146,7 +1296,7 @@
         <div class="row fixed-bottom mb-5" >
           <div class="col-md-8"></div>
           <div class="col-md-2 h-12 row">
-            <a href="#" class="col-md-12 pt-2 bg-info bg-gradient" style="text-align: center;"
+            <a id="appTotalAmt" href="#" class="col-md-12 pt-2 bg-info bg-gradient" style="text-align: center;"
             data-bs-toggle="modal" data-bs-target="#appModal" onclick="approval()">결제하기</a>
           </div>
           <div class="col-md-2 h-12 row">
@@ -1314,15 +1464,15 @@
           </div>
           <div id="productAddOptDiv" class="m-4">
           </div>
-          <div class="row m-4">
-            <div class="col-md-2">필수/선택</div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-12 text-start ms-2">부가세 (상품 가격에 부가세 10% 포함 여부를 선택합니다.)</div>
           </div>
-          <div class="row m-4">
-            <div class="col-md-1">
-              <input name="product_add_OptChk" type="radio" checked value="Y"/><label>필수</label>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">
+              <input name="product_add_taxChk" type="radio" checked value="Y"/><label>포함</label>
             </div>
-            <div class="col-md-1">
-              <input name="product_add_OptChk" type="radio" value="N"/><label>선택</label>
+            <div class="col-md-2">
+              <input name="product_add_taxChk" type="radio" value="N"/><label>미포함</label>
             </div>
           </div>
           <div class="m-4" style="height: 100px; align-items:left">
@@ -1404,15 +1554,15 @@
           </div>
           <div id="productEditOptDiv" class="m-4">
           </div>
-          <div class="row m-4">
-            <div class="col-md-2">필수/선택</div>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-12 text-start ms-2">부가세 (상품 가격에 부가세 10% 포함 여부를 선택합니다.)</div>
           </div>
-          <div class="row m-4">
-            <div class="col-md-1">
-              <input name="product_edit_OptChk" type="radio" value="Y"/><label>필수</label>
+          <div class="row mt-3 ps-2">
+            <div class="col-md-2">
+              <input name="product_edit_taxChk" type="radio" value="Y"/><label>포함</label>
             </div>
-            <div class="col-md-1">
-              <input name="product_edit_OptChk" type="radio" value="N"/><label>선택</label>
+            <div class="col-md-2">
+              <input name="product_edit_taxChk" type="radio" value="N"/><label>미포함</label>
             </div>
           </div>
           <div class="m-4" style="height: 100px; align-items:left">
@@ -1420,7 +1570,7 @@
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" onclick="editProduct(this)">저장</button>
+            <button type="button" class="btn btn-danger" onclick="editProduct('productEditOptDiv')">저장</button>
           </div>
         </div>
       </div>
@@ -1534,67 +1684,81 @@
   
         <!-- Modal body -->
         <div class="modal-body row col-md-12" style="height: 60vh;">
-          <div class="col-md-8 h-100 row">
+          <div id="discountTab1" class="col-md-8 h-100 row">
             <div style="height: 45vh; width: 100%;">
               <div class="text-center fs-4 fw-bold border-bottom row cols-2">
-                <div class="col" style="cursor: pointer;" onclick="clickDiscountTab(this)">즉시할인</div>
+                <div class="col border-bottom border-primary" style="cursor: pointer;" onclick="clickDiscountTab(this)">즉시할인</div>
                 <div class="col" style="cursor: pointer;" onclick="clickDiscountTab(this)">쿠폰</div>
-              </div>  
-              <div name="discountTap">
-                <div class="row pt-1 mt-2">
-                  <div class="col-md-1"></div>  
-                  <div class="text-start col-md-5 fs-6">결제금액</div>
-                  <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
-                  <div class="col-md-1"></div>
-                </div>
-                <div class="row pt-1 mt-2">
-                  <div class="col-md-1"></div>  
-                  <div class="text-start col-md-10 fs-6 border-top">할인금액</div>
-                  <div class="col-md-1"></div>
-                </div>
-                <div class="row pt-1">
-                  <div class="col-md-1"></div>
-                  <div class="col-md-8">
-                    <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
-                  </div>
-                  <div class="col-md-1 border-radius btn bg-body-tertiary">%</div>
-                  <div class="col-md-1 border-radius btn bg-body-tertiary">원</div>
-                  <div class="col-md-1"></div>
-                </div>
               </div>
-              <div name="discountTap" style="display: none;">
-                <div class="text-center fs-4 fw-bold">현금결제</div>
-                <div class="text-center fs-6">현금으로 받은 금액을 입력하세요.</div>
-                <div class="row pt-1 mt-2">
-                  <div class="col-md-1"></div>  
-                  <div class="text-start col-md-5 fs-6">결제금액</div>
-                  <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
-                  <div class="col-md-1"></div>
-                </div>
-                <div class="row pt-1">
-                  <div class="col-md-1"></div>  
-                  <div class="text-start col-md-5 fs-6">받은금액</div>
-                  <div class="col-md-5"></div>
-                </div>
-                <div class="row pt-1">
-                  <div class="col-md-1"></div>
-                  <div class="col-md-10">
-                    <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
+              <tab1>
+                <div name="discountTap">
+                  <div class="row pt-1 mt-2">
+                    <div class="col-md-1"></div>  
+                    <div class="text-start col-md-5 fs-6">결제금액</div>
+                    <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
+                    <div class="col-md-1"></div>
                   </div>
-                  <div class="col-md-1"></div>
+                  <div class="row pt-1 mt-2">
+                    <div class="col-md-1"></div>  
+                    <div class="text-start col-md-10 fs-6 border-top">할인금액</div>
+                    <div class="col-md-1"></div>
+                  </div>
+                  <div class="row pt-1">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-8">
+                      <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
+                    </div>
+                    <div id="discountType" class="col-md-1 border-radius btn bg-body-tertiary" onclick="clickDiscountType(this)">%</div>
+                    <div class="col-md-1 border-radius btn bg-primary text-white" onclick="clickDiscountType(this)">원</div>
+                    <div class="col-md-1"></div>
+                  </div>
                 </div>
-              </div>
+                <div name="discountTap" style="display: none;">
+                  <div class="text-center fs-4 fw-bold">현금결제</div>
+                  <div class="text-center fs-6">현금으로 받은 금액을 입력하세요.</div>
+                  <div class="row pt-1 mt-2">
+                    <div class="col-md-1"></div>  
+                    <div class="text-start col-md-5 fs-6">결제금액</div>
+                    <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
+                    <div class="col-md-1"></div>
+                  </div>
+                  <div class="row pt-1">
+                    <div class="col-md-1"></div>  
+                    <div class="text-start col-md-5 fs-6">받은금액</div>
+                    <div class="col-md-5"></div>
+                  </div>
+                  <div class="row pt-1">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                      <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
+                    </div>
+                    <div class="col-md-1"></div>
+                  </div>
+                </div>
+                </tab1>
+                <tab2 style="display: none;">
+                  <div>
+                    <div class="row pt-1">
+                      <div class="col-md-1"></div>
+                      <div class="col-md-8">
+                        <input id="cashCouponVal" class="form-control form-control-lg text-end" readonly placeholder="전화번호 끝 4자리를 검색하세요.">
+                      </div>
+                      <div class="col-md-3">
+                        <button type="button" class="btn btn-secondary" style="width: 90%; left: 5%;"onclick="searchCoupon()">조회</button>
+                      </div>
+                    </div>
+                  </div>
+                </tab2>
             </div>
             <div class="border-top" style="width:100%;">
               <div class="h-50 row pt-2" >
                 <div class="col-md-1"></div>  
-                <div class="text-start col-md-5 fs-6">거스름돈</div>
-                <div id="cashReturnVal" class="text-end col-md-5 fs-6">0원</div>
+                <div class="text-start col-md-5 fs-6">할인금액</div>
+                <div id="cashDiscountVal" class="text-end col-md-5 fs-6">0원</div>
                 <div class="col-md-1"></div>
               </div>
               <div class="h-50" >
-                <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
-                data-bs-toggle="modal" data-bs-target="#appCashCompleteModal" onclick="{cartInit(),cashApprovalComplete()}">결재완료</button>
+                <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal" style="width: 90%; left: 5%;" onclick="{approveDiscount()}">적용  </button>
               </div>
             </div>
           </div>
