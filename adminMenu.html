@@ -217,6 +217,27 @@
       $("#main>div:eq(1)").append(menuCategory);
 
     }
+
+    
+    var discountAmt = $("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','')==''?'0':$("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','');
+    discountAmt = parseInt(discountAmt);
+    var productCnt = $("#main>div:eq(1)>div[name=cartProduct]").length;
+    var totalAmt = 0;
+    var cnt = 0;
+    var amt = 0;
+    
+    for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
+      
+      cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+      amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+      
+      totalAmt += (amt*cnt);
+      
+      
+    }
+
+    $("#appTotalAmt").text(productCnt+'개 결제하기 '+(totalAmt-discountAmt).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+
     
   }
 
@@ -1032,6 +1053,9 @@
     var cnt = 0;
     var amt = 0;
     var totalAmt = 0;
+    var discountAmt = $("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','')==''?'0':$("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','');
+    discountAmt = parseInt(discountAmt);
+
     $("#appTargetDiv").children().remove();
     if($("#main>div:eq(1)>div[name=cartProduct]").length > 0){
 
@@ -1045,15 +1069,22 @@
         cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
         amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
         
-        totalAmt += amt;
+        totalAmt += (amt*cnt);
         
         $("#appTargetDiv").append($("#main>div:eq(1)>div[name=cartProduct]").eq(i).clone().removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10'));
-        $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-        $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-        $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('0원');
+        $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text((totalAmt*0.1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+        $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text((totalAmt*0.1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
         $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
+        $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
       }
 
+      var finalTotalAmt = totalAmt-discountAmt;
+
+      $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text((finalTotalAmt*0.9).toFixed(0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text((finalTotalAmt*0.1).toFixed(0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
+      $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text(finalTotalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+      
     }else{
       $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text('0원');
       $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('0원');
@@ -1061,12 +1092,10 @@
       $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text('0원');
     }
     
-    
-    
   }
 
   function cashApproval(){
-    $("#cashTrgVal").text($("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text());
+    $("#cashModalTrgVal").text($("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text());
   }
 
   function cardApproval(){
@@ -1079,9 +1108,17 @@
   function cartInit(){
     
     $('div[name=cartProduct]').remove();
+    $("#appTotalAmt").text('결제하기');
+    $("#cashInputVal").val('0원');
+    $("#cashDiscountVal").val('0원');
+    $("#discountTd1").text('');
+    $("#discountTd2").text('');
+    $("#discountTd3").text('');
+    $("#discountTd4").text('');
+
   }
 
-  function clickCashCal(obj){
+  function clickDiscountCal(obj){
 
    var gubun = $("#discountType").hasClass('bg-primary')
 
@@ -1140,18 +1177,41 @@
    
 
   }
+
+  function clickCashCal(obj){
+
+    var clickVal = $(obj).find('span:eq(0)').text();
+    var clickNum = 0;
+    var cashInputVal = $("#cashModalInputVal").val().replaceAll(',','').replaceAll('원','');
+    var cashTrgNum = $("#cashModalTrgVal").text().replaceAll(',','').replaceAll('원','') == '' ? 0 : parseInt($("#cashModalTrgVal").text().replaceAll(',','').replaceAll('원',''));
+
+    if('C' === clickVal){
+    $("#cashModalInputVal").val('0원');
+    $('#cashModalReturnVal').text('0원');
+    }else if('◁' === clickVal){
+    cashInputVal = cashInputVal != '' ? cashInputVal.slice(0,-1) : cashInputVal;
+    $("#cashModalInputVal").val(cashInputVal.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $('#cashModalReturnVal').text((parseInt(cashInputVal) - cashTrgNum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    }else{
+    clickNum = parseInt(clickVal);
+    cashInputVal += clickVal
+    $("#cashModalInputVal").val(parseInt(cashInputVal).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $('#cashModalReturnVal').text((parseInt(cashInputVal) - cashTrgNum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    }
+  }
   
   function cashApprovalComplete(){
     var amt = parseInt($("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text().replaceAll(',','').replace('원',''));
-    $("#cashCompleteModalDiv>div:eq(2)>div:eq(2)").text($("#cashTrgVal").text());
-    $("#cashCompleteModalDiv>div:eq(3)>div:eq(2)").text($("#cashInputVal").val());
-    $("#cashCompleteModalDiv>div:eq(4)>div:eq(2)").text($("#cashReturnVal").text());
-    $("#cashTrgVal").text('');
-    $("#cashInputVal").val('');
-    $("#cashReturnVal").text('');
+    $("#cashCompleteModalDiv>div:eq(2)>div:eq(2)").text($("#cashModalModalTrgVal").text());
+    $("#cashCompleteModalDiv>div:eq(3)>div:eq(2)").text($("#cashModalInputVal").val());
+    $("#cashCompleteModalDiv>div:eq(4)>div:eq(2)").text($("#cashModalReturnVal").text());
+    $("#cashModalTrgVal").text('');
+    $("#cashModalInputVal").val('');
+    $("#cashModalReturnVal").text('');
+    
   }
 
-  function showDiscount(){
+  function showDiscount(gubun){
 
     var cnt = 0;
     var amt = 0;
@@ -1165,7 +1225,7 @@
         cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
         amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
         
-        totalAmt += amt;
+        totalAmt += (amt*cnt);
         
       }
 
@@ -1173,6 +1233,10 @@
 
     $("#discountModal").find('#cashTrgVal').text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
 
+    if(gubun == 'app'){
+      $("#discountModal").modal('show');
+      // $("#appModal").modal('show');
+    }
     
 
   }
@@ -1226,17 +1290,32 @@
       cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
       amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
       
-      totalAmt += amt;
+      totalAmt += (amt*cnt);
       
-      $("#appTargetDiv").append($("#main>div:eq(1)>div[name=cartProduct]").eq(i).clone().removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10'));
-      $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-      $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-      $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text('0원');
-      $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
+      
     }
 
-
     $("#appTotalAmt").text(productCnt+'개 결제하기 '+(totalAmt-discountAmt).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+
+    var finalTotalAmt = totalAmt-discountAmt;
+
+    $("#discountTd1").text('할인전금액');
+    $("#discountTd2").text(totalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $("#discountTd3").text('할인금액');
+    $("#discountTd4").text('-'+discountAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+
+    $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text((finalTotalAmt*0.9).toFixed(0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $("#appTargetTotalDiv>div:eq(1)>div:eq(1)").text((finalTotalAmt*0.1).toFixed(0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    $("#appTargetTotalDiv>div:eq(2)>div:eq(1)").text('0원');
+    $("#appTargetTotalDiv>div:eq(3)>div:eq(1)").text(finalTotalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+
+
+    if(discountAmt == 0){
+      $("#discountTd1").text('');
+      $("#discountTd2").text('');
+      $("#discountTd3").text('');
+      $("#discountTd4").text('');
+    }
 
   }
 
@@ -1630,14 +1709,30 @@
                 <div class="col bg-secondary bg-opacity-10" style='cursor:pointer;' >
                   <table style="height: 15vh; width: 100%;">
                     <tr>
-                      <td class="align-middle ">할인/쿠폰</td>
+                      <td class="align-middle text-start" style="cursor: pointer;" onclick="showDiscount('app')">할인/쿠폰</td>
+                    </tr>
+                    <tr>
+                      <td id="discountTd1"></td>
+                      <td id="discountTd2"></td>
+                    </tr>
+                    <tr>
+                      <td class="text-danger" id="discountTd3"></td>
+                      <td class="text-danger" id="discountTd4"></td>
                     </tr>
                   </table>
                 </div>
                 <div class="col bg-secondary bg-opacity-10" style='cursor:pointer; margin-left: 2px;' >
                   <table style="height: 15vh; width: 100%;">
                     <tr>
-                      <td class="align-middle ">분할결제</td>
+                      <td class="align-middle text-start">분할결제</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
                     </tr>
                   </table>
                 </div>
@@ -1713,28 +1808,6 @@
                     <div class="col-md-1"></div>
                   </div>
                 </div>
-                <div name="discountTap" style="display: none;">
-                  <div class="text-center fs-4 fw-bold">현금결제</div>
-                  <div class="text-center fs-6">현금으로 받은 금액을 입력하세요.</div>
-                  <div class="row pt-1 mt-2">
-                    <div class="col-md-1"></div>  
-                    <div class="text-start col-md-5 fs-6">결제금액</div>
-                    <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
-                    <div class="col-md-1"></div>
-                  </div>
-                  <div class="row pt-1">
-                    <div class="col-md-1"></div>  
-                    <div class="text-start col-md-5 fs-6">받은금액</div>
-                    <div class="col-md-5"></div>
-                  </div>
-                  <div class="row pt-1">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-10">
-                      <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
-                    </div>
-                    <div class="col-md-1"></div>
-                  </div>
-                </div>
                 </tab1>
                 <tab2 style="display: none;">
                   <div>
@@ -1765,18 +1838,18 @@
           <div class="col-md-4 h-100 border-start bg-secondary bg-opacity-25">
             <div class="" style="height: 60vh; width:100%">
               <div class="row row-cols-3"> 
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>1</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>2</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>3</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>4</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>5</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>6</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>7</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>8</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>9</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>C</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>0</span></div>
-                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickCashCal(this)"><span>◁</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>1</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>2</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>3</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>4</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>5</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>6</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>7</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>8</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>9</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>C</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>0</span></div>
+                <div class="col btn bg-white border-radius m-1" style="max-width: 30%; left: 3%; min-height: 3rem;" onclick="clickDiscountCal(this)"><span>◁</span></div>
               </div>
             </div>
           </div>
@@ -1802,7 +1875,7 @@
               <div class="row pt-1 mt-2">
                 <div class="col-md-1"></div>  
                 <div class="text-start col-md-5 fs-6">결제금액</div>
-                <div id="cashTrgVal" class="text-end col-md-5 fs-6">0원</div>
+                <div id="cashModalTrgVal" class="text-end col-md-5 fs-6">0원</div>
                 <div class="col-md-1"></div>
               </div>
               <div class="row pt-1">
@@ -1813,7 +1886,7 @@
               <div class="row pt-1">
                 <div class="col-md-1"></div>
                 <div class="col-md-10">
-                  <input id="cashInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
+                  <input id="cashModalInputVal" class="form-control form-control-lg text-end" readonly placeholder="0원">
                 </div>
                 <div class="col-md-1"></div>
               </div>
@@ -1822,7 +1895,7 @@
               <div class="h-50 row pt-2" >
                 <div class="col-md-1"></div>  
                 <div class="text-start col-md-5 fs-6">거스름돈</div>
-                <div id="cashReturnVal" class="text-end col-md-5 fs-6">0원</div>
+                <div id="cashModalReturnVal" class="text-end col-md-5 fs-6">0원</div>
                 <div class="col-md-1"></div>
               </div>
               <div class="h-50" >
