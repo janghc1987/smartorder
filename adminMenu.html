@@ -140,7 +140,7 @@
   a{font-family: 'TmonMonsori'} */
 
   .shadowBox {
-    box-shadow : 0 -5px 5px gray inset;
+    box-shadow : 0 -3px 5px gray inset;
   }
 
   .shadowBox2 {
@@ -165,7 +165,11 @@
       $("#mainForm").hide();
     }
     
+      // 매 초마다 시계 업데이트
+  setInterval(updateClock, 1000);
 
+  // 페이지 로드 시에도 시계 업데이트
+  updateClock();
 
   }
 
@@ -186,6 +190,24 @@
     $(".keyup_select").removeClass("keyup_select");
 
   }
+
+  function updateClock() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    
+    const dateString = `${year}-${month}-${day}`;
+    const timeString = `${hours}:${minutes}:${seconds}`;
+    const fullString = `${dateString} ${timeString}`;
+    $('#clockDiv').text(fullString);
+}
+
+
+
 
   function pay(){
 
@@ -341,6 +363,11 @@
 
   }
 
+  function logout(){
+    window.localStorage.removeItem('loginChk');
+    $("#loginForm").show();
+    $("#mainForm").hide();
+  }
 
   function goMain(eatType){
     $("#subForm").hide();
@@ -350,25 +377,23 @@
   function showCategoryMng(){ 
     $("#optionModal").find('main').hide();
     $("#optionModal").find('category').show();
-    $("#optionModal").find('product').hide();
-    $("#optionModal").find('productOpt').hide();
     $("#categoryDiv").children().remove();
     
     var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
 
     for(var i = 0 ; i < categoryList.length ; i++){
-      var categoryTag = $("<div>")
-      categoryTag.append($("<div>",{class:'border border-2 rounded-2 border-secondary  m-3 row',style:'align-items:center'}).append($('<input>',{value:categoryList[i],placeholder:'카테고리를 입력해주세요.',name:'categoryVal'})))
+      var categoryTag = $("<div>",{class:'row m-3'})
+      categoryTag.append($("<div>",{class:'border border-2 rounded-2 border-secondary col-md-11',style:'align-items:center;'}).append($('<input>',{value:categoryList[i],placeholder:'카테고리를 입력해주세요.',name:'categoryVal',style:'width:100%; height:100%; outline: none;'})));
+        categoryTag.append($("<div>",{class:'col-md-1'}).append($("<button>",{class:'btn btn-outline-secondary fw-bolder',onclick:'deleteCategory(this)',text:'-'})));
       $("#categoryDiv").append(categoryTag);
     }
+
     
   }
 
   function showProductOptMng(){ 
     $("#optionModal").find('main').hide();
     $("#optionModal").find('category').hide();
-    $("#optionModal").find('product').hide();
-    $("#optionModal").find('productOpt').show();
     
     $("#productCategory").children().remove();
 
@@ -425,14 +450,13 @@
   function showOptionMng(){
     $("#optionModal").find('main').show();
     $("#optionModal").find('category').hide();
-    $("#optionModal").find('productOpt').hide();
-    $("#optionModal").find('product').hide();
   }
 
   function addCategory(){
 
-    var categoryTag = $("<div>")
-      categoryTag.append($("<div>",{class:'border border-2 rounded-2 border-secondary  m-3 row',style:'align-items:center'}).append($('<input>',{value:'',placeholder:'카테고리를 입력해주세요.',name:'categoryVal'})))
+    var categoryTag = $("<div>",{class:'row m-3'})
+      categoryTag.append($("<div>",{class:'border border-2 rounded-2 border-secondary col-md-11',style:'align-items:cente;'}).append($('<input>',{value:'',placeholder:'카테고리를 입력해주세요.',name:'categoryVal',style:'width:100%; height:100%; outline: none;'})));
+      categoryTag.append($("<div>",{class:'col-md-1'}).append($("<button>",{class:'btn btn-outline-secondary fw-bolder',onclick:'deleteCategory(this)',text:'-'})));
     $("#categoryDiv").append(categoryTag);
 
   }
@@ -453,6 +477,10 @@
 
   function deleteOption(obj){
 
+    $(obj).parent().parent().remove();
+  }
+
+  function deleteCategory(obj){
     $(obj).parent().parent().remove();
   }
  
@@ -497,7 +525,7 @@
   //var categoryList = [];
   function saveCategory(){
 
-    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+    var categoryList = [];
 
     for( var i=0 ; i < $("input[name=categoryVal]").length ; i++){
       if(!$("input[name=categoryVal]").eq(i).attr('readonly')){
@@ -547,15 +575,15 @@
           for(var j = 0 ; j < targetProductList.length ; j++){
             
             if(j==0){
-              $("#main").find("div").eq(0).append($("<div>",{class:'bg-secondary bg-opacity-10 text-start m-2 fs-2 fw-bolder',style:'height:3rem;',text:categoryList[i]}));
-              categoryDiv = $("<div>",{class:'row menuDiv '+categoryList[i]})
+              $("#main").find("div").eq(0).append($("<div>",{class:'bg-secondary bg-opacity-10 text-start m-2 fs-2 fw-bolder ps-2',style:'height:3rem;',text:categoryList[i]}));
+              categoryDiv = $("<div>",{class:'row '+categoryList[i]})
               categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
                       .append($('<div>',{class:'row py-4'})));
             }
             
-            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addCart("'+targetProductList[j][0]+'","'+targetProductList[j][1]+'")'})
+            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
                       .append($('<div>',{class:'row'})
-                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
+                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;',onclick:'addCart("'+targetProductList[j][0]+'","'+targetProductList[j][1]+'")'})
                       .append($('<div>',{text:targetProductList[j][0],style:'height:70%; padding-top:1rem;'}))
                       .append($('<div>',{text:targetProductList[j][1].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',style:'height:30%'})))));
             
@@ -563,11 +591,21 @@
 
 
           
-          categoryDiv.find('div').eq(1).append($("<div>",{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addShowProduct("'+categoryList[i]+'")'})
+          categoryDiv.find('div').eq(1).append($("<div>",{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
                      .append($('<div>',{class:'row'})
-                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
+                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;',onclick:'addShowProduct("'+categoryList[i]+'")'})
                       .append($('<div>',{style:'height:100%'}).append($('<table>',{style:'height:100%; width:100%'}).append($('<tr>').append($('<td>',{class:'align-middle',text:'+'}))))))));
 
+        }else{
+          $("#main").find("div").eq(0).append($("<div>",{class:'bg-secondary bg-opacity-10 text-start m-2 fs-2 fw-bolder ps-2',style:'height:3rem;',text:categoryList[i]}));
+          var  categoryDiv = $("<div>",{class:'row '+categoryList[i]})
+              categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
+                      .append($('<div>',{class:'row py-4'})));
+
+          categoryDiv.find('div').eq(1).append($("<div>",{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
+                     .append($('<div>',{class:'row'})
+                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;',onclick:'addShowProduct("'+categoryList[i]+'")'})
+                      .append($('<div>',{style:'height:100%'}).append($('<table>',{style:'height:100%; width:100%'}).append($('<tr>').append($('<td>',{class:'align-middle',text:'+'}))))))));
         }
         $("#main").find("div").eq(0).append(categoryDiv);
 
@@ -597,7 +635,9 @@
           for(var j = 0 ; j < targetProductList.length ; j++){
             
             if(j==0){
-              categoryDiv = $("<div>",{class:'row menuDiv '+categoryList[i]})
+              categoryDiv = $("<div>",{class:'bg-secondary bg-opacity-10 text-start m-2 fs-2 fw-bolder ps-2',style:'height:3rem;',text:categoryList[i]})
+              $("#productMngModal").find("#displayDiv").append(categoryDiv);
+              categoryDiv = ($("<div>",{class:'row menuDiv '+categoryList[i]}));
               categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
                       .append($('<div>',{class:'row py-4'})));
             }
@@ -609,6 +649,18 @@
                       .append($('<div>',{text:targetProductList[j][1].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',style:'height:30%'})))));
             
           }
+        }else{
+          var categoryDiv = $("<div>",{class:'bg-secondary bg-opacity-10 text-start m-2 fs-2 fw-bolder ps-2',style:'height:3rem;',text:categoryList[i]})
+          $("#productMngModal").find("#displayDiv").append(categoryDiv);  
+              categoryDiv = ($("<div>",{class:'row '+categoryList[i]}))
+              categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
+                      .append($('<div>',{class:'row py-4'})));
+
+              categoryDiv.find('div').eq(1).append($("<div>",{class:'col-md-2 mt-3 m-2 Barbecue menuDiv'})
+                     .append($('<div>',{class:'row'})
+                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;',onclick:'addShowProduct("'+categoryList[i]+'")'})
+                      .append($('<div>',{style:'height:100%'}).append($('<table>',{style:'height:100%; width:100%'}).append($('<tr>').append($('<td>',{class:'align-middle',text:'+'}))))))));
+
         }
         $("#productMngModal").find("#displayDiv").append(categoryDiv);
       }
@@ -707,8 +759,6 @@
   function showProductAdd(){ 
     $("#optionModal").find('main').hide();
     $("#optionModal").find('category').hide();
-    $("#optionModal").find('productOpt').hide();
-    $("#optionModal").find('product').show();
     
     $("#product_category").children().remove();
 
@@ -1319,6 +1369,22 @@
 
   }
 
+  function menuClick(obj){
+    
+    $("footer>div:eq(0)>div:eq(0)>a").removeClass('fs-4');
+    $("footer>div:eq(0)>div:eq(1)>a").removeClass('fs-4');
+    $("footer>div:eq(0)>div:eq(2)>a").removeClass('fs-4');
+    $("footer>div:eq(0)>div:eq(3)>a").removeClass('fs-4');
+    $(obj).addClass('fs-4');
+    
+
+  }
+
+var backModal;
+function backModalCall(){ 
+  // $("#"+backModal).modal('show');
+}
+
 </script>
 <body class="text-center" style="background-color: white;">
   <div class="loginForm" id="loginForm" style="display: none;">
@@ -1342,20 +1408,21 @@
       <div class="spinner"></div>
     </div>
     <header class="container-fluid fixed-top bg-white border-bottom border-width-2">
-      <div class="row bg-primary">
-        <div class="col-md-1 h-12 row">
-          <a href="#" class="col-md-12 h-12">
-          <img class="pt-2" src="https://i.postimg.cc/YCWhMVjM/home.png" style="height: 80%; width: 80%;"/>
+      <div class="row bg-primary h-12">
+        <div class="col-md-1 row">
+          <a href="#" class="col-md-12 ms-2 mt-1" onclick="refreshMain()">
+            <img class="pt-2" src="https://i.postimg.cc/YCWhMVjM/home.png mt-2" style="height: 50%; width: 50%;"/>
           </a>
         </div>
-        <div class="col-md-9 h-12 row"></div>
-        <div class="col-md-1 h-12 row"><a href="#" data-bs-toggle="modal" data-bs-target="#optionModal" onclick="showOptionMng()">설정</a></div>
-        <div class="col-md-1 h-12 row"><a href="#">로그아웃</a></div>
+        <div id="clockDiv" class="col-md-2 text-start mt-2 fs-5 text-white fw-bolder"></div>
+        <div class="col-md-7 row"></div>
+        <div class="col-md-1 row text-white mt-2 fs-5"><a href="#" data-bs-toggle="modal" data-bs-target="#optionModal" onclick="showOptionMng()">설정</a></div>
+        <div class="col-md-1 row text-white mt-2 fs-5"><a href="#" onclick="logout()">로그아웃</a></div>
       </div>
     </header>
-    <main id="main" class="py-3 mt-5 row" style="height: 100%">
-      <div class="col-md-8"></div>
-      <div class="col-md-4 border-start">
+    <main id="main" class="py-3 mt-5 row">
+      <div class="col-md-8" ></div>
+      <div class="col-md-4 border-start" >
         <div class="row" style="height: 50px;">
           <div class="col-md-3">
             <button type="button" class="btn btn-outline-primary col-md-12" data-bs-toggle="modal" data-bs-target="#discountModal" onclick="showDiscount()">할인</button>
@@ -1366,10 +1433,10 @@
         </div>
         <div class="row" style="height: 50px;">
           <div class="col-md-6">
-            <button type="button" class="btn btn-outline-secondary col-md-12" onclick="minusCartProduct()">-</button>
+            <button type="button" class="btn btn-outline-secondary col-md-12 fw-bolder btn-light"  onclick="minusCartProduct()">-</button>
           </div>
           <div class="col-md-6">
-            <button type="button" class="btn btn-outline-secondary col-md-12" onclick="plusCartProduct()">+</button>
+            <button type="button" class="btn btn-outline-secondary col-md-12 fw-bolder btn-light"  onclick="plusCartProduct()">+</button>
           </div>
         </div>
         <div class="row fixed-bottom mb-5" >
@@ -1379,7 +1446,7 @@
             data-bs-toggle="modal" data-bs-target="#appModal" onclick="approval()">결제하기</a>
           </div>
           <div class="col-md-2 h-12 row">
-            <a href="#" class="col-md-12 pt-2 bg-secondary bg-opacity-10" style="text-align: center;">금액입력</a>
+            <a href="#" class="col-md-12 pt-2 bg-secondary bg-opacity-10" style="text-align: center;" onclick="{alert('서비스 준비중.')}">금액입력</a>
           </div>
         </div>
       </div>
@@ -1387,20 +1454,20 @@
     <footer class="container-fluid fixed-bottom bg-white border-top border-width-2" style="height: 3rem;">
       <div class="row">
         <div class="col-md-3 h-100 row">
-          <a href="#" class="col-md-12 pt-2 " style="text-align: center;"
-          data-bs-toggle="modal" data-bs-target="#waiterCallModal">직원호출</a>
+          <a href="#" class="col-md-12 pt-2 fs-4" style="text-align: center;" 
+          data-bs-toggle="modal" data-bs-target="#waiterCallModal" onclick="{menuClick(this);refreshMain()}">상품관리</a>
         </div>
         <div class="col-md-3 h-100 row">
-          <a href="#" class="col-md-12 pt-2  " style="text-align: center;"
-          data-bs-toggle="modal" data-bs-target="#myOrderModal">주문내역</a>
+          <a href="#" class="col-md-12 pt-2" style="text-align: center;" onclick="menuClick(this)"  
+          data-bs-toggle="modal" data-bs-target="#myOrderModal">테이블관리</a>
         </div>
         <div class="col-md-3 h-100 row">
-          <a href="#" class="col-md-12 pt-2  " style="text-align: center;"
-          data-bs-toggle="modal" data-bs-target="#myOrderModal">주문내역</a>
+          <a href="#" class="col-md-12 pt-2" style="text-align: center;"  onclick="menuClick(this)"
+          data-bs-toggle="modal" data-bs-target="#myOrderModal">주문내역관리</a>
         </div>
         <div class="col-md-3 h-100 row">
-          <a href="#" class="col-md-12 pt-2 " style="text-align: center;"
-          data-bs-toggle="modal" data-bs-target="#myCartModal">장바구니</a>
+          <a href="#" class="col-md-12 pt-2" style="text-align: center;"  onclick="menuClick(this)"
+          data-bs-toggle="modal" data-bs-target="#myCartModal">더보기</a>
         </div>
       </div>
     </footer>
@@ -1416,55 +1483,42 @@
           </div>
     
           <!-- Modal body -->
-          <div class="modal-body row ps-20 col-md-12 overflow-auto" style="height: 400px;">
-            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
-              <div clas="h-100">
-                <a name="Barbecue" href="#" onclick="showCategoryMng()" style="background-color: white; border-radius: 5%;">
-                  상품카테고리
-                </a>
-              </div>
+          <div class="modal-body overflow-auto mt-3" style="height: 400px;">
+            <div style="height: 5vh">
+              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showCategoryMng();backModal='optionModal'}">상품카테고리</button>
             </div>
-            <div class="col-md-2 h-25 m-3 border border-2 rounded-2 border-secondary row" style="align-items:center">
-              <div clas="h-100 col-md-12">
-                <a name="Barbecue" href="#" onclick="showProductMng()" style="background-color: white; border-radius: 5%;"
-                data-bs-toggle="modal" data-bs-target="#productMngModal">
-                  상품관리
-                </a>
-              </div>
+            <div style="height: 3rem;">
+              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showProductMng();backModal='optionModal'}" data-bs-toggle="modal" data-bs-target="#productMngModal">상품관리</button>
             </div>
           </div>
         </main>
         <category style="display: none;">
             <!-- Modal Header -->
-            <div class="modal-header">
+            <div class="modal-header">  
               <h4 class="modal-title">상품 카테고리 설정</h4>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="row mt-3 ps-2">
               <div class="col-md-2">상품 카테고리 </div>
               <div class="col-md-2">
-                <div class="border border-2 rounded-2 border-secondary row" style="align-items:center">
-                  <div clas="h-100 col-md-12">
-                    <a name="Barbecue" href="#" onclick="addCategory('')" style="background-color: white; border-radius: 5%;">+추가</a>
-                  </div>
+                <div style="align-items:center">
+                  <button class="btn btn-outline-secondary w-100" onclick="addCategory('')">+추가</button>
                 </div>
               </div>
             </div>
             <div id="categoryDiv">
-              <div>
-                <div class="border border-2 rounded-2 border-secondary m-3 row" style="align-items:center">
-                  <input value="기본" readonly />
-                </div>
-              </div>
-              <div>
-                <div class="border border-2 rounded-2 border-secondary  m-3 row" style="align-items:center">
+              <div class="row">
+                <div class="border border-2 rounded-2 border-secondary m-3 col-md-11" style="align-items:center;">
                   <input value="" placeholder="카테고리를 입력해주세요." />
+                </div>
+                <div class="col-md-1">
+                  <button class="btn btn-outline-secondary">-</button>
                 </div>
               </div>
             </div>
             <div style="height: 100px;">
               <div class="h-100 rounded-2 border-secondary m-3 row bg-secondary bg-opacity-10" style="align-items:center">
-                상품 카테고리를 만들고 여러 상품에 적용 해보세요.
+                &nbsp;&nbsp;상품 카테고리를 만들고 여러 상품에 적용 해보세요.
               </div>
             </div>
             <!-- Modal footer -->
@@ -1662,11 +1716,11 @@
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">상품관리</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="backModalCall()"></button>
         </div>
   
         <!-- Modal body -->
-        <div id="displayDiv" class="modal-body" style="height: 80vh;"></div>
+        <div id="displayDiv" class="modal-body overflow-auto" style="height: 80vh;"></div>
       </div>
     </div>
   </div>
