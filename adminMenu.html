@@ -250,16 +250,12 @@
     
     for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
       
-      cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
       amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
-      
-      totalAmt += (amt*cnt);
-      
+      totalAmt += amt;
       
     }
 
     $("#appTotalAmt").text(productCnt+'개 결제하기 '+(totalAmt-discountAmt).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-
     
   }
 
@@ -533,16 +529,12 @@
         $("input[name=categoryVal]").eq(i).attr("readonly",true);
       }
     }
-    var saveCategoryTag = $("#categoryDiv").clone();
-    window.localStorage.setItem('saveCategoryTag',JSON.stringify(saveCategoryTag))
+    // var saveCategoryTag = $("#categoryDiv").clone();
+    // window.localStorage.setItem('saveCategoryTag',JSON.stringify(saveCategoryTag))
+    window.localStorage.setItem("categoryList",JSON.stringify(categoryList));
     alert('저장완료');
     refreshMain();
     $("#optionModal").find(".btn-close").click();
-
-
-
-    window.localStorage.setItem("categoryList",JSON.stringify(categoryList));
-
 
   }
 
@@ -691,12 +683,14 @@
   }
 
   //상품 수정하기
+  var recentMenuName;
+  var recentCategoryName;
   function editShowProduct(menuName,categoryName){
     $("#productMngModal").modal('hide');
     $("#productEditModal").modal('show');
-
-
     $("#product_edit_category").children().remove();
+    recentMenuName = menuName;
+    recentCategoryName = categoryName;
 
     var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
     var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
@@ -868,7 +862,7 @@
     }  
 
     for(var i=0 ; i < productDetailList.length ; i++){
-      if(productName == productDetailList[i][0]){
+      if(recentMenuName == productDetailList[i][0]){
         productDetailList.splice(i,1);
         break;
       }
@@ -1076,6 +1070,21 @@
       }
       
     }
+
+    var discountAmt = $("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','')==''?'0':$("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','');
+    discountAmt = parseInt(discountAmt);
+    var productCnt = $("#main>div:eq(1)>div[name=cartProduct]").length;
+    var totalAmt = 0;
+    var cnt = 0;
+    var amt = 0;
+    
+    for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
+      amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+      totalAmt += amt;
+    }
+
+    $("#appTotalAmt").text(productCnt+'개 결제하기 '+(totalAmt-discountAmt).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    
   }
 
   function minusCartProduct(){
@@ -1091,11 +1100,23 @@
 
         $("#main>div:eq(1)").find('#'+menuId+'>div:eq(2)').text((amt-(amt/cnt)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
         $("#main>div:eq(1)").find('#'+menuId+'>div:eq(1)').text(cnt-1);
-        
 
       }
-      
     }
+
+    var discountAmt = $("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','')==''?'0':$("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','');
+    discountAmt = parseInt(discountAmt);
+    var productCnt = $("#main>div:eq(1)>div[name=cartProduct]").length;
+    var totalAmt = 0;
+    var cnt = 0;
+    var amt = 0;
+    
+    for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
+      amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+      totalAmt += amt;
+    }
+
+    $("#appTotalAmt").text(productCnt+'개 결제하기 '+(totalAmt-discountAmt).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
   }
 
   function approval(){
@@ -1116,10 +1137,11 @@
 
       for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
       
-        cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+        //cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
         amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
         
-        totalAmt += (amt*cnt);
+        //totalAmt += (amt*cnt);
+        totalAmt += amt;
         
         $("#appTargetDiv").append($("#main>div:eq(1)>div[name=cartProduct]").eq(i).clone().removeClass('bg-info').removeClass('bg-gradient').removeClass('bg-opacity-10'));
         $("#appTargetTotalDiv>div:eq(0)>div:eq(1)").text((totalAmt*0.1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
@@ -1258,7 +1280,6 @@
     $("#cashModalTrgVal").text('');
     $("#cashModalInputVal").val('');
     $("#cashModalReturnVal").text('');
-    
   }
 
   function showDiscount(gubun){
@@ -1272,10 +1293,11 @@
 
       for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
       
-        cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+        //cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
         amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
         
-        totalAmt += (amt*cnt);
+        //totalAmt += (amt*cnt);
+        totalAmt += amt;
         
       }
 
@@ -1327,6 +1349,12 @@
 
   function approveDiscount(trgName){
 
+    var cashTrgNum = $("#cashTrgVal").text().replaceAll(',','').replaceAll('원','') == '' ? 0 : parseInt($("#cashTrgVal").text().replaceAll(',','').replaceAll('원',''));
+
+    if(cashTrgNum == 0){
+      return; 
+    }
+
     var discountAmt = $("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','')==''?'0':$("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','');
     discountAmt = parseInt(discountAmt);
     var productCnt = $("#main>div:eq(1)>div[name=cartProduct]").length;
@@ -1337,10 +1365,11 @@
     
     for(var i =0 ; i < $("#main>div:eq(1)>div[name=cartProduct]").length ; i++){
       
-      cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+      //cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
       amt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
       
-      totalAmt += (amt*cnt);
+      //totalAmt += (amt*cnt);
+      totalAmt += amt;
       
       
     }
@@ -1376,7 +1405,28 @@
     $("footer>div:eq(0)>div:eq(2)>a").removeClass('fs-4');
     $("footer>div:eq(0)>div:eq(3)>a").removeClass('fs-4');
     $(obj).addClass('fs-4');
-    
+
+    if($(obj).text() == '상품관리'){
+      $("#mainForm>main").show();
+      $("#mainForm>main1").hide();
+      $("#mainForm>main2").hide();
+      $("#mainForm>main3").hide();
+    }else if($(obj).text() == '테이블관리'){
+      $("#mainForm>main").hide();
+      $("#mainForm>main1").show();
+      $("#mainForm>main2").hide();
+      $("#mainForm>main3").hide();
+    }else if($(obj).text() == '주문내역관리'){
+      $("#mainForm>main").hide();
+      $("#mainForm>main1").hide();
+      $("#mainForm>main2").show();
+      $("#mainForm>main3").hide();
+    }else if($(obj).text() == '더보기'){
+      $("#mainForm>main").hide();
+      $("#mainForm>main1").hide();
+      $("#mainForm>main2").hide();
+      $("#mainForm>main3").show();
+    }
 
   }
 
@@ -1407,7 +1457,7 @@ function backModalCall(){
     <div class="layerPopup" style="display: none;" id="loading">
       <div class="spinner"></div>
     </div>
-    <header class="container-fluid fixed-top bg-white border-bottom border-width-2">
+    <header class="container-fluid fixed-top bg-white border-bottom border-width-2" style="height: 5vh;">
       <div class="row bg-primary h-12">
         <div class="col-md-1 row">
           <a href="#" class="col-md-12 ms-2 mt-1" onclick="refreshMain()">
@@ -1451,7 +1501,25 @@ function backModalCall(){
         </div>
       </div>
     </main>
-    <footer class="container-fluid fixed-bottom bg-white border-top border-width-2" style="height: 3rem;">
+    <main1 id="main" class="py-3 mt-5 row" style="display: none;">
+      <div class="col-md-10" style="min-height: 90vh;">
+        
+      </div>
+      <div class="col-md-2 border-start" style="height: 90vh;">
+        <div style="height: 10vh; cursor: pointer;">주문상세</div>
+        <div style="height: 10vh; cursor: pointer;">계산서</div>
+        <div style="height: 10vh; cursor: pointer;">이동/합석</div>
+        <div style="height: 10vh; cursor: pointer;">그룹결제</div>
+        <div style="height: 10vh; cursor: pointer;">정보 뷰</div>
+      </div>
+    </main1>
+    <main2 id="main" class="py-3 mt-5 row" style="display: none;">
+
+    </main2>
+    <main3 id="main" class="py-3 mt-5 row" style="display: none;">
+
+    </main3>
+    <footer class="container-fluid fixed-bottom bg-white border-top border-width-2" style="height: 5vh;">
       <div class="row">
         <div class="col-md-3 h-100 row">
           <a href="#" class="col-md-12 pt-2 fs-4" style="text-align: center;" 
@@ -1540,65 +1608,61 @@ function backModalCall(){
         </div>
 
         <!-- Modal body -->
-        <div class="modal-body" >
+        <div class="modal-body">
           <div class="row mt-3 ps-2">
             <div class="col-md-12 row">
-              <div>상품 카테고리</div>
-              <div class="row col-md-4">
-                <select class="col-md-12" id="product_add_category"></select>
+              <div class="text-start m-3">상품 카테고리</div>
+              <div class="col-md-4 m-3" >
+                <select class="w-100 border border-2 rounded-2 border-secondary" id="product_add_category" style="height: 4vh;"></select>
               </div>
             </div>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품명</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="product_add_productName" class="border border-2 rounded-2 border-secondary " value="" />
-              </div>
+          <div class="mt-3 ps-2">
+            <div class="text-start ms-3">상품명</div>
+            <div class="border border-2 rounded-2 border-secondary m-3" style="align-items:center;">
+              <input id="product_add_productName" style="width:100%; height: 4vh; outline: none; padding-left: 0.5vw;" value="" />
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+          <div class="mt-3 ps-2">
+            <div class="text-start ms-3">가격</div>
+            <div class="border border-2 rounded-2 border-secondary m-3" style="align-items:center;">
+                <input type="number" id="product_add_productAmt" style="width:100%; height: 4vh; outline: none; padding-left: 0.5vw;" value="" />
             </div>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">가격</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="product_add_productAmt" class="border border-2 rounded-2 border-secondary " value="" />
-              </div>
+          <div class="mt-3 ps-2">
+            <div class="text-start ms-3">상품설명</div>
+            <div class="border border-2 rounded-2 border-secondary m-3" style="align-items:center;">
+              <input id="product_add_productDes" style="width:100%; height: 4vh; outline: none; padding-left: 0.5vw;" value="" />
             </div>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품설명</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="product_add_productDes" class="border border-2 rounded-2 border-secondary " value="" />
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품이미지</div>
-            <div class="col-md-10">
+          <div class="mt-5 ps-2">
+            <div class="text-start ms-3">상품이미지</div>
+            <div>
               <div class="m-3 row" style="align-items:center">
                 <div class="mb-3">
-                  <label for="product_add_formFile" class="form-label">Default file input example</label>
                   <input class="form-control" type="file" id="product_add_formFile" onchange="previewImage(this,'View_area_add')">
-                  <div id='View_area_add' style='position:relative; max-width: 300px; max-height: 300px; color: black; border: 0px solid black; display: inline;'></div>
+                  <div id='View_area_add' style='position:relative; max-width: 20vh; max-height: 30vw; color: black; border: 0px solid black;  margin-top: 2vh;'></div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row mt-5 m-4">
-            <div class="col-md-2">옵션</div>
-            <div class="col-md-2">
-              <div class="border border-2 rounded-2 border-secondary row" style="align-items:center">
-                <div clas="h-100 col-md-12">
+          <div class="mt-3 ps-2">
+            <div class="text-start ms-3">옵션</div>
+            <div class="m-3">
+              <div class="border border-2 rounded-2 border-secondary bg-secondary bg-opacity-10" style="align-items:center">
+                <div clas="w-100">
                   <a name="Barbecue" href="#" onclick="addOption('productAddOptDiv')" style="background-color: white; border-radius: 5%;">+추가</a>
                 </div>
               </div>
             </div>
           </div>
-          <div id="productAddOptDiv" class="m-4">
+          <div class="mt-3 ps-2">
+            <div id="productAddOptDiv" class="align-middle ps-2">
+            </div>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-12 text-start ms-2">부가세 (상품 가격에 부가세 10% 포함 여부를 선택합니다.)</div>
+          <div class="mt-5 ps-2">
+            <div class="text-start ms-2">부가세 (상품 가격에 부가세 10% 포함 여부를 선택합니다.)</div>
           </div>
           <div class="row mt-3 ps-2">
             <div class="col-md-2">
@@ -1608,8 +1672,10 @@ function backModalCall(){
               <input name="product_add_taxChk" type="radio" value="N"/><label>미포함</label>
             </div>
           </div>
-          <div class="m-4" style="height: 100px; align-items:left">
-            <input name="" type="checkbox"><label>저장 후 입력한 정보 유지 (체크할 경우 상품 이전의 상품 정보가 유지 됩니다)</label>
+          <div class="mt-5 mb-5 ps-2">
+            <div class="text-start ms-3">
+              <input name="" type="checkbox"><label>저장 후 입력한 정보 유지 (체크할 경우 상품 이전의 상품 정보가 유지 됩니다)</label>
+            </div>  
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
@@ -1633,73 +1699,71 @@ function backModalCall(){
         <div class="modal-body" >
           <div class="row mt-3 ps-2">
             <div class="col-md-12 row">
-              <div>상품 카테고리</div>
-              <div class="row col-md-4">
-                <select class="col-md-12" id="product_edit_category"></select>
+              <div class="text-start m-3">상품 카테고리</div>
+              <div class="col-md-4 m-3" >
+                <select class="w-100 border border-2 rounded-2 border-secondary" id="product_edit_category" style="height: 4vh;"></select>
               </div>
             </div>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품명</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="product_edit_productName" class="border border-2 rounded-2 border-secondary " readonly value="" />
-              </div>
+          <div class="mt-3 ps-2">
+            <div class="text-start ms-3">상품명</div>
+            <div class="border border-2 rounded-2 border-secondary m-3" style="align-items:center;">
+              <input id="product_edit_productName" style="width:100%; height: 4vh; outline: none; padding-left: 0.5vw;" value="" />
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+          <div class="mt-3 ps-2">
+            <div class="text-start ms-3">가격</div>
+            <div class="border border-2 rounded-2 border-secondary m-3" style="align-items:center;">
+                <input type="number" id="product_edit_productAmt" style="width:100%; height: 4vh; outline: none; padding-left: 0.5vw;" value="" />
             </div>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">가격</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="product_edit_productAmt" class="border border-2 rounded-2 border-secondary " value="" />
-              </div>
+          <div class="mt-3 ps-2">
+            <div class="text-start ms-3">상품설명</div>
+            <div class="border border-2 rounded-2 border-secondary m-3" style="align-items:center;">
+              <input id="product_edit_productDes" style="width:100%; height: 4vh; outline: none; padding-left: 0.5vw;" value="" />
             </div>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품설명</div>
-            <div class="col-md-2">
-              <div class="m-3 row" style="align-items:center">
-                <input id="product_edit_productDes" class="border border-2 rounded-2 border-secondary " value="" />
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-2">상품이미지</div>
-            <div class="col-md-10">
+          <div class="mt-5 ps-2">
+            <div class="text-start ms-3">상품이미지</div>
+            <div>
               <div class="m-3 row" style="align-items:center">
                 <div class="mb-3">
-                  <label for="product_edit_formFile" class="form-label">Default file input example</label>
-                  <input class="form-control" type="file" id="product_edit_formFile" onchange="previewImage(this,'View_area_edit')">
-                  <div id='View_area_edit' style='position:relative; max-width: 300px; max-height: 300px; color: black; border: 0px solid black; display: inline;'></div>
+                  <input class="form-control" type="file" id="product_eidt_formFile" onchange="previewImage(this,'View_area_edit')">
+                  <div id='View_area_edit' style='position:relative; max-width: 20vh; max-height: 30vw; color: black; border: 0px solid black;  margin-top: 2vh;'></div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row mt-5 m-4">
-            <div class="col-md-2">옵션</div>
-            <div class="col-md-2">
-              <div class="border border-2 rounded-2 border-secondary row" style="align-items:center">
-                <div clas="h-100 col-md-12">
-                  <a href="#" onclick="addOption('productEditOptDiv')" style="background-color: white; border-radius: 5%;">+추가</a>
+          <div class="mt-3 ps-2">
+            <div class="text-start ms-3">옵션</div>
+            <div class="m-3">
+              <div class="border border-2 rounded-2 border-secondary bg-secondary bg-opacity-10" style="align-items:center">
+                <div clas="w-100">
+                  <a name="Barbecue" href="#" onclick="addOption('productEditOptDiv')" style="background-color: white; border-radius: 5%;">+추가</a>
                 </div>
               </div>
             </div>
           </div>
-          <div id="productEditOptDiv" class="m-4">
+          <div class="mt-3 ps-2">
+            <div id="productEditOptDiv" class="align-middle ps-2">
+            </div>
           </div>
-          <div class="row mt-3 ps-2">
-            <div class="col-md-12 text-start ms-2">부가세 (상품 가격에 부가세 10% 포함 여부를 선택합니다.)</div>
+          <div class="mt-5 ps-2">
+            <div class="text-start ms-2">부가세 (상품 가격에 부가세 10% 포함 여부를 선택합니다.)</div>
           </div>
           <div class="row mt-3 ps-2">
             <div class="col-md-2">
-              <input name="product_edit_taxChk" type="radio" value="Y"/><label>포함</label>
+              <input name="product_edit_taxChk" type="radio" checked value="Y"/><label>포함</label>
             </div>
             <div class="col-md-2">
               <input name="product_edit_taxChk" type="radio" value="N"/><label>미포함</label>
             </div>
           </div>
-          <div class="m-4" style="height: 100px; align-items:left">
-            <input name="" type="checkbox"><label>저장 후 입력한 정보 유지 (체크할 경우 상품 이전의 상품 정보가 유지 됩니다)</label>
+          <div class="mt-5 mb-5 ps-2">
+            <div class="text-start ms-3">
+              <input name="" type="checkbox"><label>저장 후 입력한 정보 유지 (체크할 경우 상품 이전의 상품 정보가 유지 됩니다)</label>
+            </div>
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
@@ -1778,7 +1842,7 @@ function backModalCall(){
                 <div class="col bg-secondary bg-opacity-10" style='cursor:pointer; margin-left: 2px;' >
                   <table style="height: 15vh; width: 100%;">
                     <tr>
-                      <td class="align-middle text-start">분할결제</td>
+                      <td class="align-middle text-start" onclick="{alert('서비스 준비중')}">분할결제</td>
                     </tr>
                     <tr>
                       <td></td>
@@ -1811,7 +1875,7 @@ function backModalCall(){
                 <div class="col bg-secondary bg-opacity-10 "  style='cursor:pointer; margin-left: 2px;' >
                   <table style="height: 15vh; width: 100%;">
                     <tr>
-                      <td class="align-middle">기타결제수단</td>
+                      <td class="align-middle" onclick="{alert('서비스 준비중')}">기타결제수단</td>
                     </tr>
                   </table>
                 </div>
@@ -1917,7 +1981,7 @@ function backModalCall(){
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">현금결제</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="{$('#cashModalInputVal').val('');$('#cashModalReturnVal').text('0원')}"></button>
         </div>
   
         <!-- Modal body -->
