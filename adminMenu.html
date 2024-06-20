@@ -444,8 +444,18 @@
   }
 
   function showOptionMng(){
-    $("#optionModal").find('main').show();
-    $("#optionModal").find('category').hide();
+    if(recentMenu == '상품관리'){
+      $("#optionModal").modal('show');
+      $("#optionModal").find('main').show();
+      $("#optionModal").find('category').hide();
+    }else if(recentMenu == '테이블관리'){
+      $("#optionTableModal").modal('show');
+    }else if(recentMenu == '주문내역관리'){
+      alert('준비중')
+    }else if(recentMenu == '더보기'){
+      alert('준비중')
+    }
+    
   }
 
   function addCategory(){
@@ -1398,6 +1408,7 @@
 
   }
 
+  var recentMenu = '상품관리';
   function menuClick(obj){
     
     $("footer>div:eq(0)>div:eq(0)>a").removeClass('fs-4');
@@ -1411,21 +1422,25 @@
       $("#mainForm>main1").hide();
       $("#mainForm>main2").hide();
       $("#mainForm>main3").hide();
+      recentMenu = '상품관리';
     }else if($(obj).text() == '테이블관리'){
       $("#mainForm>main").hide();
       $("#mainForm>main1").show();
       $("#mainForm>main2").hide();
       $("#mainForm>main3").hide();
+      recentMenu = '테이블관리';
     }else if($(obj).text() == '주문내역관리'){
       $("#mainForm>main").hide();
       $("#mainForm>main1").hide();
       $("#mainForm>main2").show();
       $("#mainForm>main3").hide();
+      recentMenu = '주문내역관리';
     }else if($(obj).text() == '더보기'){
       $("#mainForm>main").hide();
       $("#mainForm>main1").hide();
       $("#mainForm>main2").hide();
       $("#mainForm>main3").show();
+      recentMenu = '더보기';
     }
 
   }
@@ -1466,7 +1481,7 @@ function backModalCall(){
         </div>
         <div id="clockDiv" class="col-md-2 text-start mt-2 fs-5 text-white fw-bolder"></div>
         <div class="col-md-7 row"></div>
-        <div class="col-md-1 row text-white mt-2 fs-5"><a href="#" data-bs-toggle="modal" data-bs-target="#optionModal" onclick="showOptionMng()">설정</a></div>
+        <div class="col-md-1 row text-white mt-2 fs-5"><a href="#" onclick="showOptionMng()">설정</a></div>
         <div class="col-md-1 row text-white mt-2 fs-5"><a href="#" onclick="logout()">로그아웃</a></div>
       </div>
     </header>
@@ -1503,7 +1518,66 @@ function backModalCall(){
     </main>
     <main1 id="main" class="py-3 mt-5 row" style="display: none;">
       <div class="col-md-10" style="min-height: 90vh;">
-        
+        <div class="border-bottom row" style="height: 6vh; overflow-x: auto;">  
+          <div class="col-md-2 fw-bold fs-5" style="cursor: pointer;">1구역</div>
+          <div class="col-md-2 fw-bold fs-5" style="cursor: pointer;">2구역</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="min-height: 42vh;">
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+              <table style="height: 100%; width: 100%;">
+                <tr class="h-100">
+                  <td class="w-100 align-middle fs-4 fw-bold">1</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-3" style="min-height: 42vh;">
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+              <table style="height: 100%; width: 100%;">
+                <tr class="h-100">
+                  <td class="w-100 align-middle fs-4 fw-bold">2</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-3" style="min-height: 42vh;">
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+              <table style="height: 100%; width: 100%;">
+                <tr class="h-100">
+                  <td class="w-100 align-middle fs-4 fw-bold">3</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-3" style="min-height: 42vh;">
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+              <table style="height: 100%; width: 100%;">
+                <tr class="h-100">
+                  <td class="w-100 align-middle fs-4 fw-bold">4</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-3" style="min-height: 42vh;">
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+              <table style="height: 100%; width: 100%;">
+                <tr class="h-100">
+                  <td class="w-100 align-middle fs-4 fw-bold">5</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-3" style="min-height: 42vh;">
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+              <table style="height: 100%; width: 100%;">
+                <tr class="h-100">
+                  <td class="w-100 align-middle fs-4 fw-bold">6</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-md-2 border-start" style="height: 90vh;">
         <div style="height: 10vh; cursor: pointer;">주문상세</div>
@@ -1557,6 +1631,69 @@ function backModalCall(){
             </div>
             <div style="height: 3rem;">
               <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showProductMng();backModal='optionModal'}" data-bs-toggle="modal" data-bs-target="#productMngModal">상품관리</button>
+            </div>
+          </div>
+        </main>
+        <category style="display: none;">
+            <!-- Modal Header -->
+            <div class="modal-header">  
+              <h4 class="modal-title">상품 카테고리 설정</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="row mt-3 ps-2">
+              <div class="col-md-2">상품 카테고리 </div>
+              <div class="col-md-2">
+                <div style="align-items:center">
+                  <button class="btn btn-outline-secondary w-100" onclick="addCategory('')">+추가</button>
+                </div>
+              </div>
+            </div>
+            <div id="categoryDiv">
+              <div class="row">
+                <div class="border border-2 rounded-2 border-secondary m-3 col-md-11" style="align-items:center;">
+                  <input value="" placeholder="카테고리를 입력해주세요." />
+                </div>
+                <div class="col-md-1">
+                  <button class="btn btn-outline-secondary">-</button>
+                </div>
+              </div>
+            </div>
+            <div style="height: 100px;">
+              <div class="h-100 rounded-2 border-secondary m-3 row bg-secondary bg-opacity-10" style="align-items:center">
+                &nbsp;&nbsp;상품 카테고리를 만들고 여러 상품에 적용 해보세요.
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" onclick="saveCategory(this)">저장</button>
+            </div>
+        </category>
+      </div>
+    </div>
+  </div>
+  <!-- 테이블관리 옵션 -->
+  <div class="modal" id="optionTableModal" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <main>
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">설정</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+    
+          <!-- Modal body -->
+          <div class="modal-body overflow-auto mt-3" style="height: 400px;">
+            <div class="ms-2 text-start fs-5" style="height: 5vh">테입블 주문관리</div>
+            <div style="height: 5vh;">
+              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showCategoryMng();backModal='optionModal'}">그룹만들기</button>
+            </div>
+            <div class="ms-2 text-start  fs-5" style="height: 5vh">테이블 설정</div>
+            <div style="height: 3rem;">
+              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showCategoryMng();backModal='optionModal'}">구역수정</button>
+            </div>
+            <div style="height: 3rem;"> 
+              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showCategoryMng();backModal='optionModal'}">테이블설정</button>
             </div>
           </div>
         </main>
