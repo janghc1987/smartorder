@@ -146,7 +146,6 @@
   .shadowBox2 {
     box-shadow : 0 -2px 2px gray inset;
   }
-  
 
 </style>
 <script type="text/javascript">
@@ -1450,6 +1449,93 @@ function backModalCall(){
   // $("#"+backModal).modal('show');
 }
 
+function clickTableShow(tableId){
+
+  $("#tableShowModal").modal('show');
+
+
+}
+
+//상품 가져오기 
+function showProductPlus(){
+
+    $("#tableShowModal").modal('hide');
+    $("#tableProductModal").modal('show');
+
+    var categoryList = JSON.parse(window.localStorage.getItem('categoryList')) == null ? [] : JSON.parse(window.localStorage.getItem('categoryList'));
+    var productList = JSON.parse(window.localStorage.getItem('productList')) == null? {} : JSON.parse(window.localStorage.getItem('productList'));
+    var targetProductList;
+
+    if(categoryList.length > 0){
+      
+      $("#tableProductModal").find("#displayDiv").children().remove();
+      for( var i = 0 ; i < categoryList.length ; i++){
+
+        if(productList.hasOwnProperty(categoryList[i])){
+          targetProductList = productList[categoryList[i]];
+          
+          var categoryDiv;
+          for(var j = 0 ; j < targetProductList.length ; j++){
+            
+            if(j==0){
+              categoryDiv = $("<div>",{class:'bg-secondary bg-opacity-10 text-start m-2 fs-2 fw-bolder ps-2',style:'height:3rem;',text:categoryList[i]})
+              $("#tableProductModal").find("#displayDiv").append(categoryDiv);
+              categoryDiv = ($("<div>",{class:'row menuDiv '+categoryList[i]}));
+              categoryDiv.append($("<div>",{name:'mainMenu',class:'col-md-12 ps-4 pb-5 text-gray-500',style:'align-items:center'})
+                      .append($('<div>',{class:'row py-4'})));
+            }
+            
+            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addTableCart("'+targetProductList[j][0]+'","'+categoryList[i]+'")'})
+                      .append($('<div>',{class:'row'})
+                      .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
+                      .append($('<div>',{text:targetProductList[j][0],style:'height:70%; padding-top:1rem;'}))
+                      .append($('<div>',{text:targetProductList[j][1].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',style:'height:30%'})))));
+            
+          }
+        }
+        $("#tableProductModal").find("#displayDiv").append(categoryDiv);
+      }
+    }
+  }
+
+function addTableCart(menuName, menuPrice){
+
+  if($("#tableProductCart>div:eq(1)>div:eq(1)").find('#cart_'+menuName).length > 0){
+    var cnt = parseInt($("#tableProductCart>div:eq(1)>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)>div:eq(1)').text().replaceAll(',','').replaceAll('원',''));
+    var amt = parseInt($("#tableProductCart>div:eq(1)>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)>div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+
+    $("#tableProductCart>div:eq(1)>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)>div:eq(1)').text(cnt+1);
+    $("#tableProductCart>div:eq(1)>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)>div:eq(2)').text((amt+(amt/cnt)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+  }else{
+
+    var menuCategory = $('<div>',{class:'row py-8',style:'cursor:pointer;',id:'cart_'+menuName,onclick:'clickProduct(this)',name:'cartProduct'});
+    menuCategory.append($('<div>',{class:'col-md-4'}).append(menuName));
+    menuCategory.append($('<div>',{class:'col-md-4'}).append('1'));
+    menuCategory.append($('<div>',{class:'col-md-4'}).append(menuPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원'));
+    
+    $("#tableProductCart>div:eq(1)>div:eq(1)").append(menuCategory);
+
+  }
+
+
+  var discountAmt = $("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','')==''?'0':$("#cashDiscountVal").text().replaceAll(',','').replaceAll('원','');
+  discountAmt = parseInt(discountAmt);
+  var productCnt = $("#tableProductCart>div:eq(1)>div:eq(1)>div[name=cartProduct]").length;
+  var totalAmt = 0;
+  var cnt = 0;
+  var amt = 0;
+
+  for(var i =0 ; i < $("#tableProductCart>div:eq(1)>div:eq(1)>div[name=cartProduct]").length ; i++){
+    
+    amt = parseInt($("#tableProductCart>div:eq(1)>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+    totalAmt += amt;
+    
+  }
+
+  $("#tableProductBtn").text(productCnt+'개 주문하기');
+
+}
+
 </script>
 <body class="text-center" style="background-color: white;">
   <div class="loginForm" id="loginForm" style="display: none;">
@@ -1524,7 +1610,7 @@ function backModalCall(){
         </div>
         <div class="row">
           <div class="col-md-3" style="min-height: 42vh;">
-            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" onclick="clickTableShow(1)">
               <table style="height: 100%; width: 100%;">
                 <tr class="h-100">
                   <td class="w-100 align-middle fs-4 fw-bold">1</td>
@@ -2261,6 +2347,71 @@ function backModalCall(){
             <div class="border-top"  style="width: 100%;">
               <button type="button" class="btn btn-primary text-white mt-3" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
               onclick="cartInit()">확인</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 테이블 상세 화면 -->
+  <div class="modal fade" id="tableShowModal" tabindex="-1"  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">테이블 주문현황</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="backModalCall()"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body" style="height: 60vh;">
+          
+          <div class="row cols-2" style="width: 100%; height: 10vh; margin-top: 50vh;">
+            <div class="col">
+              <button type="button" class="btn btn-outline-primary text-primary mt-3" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
+            onclick="showProductPlus()">+ 상품추가</button>
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-secondary text-white mt-3" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
+            onclick="showApp()">결제</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 테이블 상품추가 화면 -->
+  <div class="modal fade" id="tableProductModal" tabindex="-1"  >
+    <div class="modal-dialog" style="max-width: 80%;">
+      <div class="modal-content" >
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">상품관리</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="backModalCall()"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div id="tableProductCart" class="modal-body row" style="height: 80vh;">
+          <div id="displayDiv" class="overflow-auto col-md-8" style="height: 80vh;"></div>
+          <div id="displayRightDiv" class="overflow-auto col-md-4" style="height: 80vh;">
+            <div style="height: 10vh;">
+              <div class="row" style="height: 50px;">
+                <div>
+                  <button type="button" class="btn btn-outline-danger col-md-12" onclick="deleteTableCartProduct()">삭제</button>
+                </div>
+              </div>
+              <div class="row" style="height: 50px;">
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-outline-secondary col-md-12 fw-bolder btn-light"  onclick="minusTableCartProduct()">-</button>
+                </div>
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-outline-secondary col-md-12 fw-bolder btn-light"  onclick="plusTableCartProduct()">+</button>
+                </div>
+              </div>
+            </div>
+            <div style="height: 60vh; overflow-y: auto;"></div>
+            <div style="height: 10vh;" >
+              <button id="tableProductBtn" class="btn btn-primary text-white" style="width: 90%; min-height: 1rem;">주문추가</button>
             </div>
           </div>
         </div>
