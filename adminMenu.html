@@ -1449,10 +1449,35 @@ function backModalCall(){
   // $("#"+backModal).modal('show');
 }
 
-function clickTableShow(tableId){
+var tableClickThis;
+function clickTableShow(tableId,obj){
 
-  $("#tableShowModal").modal('show');
+  if($(obj).find('table').length > 0){
+    $("#tableShowModal").modal('show');
+  }else{
+    
+    if($("#main>div:eq(1)").find('#cart_'+menuName).length > 0){
+      var cnt = parseInt($("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)').text().replaceAll(',','').replaceAll('원',''));
+      var amt = parseInt($("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
 
+      $("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)').text(cnt+1);
+      $("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(2)').text((amt+(amt/cnt)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
+    }else{
+
+      var menuCategory = $('<div>',{class:'row py-8',style:'cursor:pointer;',id:'cart_'+menuName,onclick:'clickProduct(this)',name:'cartProduct'});
+      menuCategory.append($('<div>',{class:'col-md-4'}).append(menuName));
+      menuCategory.append($('<div>',{class:'col-md-4'}).append('1'));
+      menuCategory.append($('<div>',{class:'col-md-4'}).append(menuPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원'));
+      
+      $("#main>div:eq(1)").append(menuCategory);
+
+    }
+
+    $("#tableOrderInfoDiv").append();
+    $("#tableShowModal").modal('show');
+  }
+
+  tableClickThis = obj;
 
 }
 
@@ -1485,7 +1510,7 @@ function showProductPlus(){
                       .append($('<div>',{class:'row py-4'})));
             }
             
-            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addTableCart("'+targetProductList[j][0]+'","'+categoryList[i]+'")'})
+            categoryDiv.find('div').eq(1).append($('<div>',{class:'col-md-2 mt-3 m-2 Barbecue menuDiv',onclick:'addTableCart("'+targetProductList[j][0]+'","'+targetProductList[j][1]+'")'})
                       .append($('<div>',{class:'row'})
                       .append($('<a>',{class:'col-md-11 shadowBox',name:categoryList[i],href:'#',style:'height: 150px; width: 150px; margin-top: 5px; border-radius: 5%;'})
                       .append($('<div>',{text:targetProductList[j][0],style:'height:70%; padding-top:1rem;'}))
@@ -1532,7 +1557,52 @@ function addTableCart(menuName, menuPrice){
     
   }
 
-  $("#tableProductBtn").text(productCnt+'개 주문하기');
+  $("#tableProductBtn").text(productCnt+'개 주문 추가');
+
+}
+
+function addTableProduct(){
+  
+  $(tableClickThis).children().remove();
+  if($("#addTableProductList>div[name=cartProduct]").length > 0){
+    
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    
+    const dateString = `${year}-${month}-${day}`;
+    const timeString = `${hours}:${minutes}:${seconds}`;
+    const fullString = `${dateString} ${timeString}`;
+
+    $(tableClickThis).append($('<div>',{text:'주문시간 '+timeString,class:'border-bottom h-10'}));
+
+    var menuName;
+    var totalAmt = 0;
+    var amt = 0;
+    var discountAmt = 0;
+    for(var i =0 ; i < $("#addTableProductList>div[name=cartProduct]").length ; i++){
+    
+      //cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+      menuName = $("#addTableProductList>div[name=cartProduct]").eq(i).find('div:eq(0)').text();
+      amt = parseInt($("#addTableProductList>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
+      
+      //totalAmt += (amt*cnt);
+      totalAmt += amt;
+      
+      $(tableClickThis).append($('<div>',{text:menuName}));
+
+    }
+
+    var finalTotalAmt = totalAmt-discountAmt;
+    
+    $(tableClickThis).append($('<div>',{text:finalTotalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',class:'border-top h-10 text-end',style:'position: absolute; bottom: 0; width: 100%; text-align: center;'}));
+    $("#tableProductModal").modal('hide')
+
+  }
 
 }
 
@@ -1602,7 +1672,7 @@ function addTableCart(menuName, menuPrice){
         </div>
       </div>
     </main>
-    <main1 id="main" class="py-3 mt-5 row" style="display: none;">
+    <main1 id="main1" class="py-3 mt-5 row" style="display: none;">
       <div class="col-md-10" style="min-height: 90vh;">
         <div class="border-bottom row" style="height: 6vh; overflow-x: auto;">  
           <div class="col-md-2 fw-bold fs-5" style="cursor: pointer;">1구역</div>
@@ -1610,7 +1680,7 @@ function addTableCart(menuName, menuPrice){
         </div>
         <div class="row">
           <div class="col-md-3" style="min-height: 42vh;">
-            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" onclick="clickTableShow(1)">
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;" onclick="clickTableShow(1,this)">
               <table style="height: 100%; width: 100%;">
                 <tr class="h-100">
                   <td class="w-100 align-middle fs-4 fw-bold">1</td>
@@ -1619,7 +1689,7 @@ function addTableCart(menuName, menuPrice){
             </div>
           </div>
           <div class="col-md-3" style="min-height: 42vh;">
-            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;" >
               <table style="height: 100%; width: 100%;">
                 <tr class="h-100">
                   <td class="w-100 align-middle fs-4 fw-bold">2</td>
@@ -1628,7 +1698,7 @@ function addTableCart(menuName, menuPrice){
             </div>
           </div>
           <div class="col-md-3" style="min-height: 42vh;">
-            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer;" >
+            <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;" >
               <table style="height: 100%; width: 100%;">
                 <tr class="h-100">
                   <td class="w-100 align-middle fs-4 fw-bold">3</td>
@@ -1673,10 +1743,10 @@ function addTableCart(menuName, menuPrice){
         <div style="height: 10vh; cursor: pointer;">정보 뷰</div>
       </div>
     </main1>
-    <main2 id="main" class="py-3 mt-5 row" style="display: none;">
+    <main2 id="main2" class="py-3 mt-5 row" style="display: none;">
 
     </main2>
-    <main3 id="main" class="py-3 mt-5 row" style="display: none;">
+    <main3 id="main3" class="py-3 mt-5 row" style="display: none;">
 
     </main3>
     <footer class="container-fluid fixed-bottom bg-white border-top border-width-2" style="height: 5vh;">
@@ -2365,8 +2435,8 @@ function addTableCart(menuName, menuPrice){
   
         <!-- Modal body -->
         <div class="modal-body" style="height: 60vh;">
-          
-          <div class="row cols-2" style="width: 100%; height: 10vh; margin-top: 50vh;">
+          <div id="tableOrderInfoDiv" style="height: 50vh;"></div>
+          <div class="row cols-2" style="width: 100%; height: 10vh;">
             <div class="col">
               <button type="button" class="btn btn-outline-primary text-primary mt-3" data-bs-dismiss="modal" style="width: 90%; left: 5%;"
             onclick="showProductPlus()">+ 상품추가</button>
@@ -2386,7 +2456,7 @@ function addTableCart(menuName, menuPrice){
       <div class="modal-content" >
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">상품관리</h4>
+          <h4 class="modal-title">상품추가</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="backModalCall()"></button>
         </div>
   
@@ -2409,9 +2479,9 @@ function addTableCart(menuName, menuPrice){
                 </div>
               </div>
             </div>
-            <div style="height: 60vh; overflow-y: auto;"></div>
+            <div id="addTableProductList" style="height: 60vh; overflow-y: auto;"></div>
             <div style="height: 10vh;" >
-              <button id="tableProductBtn" class="btn btn-primary text-white" style="width: 90%; min-height: 1rem;">주문추가</button>
+              <button id="tableProductBtn" class="btn btn-primary text-white" style="width: 90%; min-height: 1rem;" onclick="addTableProduct()">주문추가</button>
             </div>
           </div>
         </div>
