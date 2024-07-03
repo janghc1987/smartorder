@@ -1452,31 +1452,20 @@ function backModalCall(){
 var tableClickThis;
 function clickTableShow(tableId,obj){
 
-  if($(obj).find('table').length > 0){
-    $("#tableShowModal").modal('show');
-  }else{
+  $("#tableOrderInfoDiv").children().remove()
+  if($(obj).find('table').length != 1){
     
-    if($("#main>div:eq(1)").find('#cart_'+menuName).length > 0){
-      var cnt = parseInt($("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)').text().replaceAll(',','').replaceAll('원',''));
-      var amt = parseInt($("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
-
-      $("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(1)').text(cnt+1);
-      $("#main>div:eq(1)").find('#cart_'+menuName+'>div:eq(2)').text((amt+(amt/cnt)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원');
-    }else{
-
-      var menuCategory = $('<div>',{class:'row py-8',style:'cursor:pointer;',id:'cart_'+menuName,onclick:'clickProduct(this)',name:'cartProduct'});
-      menuCategory.append($('<div>',{class:'col-md-4'}).append(menuName));
-      menuCategory.append($('<div>',{class:'col-md-4'}).append('1'));
-      menuCategory.append($('<div>',{class:'col-md-4'}).append(menuPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원'));
-      
-      $("#main>div:eq(1)").append(menuCategory);
-
+    for(var i=0 ; i < $(obj).find('div[name=tableMenu]').length ; i++){
+      $("#tableOrderInfoDiv").append($('<div>',{class:'row'})
+        .append($('<div>',{class:'col-md-4 text-start', text:$(obj).find('div[name=tableMenu]').eq(i).children().eq(0).children().eq(0).text()}))
+        .append($('<div>',{class:'col-md-2'}))
+        .append($('<div>',{class:'col-md-2',text:$(obj).find('div[name=tableMenu]').eq(i).children().eq(1).children().eq(0).text()}))
+        .append($('<div>',{class:'col-md-4 text-end',text:$(obj).find('div[name=tableMenu]').eq(i).children().eq(2).children().eq(0).text()})))
     }
-
-    $("#tableOrderInfoDiv").append();
-    $("#tableShowModal").modal('show');
+    
   }
 
+  $("#tableShowModal").modal('show');
   tableClickThis = obj;
 
 }
@@ -1586,20 +1575,23 @@ function addTableProduct(){
     var discountAmt = 0;
     for(var i =0 ; i < $("#addTableProductList>div[name=cartProduct]").length ; i++){
     
-      //cnt = parseInt($("#main>div:eq(1)>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
+      cnt = parseInt($("#addTableProductList>div[name=cartProduct]").eq(i).find('div:eq(1)').text().replaceAll(',',''));
       menuName = $("#addTableProductList>div[name=cartProduct]").eq(i).find('div:eq(0)').text();
       amt = parseInt($("#addTableProductList>div[name=cartProduct]").eq(i).find('div:eq(2)').text().replaceAll(',','').replaceAll('원',''));
       
       //totalAmt += (amt*cnt);
       totalAmt += amt;
       
-      $(tableClickThis).append($('<div>',{text:menuName}));
+      $(tableClickThis).append($('<div>',{name:'tableMenu',class:'row'})
+        .append($('<div>',{class:'col-md-6'}).append($('<p>',{text:menuName,class:'text-start ms-2'})))
+        .append($('<div>',{class:'col-md-2'}).append($('<p>',{text:cnt})))
+        .append($('<div>',{class:'col-md-4'}).append($('<p>',{text:totalAmt,class:'text-end me-2'}))));
 
     }
 
     var finalTotalAmt = totalAmt-discountAmt;
     
-    $(tableClickThis).append($('<div>',{text:finalTotalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',class:'border-top h-10 text-end',style:'position: absolute; bottom: 0; width: 100%; text-align: center;'}));
+    $(tableClickThis).append($('<div>',{text:finalTotalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',class:'border-top h-10 text-end me-1 p-2',style:'position: absolute; bottom: 0; width: 100%; text-align: center;'}));
     $("#tableProductModal").modal('hide')
 
   }
