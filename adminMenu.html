@@ -457,6 +457,22 @@
     
   }
 
+  function showOptionMng_2(obj){
+    $("#optionTableModal").modal('hide');
+    if($(obj).text() == '그룹만들기'){
+      var divisionList = JSON.parse(window.localStorage.getItem('divisionList')) == null ? [] : JSON.parse(window.localStorage.getItem('divisionList'));;
+      for(var i=0 ; i < divisionList.length ; i++){
+        $("#divisionDiv").append($('<div>',{class:'col-md-2 fw-bold fs-5',style:'cursor: pointer',text:divisionList[i]}));
+      }
+      $("#groupMngModal").modal('show');
+    }else if($(obj).text() == '구역수정'){
+      $("#divisionMngModal").modal('show');
+    }else if($(obj).text() == '테이블설정'){
+      $("#tableMngModal").modal('show');
+    }
+    
+  }
+  
   function addCategory(){
 
     var categoryTag = $("<div>",{class:'row m-3'})
@@ -1834,14 +1850,14 @@ function addTableProduct(){
           <div class="modal-body overflow-auto mt-3" style="height: 400px;">
             <div class="ms-2 text-start fs-5" style="height: 5vh">테입블 주문관리</div>
             <div style="height: 5vh;">
-              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showCategoryMng();backModal='optionModal'}">그룹만들기</button>
+              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showOptionMng_2(this);}">그룹만들기</button>
             </div>
             <div class="ms-2 text-start  fs-5" style="height: 5vh">테이블 설정</div>
             <div style="height: 3rem;">
-              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showCategoryMng();backModal='optionModal'}">구역수정</button>
+              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showOptionMng_2(this);}">구역수정</button>
             </div>
             <div style="height: 3rem;"> 
-              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showCategoryMng();backModal='optionModal'}">테이블설정</button>
+              <button style="width: 80%;" class="btn btn-outline-secondary" onclick="{showOptionMng_2(this);}">테이블설정</button>
             </div>
           </div>
         </main>
@@ -2477,6 +2493,58 @@ function addTableProduct(){
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <!-- 그룹관리 화면 -->
+  <div class="modal fade" id="groupMngModal" tabindex="-1"  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">그룹관리</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="backModalCall()"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body overflow-auto" style="height: 80vh;">
+          <div id="divisionDiv" class="row border-bottom h-10"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 구역수정 화면 -->
+  <div class="modal fade" id="divisionMngModal" tabindex="-1"  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">구역관리</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="backModalCall()"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div id="displayDiv" class="modal-body overflow-auto" style="height: 80vh;">
+          
+          <div>
+            <button class="btn btn-outline-secondary w-100" onclick="addDivision()">추가</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 테이블설정 화면 -->
+  <div class="modal fade" id="tableMngModal" tabindex="-1"  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">테이블관리</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="backModalCall()"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div id="displayDiv" class="modal-body overflow-auto" style="height: 80vh;"></div>
       </div>
     </div>
   </div>
