@@ -487,8 +487,9 @@
         // }
         if(i==0){
           var tableList = JSON.parse(window.localStorage.getItem('tableList')) == null ? [] : JSON.parse(window.localStorage.getItem('tableList'));
-          var divisionTableList = tableList[divisionList[0][0]];
+          var divisionTableList = tableList[divisionList[i][0]];
           $("#displayDetailDiv").children().remove();
+          if(divisionTableList == undefined)continue;
           for(var j=0; j < divisionTableList.length; j++){
             $("#displayDetailDiv").append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:divisionList[i][0],style:'cursor: pointer;',onclick:'showDivisionDetail("' + divisionList[i][0] + '"); backModal="divisionMngModal";'}))
           }
@@ -496,6 +497,10 @@
       }
       $("#tableMngModal").modal('show');
     }
+    
+  }
+
+  function onclickTableTab(obj){
     
   }
 
