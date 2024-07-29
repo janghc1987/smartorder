@@ -463,7 +463,7 @@
       var divisionList = JSON.parse(window.localStorage.getItem('divisionList')) == null ? [] : JSON.parse(window.localStorage.getItem('divisionList'));;
       $("#divisionDiv").children().remove();
       for(var i=0 ; i < divisionList.length ; i++){
-        $("#divisionDiv").append($('<div>',{class:'col-md-2 fw-bold fs-5',style:'cursor: pointer',text:divisionList[i][0]}));
+        $("#divisionDiv").append($('<div>',{class:'col-md-2 fw-bold fs-5',style:'cursor: pointer',text:divisionList[i].name}));
       }
       $("#groupMngModal").modal('show');
     }else if($(obj).text() == '구역수정'){
@@ -471,7 +471,7 @@
       $("#divisionMngModal").find('#displayDiv>div:eq(0)').children().remove();
       if(divisionList.length > 0){
         for(var i=0 ; i < divisionList.length ; i++){
-          $("#divisionMngModal").find('#displayDiv>div:eq(0)').append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:divisionList[i][0],style:'cursor: pointer;',onclick:'showDivisionDetail("' + divisionList[i][0] + '"); backModal="divisionMngModal";'}))
+          $("#divisionMngModal").find('#displayDiv>div:eq(0)').append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:divisionList[i].name,style:'cursor: pointer;',onclick:'showDivisionDetail("' + divisionList[i].name + '"); backModal="divisionMngModal";'}))
         }
       }
       $("#divisionMngModal").modal('show');
@@ -479,7 +479,7 @@
       var divisionList = JSON.parse(window.localStorage.getItem('divisionList')) == null ? [] : JSON.parse(window.localStorage.getItem('divisionList'));;
       $("#tableMngModal").find("#displayDiv").children().remove();
       for(var i=0 ; i < divisionList.length ; i++){
-        $("#tableMngModal").find("#displayDiv").append($('<div>',{class:'col-md-2 fw-bold fs-5',style:'cursor: pointer',text:divisionList[i][0]}));
+        $("#tableMngModal").find("#displayDiv").append($('<div>',{class:'col-md-2 fw-bold fs-5',style:'cursor: pointer',text:divisionList[i].name,onclick:'onclickTableTab(this)'}));
         // var tableList = JSON.parse(window.localStorage.getItem('tableList')) == null ? [] : JSON.parse(window.localStorage.getItem('tableList'));
         // var divisionTableList = tableList[divisionList[i]];
         // for(var j=0; j < divisionTableList.length; j++){
@@ -487,11 +487,11 @@
         // }
         if(i==0){
           var tableList = JSON.parse(window.localStorage.getItem('tableList')) == null ? [] : JSON.parse(window.localStorage.getItem('tableList'));
-          var divisionTableList = tableList[divisionList[i][0]];
+          var divisionTableList = tableList[divisionList[i].name];
           $("#displayDetailDiv").children().remove();
           if(divisionTableList == undefined)continue;
           for(var j=0; j < divisionTableList.length; j++){
-            $("#displayDetailDiv").append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:divisionList[i][0],style:'cursor: pointer;',onclick:'showDivisionDetail("' + divisionList[i][0] + '"); backModal="divisionMngModal";'}))
+            $("#displayDetailDiv").append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:divisionList[i].name,style:'cursor: pointer;',onclick:'showDivisionDetail("' + divisionList[i].name + '"); backModal="divisionMngModal";'}))
           }
         }
       }
@@ -501,7 +501,20 @@
   }
 
   function onclickTableTab(obj){
-    
+    var divisionList = JSON.parse(window.localStorage.getItem('divisionList')) == null ? [] : JSON.parse(window.localStorage.getItem('divisionList'));;
+    var targetDiv = $(obj).text();
+    var tableCnt;
+    $("#displayDetailDiv").children().remove();
+    for(var i = 0 ; i < divisionList.length ; i++){
+      if(divisionList[i].name == targetDiv){
+        tableCnt = divisionList[i].cnt;
+      }
+    }
+
+    for(var i = 0 ; i < tableCnt ; i++){
+      $("#displayDetailDiv").append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:i,style:'cursor: pointer;',onclick:'showDivisionDetail("' + i + '"); backModal="divisionMngModal";'}))
+    }
+
   }
 
   function showDivisionDetail(devisionTrg){
@@ -510,9 +523,9 @@
     if(divisionList.length > 0){
       console.log('divisionList',divisionList)
       for(var i=0 ; i < divisionList.length ; i++){
-        if(divisionList[i][0] == devisionTrg){
-          $("#divisionNm").val(divisionList[i][0]);
-          $("#divisionCnt").val(divisionList[i][1]);
+        if(divisionList[i].name == devisionTrg){
+          $("#divisionNm").val(divisionList[i].name);
+          $("#divisionCnt").val(divisionList[i].cnt);
         }
       }
     }
@@ -524,8 +537,11 @@
     var divisionList = JSON.parse(window.localStorage.getItem('divisionList')) == null ? [] : JSON.parse(window.localStorage.getItem('divisionList'));;
 
     for(var i=0 ; i < divisionList.length ; i++){
-        if(divisionList[i][0] == $("#divisionNm").val()){
-          divisionList[i] = [$("#divisionNm").val(),$("#divisionCnt").val()]
+      console.log('i',i)
+      console.log('divisionList[i].name',divisionList[i].name)
+        if(divisionList[i].name == $("#divisionNm").val()){
+          alert($("#divisionCnt").val())
+          divisionList[i] = {name:$("#divisionNm").val(),cnt:$("#divisionCnt").val()}
         }
     }
 
@@ -1682,10 +1698,10 @@ function addTableProduct(){
 
     if(divisionList.length > 0){
       $(obj).parent().append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:(divisionList.length+1)+'구역',style:'cursor: pointer;'}))
-      divisionList.push([(divisionList.length+1)+'구역','1']);
+      divisionList.push({name:(divisionList.length+1)+'구역' , cnt :1 });
     }else{
       $(obj).parent().append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:'1구역',style:'cursor: pointer;'}))
-      divisionList.push(['1구역','1']);
+      divisionList.push({name:'1구역' , cnt :1 });
     }
     
     window.localStorage.setItem("divisionList",JSON.stringify(divisionList));
