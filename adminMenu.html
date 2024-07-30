@@ -147,6 +147,12 @@
     box-shadow : 0 -2px 2px gray inset;
   }
 
+  .modal-buttom {
+  position: absolute;
+  bottom: 10px; /* 모달 내용의 바닥에서 10px 위로 위치 */
+  left: 75%;
+  }
+
 </style>
 <script type="text/javascript">
   
@@ -491,7 +497,7 @@
           $("#displayDetailDiv").children().remove();
           if(divisionTableList == undefined)continue;
           for(var j=0; j < divisionTableList.length; j++){
-            $("#displayDetailDiv").append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:divisionList[i].name,style:'cursor: pointer;',onclick:'showDivisionDetail("' + divisionList[i].name + '"); backModal="divisionMngModal";'}))
+            $("#displayDetailDiv").append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:divisionList[i].name,style:'cursor: pointer;',onclick:'showTableDetail("' + divisionList[i].name + '"); backModal="divisionMngModal";'}))
           }
         }
       }
@@ -511,9 +517,54 @@
       }
     }
 
-    for(var i = 0 ; i < tableCnt ; i++){
-      $("#displayDetailDiv").append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:i,style:'cursor: pointer;',onclick:'showDivisionDetail("' + i + '"); backModal="divisionMngModal";'}))
+    for(var i = 1 ; i <= tableCnt ; i++){
+      $("#displayDetailDiv").append($('<div>',{class:'col-md-12 border border-2 rounded-2 border-secondary',text:i,style:'cursor: pointer;',onclick:"showTableDetail('"+targetDiv+"','" + i + "');" ,backModal:'divisionMngModal'}))
     }
+
+  }
+
+  function showTableDetail(divisionNm,tableId){
+    var tableList = JSON.parse(window.localStorage.getItem('tableList')) == null ? [] : JSON.parse(window.localStorage.getItem('tableList'));;
+    var initChk = true;
+    for(var i=0 ; i < tableList.length ; i++){
+      if(tableList[i].division == divisionNm && tableList[i].tableNmae == tableId){
+        $("#divisionTrgNm").val(divisionNm);
+        $("#tableName").val(tableList[i].tableNmae);
+        $("#tableCnt").val(tableList[i].tableCnt);
+        initChk = false;
+        break;
+      }
+    }
+
+    if(initChk){
+      $("#divisionTrgNm").val(divisionNm);
+      $("#tableName").val(tableId);
+      $("#tableCnt").val(4);
+    }
+  }
+
+  function saveTableDetail(){
+    var tableList = JSON.parse(window.localStorage.getItem('tableList')) == null ? [] : JSON.parse(window.localStorage.getItem('tableList'));
+    var tableNmae = $("#tableName").val();
+    var tableCnt = $("#tableCnt").val();
+    var divisionTrgNm = $("#divisionTrgNm").val();
+    alert(divisionTrgNm)
+    var initChk = true;
+    for(var i=0 ; i < tableList.length ; i++){
+      if(tableList[i].division == divisionTrgNm && tableList[i].tableNmae == tableNmae){
+        tableList[i] = {division:divisionTrgNm,tableNmae:tableNmae,tableCnt:tableCnt}
+        window.localStorage.setItem("tableList",JSON.stringify(tableList));
+        initChk = false;
+        break;
+      }
+    }
+
+    if(initChk){
+      tableList.push({division:divisionTrgNm,tableNmae:tableNmae,tableCnt:tableCnt})
+    }
+  
+    window.localStorage.setItem("tableList",JSON.stringify(tableList));
+    alert("저장 했습니다.")
 
   }
 
@@ -575,53 +626,13 @@
   }
 
   function deleteOption(obj){
-
     $(obj).parent().parent().remove();
   }
 
   function deleteCategory(obj){
     $(obj).parent().parent().remove();
   }
- 
-  //var productOptList = {};
-  // function saveProductOpt(obj){
-  //   var productName = $("#productOption").val();
-  //   var productOptDetailList = [];
-    
-  //   var productOptList = JSON.parse(window.localStorage.getItem('productOptList')) == null ? {} : JSON.parse(window.localStorage.getItem('productOptList'));
 
-  //   // productOptList.hasOwnProperty(productName)
-
-  //   if(productName === '' || productName == undefined){
-  //     alert('상품명을 선택해주세요.')
-  //     return;
-  //   }
-
-  //   if($("input[name=optionName]").length > 0){
-  //     for(var i = 0 ; i < $("input[name=optionName]").length ; i++){
-  //       var productOptDetail = [];
-  //       productOptDetail.push($("input[name=optionName]").eq(i).val());
-  //       productOptDetail.push($("input[name=optionAmt]").eq(i).val());
-  //       productOptDetailList.push(productOptDetail);
-
-  //       if($("input[name=optionName]").eq(i).val() == '' || $("input[name=optionAmt]").eq(i).val() == ''){
-  //         alert('옵션값은 필수입니다.')
-  //         return;
-  //       }
-
-  //     }
-  //   }
-    
-  //   productOptList[productName] = productOptDetailList;
-  //   window.localStorage.setItem('productOptList',JSON.stringify(productOptList));
-  //   alert("저장완료")
-  //   $("#optionModal").find(".btn-close").click();
-
-  // }
-
-
-  
-  //var categoryList = [];
   function saveCategory(){
 
     var categoryList = [];
@@ -2658,9 +2669,28 @@ function addTableProduct(){
         </div>
   
         <!-- Modal body -->
-        <div class="modal-body overflow-auto" style="height: 80vh;">
+        <div class="modal-body overflow-auto row" style="height: 80vh;">
           <div id="displayDiv" class="row border-bottom h-10"></div>
-          <div id="displayDetailDiv" class="row border-bottom h-90"></div>
+          <div class="col-md-8 h-100">
+            <div id="displayDetailDiv" class="row border-bottom h-90"></div>
+          </div>
+          <div class="col-md-4 h-100">
+            <div id="displayTableDetail">
+              <div>테이블명</div>
+              <div><input class="form-control-plaintext border" type="text" readonly id="tableName"></div>
+              <div>형태</div>
+              <div>형태</div>
+              <div>좌석수</div>
+              <div>
+                <input type="hidden" id="divisionTrgNm">
+                <input class="form-control border" type="text" id="tableCnt">
+              </div>
+              <div class="row modal-buttom">
+                <button type="button" class="btn btn-light btn-xs col-md-6" onclick="initTable()">초기화</button>
+                <button type="button" class="btn btn-primary btn-xs col-md-6 " onclick="saveTableDetail()">저장</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
