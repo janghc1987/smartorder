@@ -1528,6 +1528,18 @@
       $("#mainForm>main3").hide();
       recentMenu = '상품관리';
     }else if($(obj).text() == '테이블관리'){
+
+      var divisionList = JSON.parse(window.localStorage.getItem('divisionList')) == null ? [] : JSON.parse(window.localStorage.getItem('divisionList'));
+      $("#divisionMainDiv").children().remove();
+      
+      for(var i= 0 ; i < divisionList.length ; i++){
+        $("#divisionMainDiv").append($('<div>',{class:'col-md-2 fw-bold fs-5',style:'cursor: pointer;',text:divisionList[i].name,onclick:"clickMainDivion('"+divisionList[i].name+"')"}));
+      }
+
+      if(divisionList.length > 1){
+        clickMainDivion(divisionList[0].name);
+      }
+
       $("#mainForm>main").hide();
       $("#mainForm>main1").show();
       $("#mainForm>main2").hide();
@@ -1548,6 +1560,54 @@
     }
 
   }
+
+function clickMainDivion(divisionName){
+  
+  var divisionList = JSON.parse(window.localStorage.getItem('divisionList')) == null ? [] : JSON.parse(window.localStorage.getItem('divisionList'));
+  var tableList = JSON.parse(window.localStorage.getItem('tableList')) == null ? [] : JSON.parse(window.localStorage.getItem('tableList'));
+  var divisionCnt;
+  var detailYn = false;
+
+  for(var i=0 ; i < tableList.length ; i++){
+    if(divisionList[i].name == divisionName){
+      divisionCnt = divisionList[i].cnt;
+    }
+  }
+
+  $("#divisionMainDetailDiv").children().remove();
+  for(var j=1 ; j <= divisionCnt ; j++){
+    for(var i=0 ; i < tableList.length ; i++){
+      if(tableList[i].division == divisionName && divisionCnt == tableList[i].tableNmae){
+        $("#divisionMainDetailDiv").append($('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
+          $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+tableList[i].tableNmae+"'',this)"}).append(
+            $('<table>',{style:'height: 100%; width: 100%;'}).append(
+              $('<tr>',{class:'h-100'}).append(
+                $('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:tableList[i].tableNmae})
+              )
+            )
+          )
+        ));
+        detailYn = true;
+      }
+    }
+
+    if(!detailYn){
+      $("#divisionMainDetailDiv").append($('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
+          $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+j+"'',this)"}).append(
+            $('<table>',{style:'height: 100%; width: 100%;'}).append(
+              $('<tr>',{class:'h-100'}).append(
+                $('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:j})
+              )
+            )
+          )
+        ));
+    }
+    detailYn = false;
+  }
+  
+  
+
+}
 
 var backModal;
 function backModalCall(){ 
@@ -1787,11 +1847,11 @@ function addTableProduct(){
     </main>
     <main1 id="main1" class="py-3 mt-5 row" style="display: none;">
       <div class="col-md-10" style="min-height: 90vh;">
-        <div class="border-bottom row" style="height: 6vh; overflow-x: auto;">  
+        <div id="divisionMainDiv" class="border-bottom row" style="height: 6vh; overflow-x: auto;">  
           <div class="col-md-2 fw-bold fs-5" style="cursor: pointer;">1구역</div>
           <div class="col-md-2 fw-bold fs-5" style="cursor: pointer;">2구역</div>
         </div>
-        <div class="row">
+        <div id="divisionMainDetailDiv" class="row">
           <div class="col-md-3" style="min-height: 42vh;">
             <div class="h-50 w-75 bg-body-tertiary border-1 border-primary" style="border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;" onclick="clickTableShow(1,this)">
               <table style="height: 100%; width: 100%;">
