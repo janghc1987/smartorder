@@ -1615,9 +1615,53 @@ function clickMainDivion(divisionName,obj){
     detailYn = false;
   }
   
-  
+}
+
+function clickMain2(cnt,obj){
+  $(obj).parent().children().removeClass('active');
+  $(obj).addClass('active');
+
+  if(cnt == 1){//대기
+
+    
+
+  }else if(cnt == 2){//접수
+
+    var orderIngList = JSON.parse(window.localStorage.getItem('orderIngList')) == null? {} : JSON.parse(window.localStorage.getItem('orderIngList'));
+
+    for(var i = 0; i < orderIngList.length ; i++){
+        $("#divisionMainDetailDiv2").append($('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
+          $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+orderIngList[i].tableNmae+"',this)"}).append(
+            $('<table>',{style:'height: 100%; width: 100%;'}).append(
+              $('<tr>',{class:'h-100'}).append(
+                $('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:orderIngList[i].tableNmae})
+              )
+            )
+          )
+        ));
+    }
+
+  }else if(cnt == 3){//완료
+
+    var orderEndList = JSON.parse(window.localStorage.getItem('orderEndList')) == null? {} : JSON.parse(window.localStorage.getItem('orderEndList'));
+
+    for(var i = 0; i < orderEndList.length ; i++){
+        $("#divisionMainDetailDiv2").append($('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
+          $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+orderEndList[i].tableNmae+"',this)"}).append(
+            $('<table>',{style:'height: 100%; width: 100%;'}).append(
+              $('<tr>',{class:'h-100'}).append(
+                $('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:orderEndList[i].tableNmae})
+              )
+            )
+          )
+        ));
+    }
+
+  }
 
 }
+
+
 
 var backModal;
 function backModalCall(){ 
@@ -1925,7 +1969,14 @@ function addTableProduct(){
       </div>
     </main1>
     <main2 id="main2" class="py-3 mt-5 row" style="display: none;">
-      
+      <div class="col-md-10" style="min-height: 90vh;">
+        <div class="nav nav-tabs" style="height: 6vh; ">
+          <div class="col-md-2 fw-bold fs-5 nav-link" style="cursor: pointer;" onclick="clickMain2(1,this)">대기</div>
+          <div class="col-md-2 fw-bold fs-5 nav-link" style="cursor: pointer;" onclick="clickMain2(2,this)">접수</div>
+          <div class="col-md-2 fw-bold fs-5 nav-link" style="cursor: pointer;" onclick="clickMain2(3,this)">완료</div>
+        </div>
+        <div id="divisionMainDetailDiv2" class="row"></div>
+      </div>
     </main2>
     <main3 id="main3" class="py-3 mt-5 row" style="display: none;">
 
