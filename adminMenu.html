@@ -1551,6 +1551,22 @@
       $("#mainForm>main2").show();
       $("#mainForm>main3").hide();
       recentMenu = '주문내역관리';
+      
+      var orderWaitList = JSON.parse(window.localStorage.getItem('orderWaitList')) == null? {} : JSON.parse(window.localStorage.getItem('orderWaitList'));
+      var divTag;
+      var detailList;
+      for(var i = 0; i < orderWaitList.length ; i++){
+        divTag = $('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
+                    $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+orderWaitList[i].tableName+"',this)"}).append(
+                      $('<table>',{style:'height: 100%; width: 100%;'})
+                    )
+                  );  
+        detailList = orderWaitList[i].detailList;
+        for(var j = 0 ; j < detailList.length ; j++){
+          divTag.find('table').append($('<tr>').append($('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:detailList[j].menuName})))
+        }
+        $("#divisionMainDetailDiv2").append(divTag);
+      }
 
 
     }else if($(obj).text() == '더보기'){
@@ -1622,39 +1638,58 @@ function clickMain2(cnt,obj){
   $(obj).addClass('active');
 
   if(cnt == 1){//대기
-
+    var orderWaitList = JSON.parse(window.localStorage.getItem('orderWaitList')) == null? {} : JSON.parse(window.localStorage.getItem('orderWaitList'));
+    var divTag;
+    var detailList;
+    for(var i = 0; i < orderWaitList.length ; i++){
+      divTag = $('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
+                  $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+orderWaitList[i].tableName+"',this)"}).append(
+                    $('<table>',{style:'height: 100%; width: 100%;'})
+                  )
+                );  
+      detailList = orderWaitList[i].detailList;
+      for(var j = 0 ; j < detailList.length ; j++){
+        divTag.find('table').append($('<tr>').append($('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:detailList[j].menuName})))
+      }
+      $("#divisionMainDetailDiv2").append(divTag);
+    }
     
 
   }else if(cnt == 2){//접수
-
+    $("#divisionMainDetailDiv2").children().remove();
     var orderIngList = JSON.parse(window.localStorage.getItem('orderIngList')) == null? {} : JSON.parse(window.localStorage.getItem('orderIngList'));
-
+    var divTag;
+    var detailList;
     for(var i = 0; i < orderIngList.length ; i++){
-        $("#divisionMainDetailDiv2").append($('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
-          $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+orderIngList[i].tableNmae+"',this)"}).append(
-            $('<table>',{style:'height: 100%; width: 100%;'}).append(
-              $('<tr>',{class:'h-100'}).append(
-                $('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:orderIngList[i].tableNmae})
-              )
-            )
-          )
-        ));
+      divTag = $('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
+                  $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+orderIngList[i].tableName+"',this)"}).append(
+                    $('<table>',{style:'height: 100%; width: 100%;'})
+                  )
+                );  
+      detailList = orderIngList[i].detailList;
+      for(var j = 0 ; j < detailList.length ; j++){
+        divTag.find('table').append($('<tr>').append($('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:detailList[j].menuName})))
+      }
+      $("#divisionMainDetailDiv2").append(divTag);
     }
+    
+    
 
   }else if(cnt == 3){//완료
-
     var orderEndList = JSON.parse(window.localStorage.getItem('orderEndList')) == null? {} : JSON.parse(window.localStorage.getItem('orderEndList'));
-
+    var divTag;
+    var detailList;
     for(var i = 0; i < orderEndList.length ; i++){
-        $("#divisionMainDetailDiv2").append($('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
-          $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+orderEndList[i].tableNmae+"',this)"}).append(
-            $('<table>',{style:'height: 100%; width: 100%;'}).append(
-              $('<tr>',{class:'h-100'}).append(
-                $('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:orderEndList[i].tableNmae})
-              )
-            )
-          )
-        ));
+      divTag = $('<div>',{class:'col-md-3',style:'min-height: 42vh;'}).append(
+                  $('<div>',{class:'h-50 w-75 bg-body-tertiary border-1 border-primary',style:'border-radius: 5%; margin-top: 10vh; margin-left: 2vw; cursor: pointer; position: relative;',onclick:"clickTableShow('"+orderEndList[i].tableName+"',this)"}).append(
+                    $('<table>',{style:'height: 100%; width: 100%;'})
+                  )
+                );  
+      detailList = orderEndList[i].detailList;
+      for(var j = 0 ; j < detailList.length ; j++){
+        divTag.find('table').append($('<tr>').append($('<td>',{class:'w-100 align-middle fs-4 fw-bold',text:detailList[j].menuName})))
+      }
+      $("#divisionMainDetailDiv2").append(divTag);
     }
 
   }
@@ -1670,7 +1705,7 @@ function backModalCall(){
 
 var tableClickThis;
 function clickTableShow(tableId,obj){
-
+  $("#tableId").val(tableId);
   $("#tableOrderInfoDiv").children().remove()
   if($(obj).find('table').length != 1){
     
@@ -1771,6 +1806,9 @@ function addTableCart(menuName, menuPrice){
 
 function addTableProduct(){
   
+  var orderIngList = JSON.parse(window.localStorage.getItem('orderIngList')) == null ? [] : JSON.parse(window.localStorage.getItem('orderIngList'));
+  var orderIngDetailList = [];
+  var tableName = $("#tableId").val();
   $(tableClickThis).children().remove();
   if($("#addTableProductList>div[name=cartProduct]").length > 0){
     
@@ -1806,13 +1844,18 @@ function addTableProduct(){
         .append($('<div>',{class:'col-md-2'}).append($('<p>',{text:cnt})))
         .append($('<div>',{class:'col-md-4'}).append($('<p>',{text:totalAmt,class:'text-end me-2'}))));
 
+          orderIngDetailList.push({menuName:menuName , cnt :cnt , amt:amt })
     }
+
+    orderIngList.push({tableName:tableName , detailList:orderIngDetailList })
 
     var finalTotalAmt = totalAmt-discountAmt;
     
     $(tableClickThis).append($('<div>',{text:finalTotalAmt.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")+'원',class:'border-top h-10 text-end me-1 p-2',style:'position: absolute; bottom: 0; width: 100%; text-align: center;'}));
     $("#tableProductModal").modal('hide')
-
+    console.log("orderIngList",orderIngList)
+    window.localStorage.setItem("orderIngList",JSON.stringify(orderIngList));
+    //orderIngList 여기서 담기
   }
 
 }
@@ -1900,6 +1943,7 @@ function addTableProduct(){
       </div>
     </main>
     <main1 id="main1" class="py-3 mt-5 row" style="display: none;">
+      <input type="hidden" id="tableId" value="">
       <div class="col-md-10" style="min-height: 90vh;">
         <div id="divisionMainDiv" class="nav nav-tabs" style="height: 6vh; ">  
         </div>
